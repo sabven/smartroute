@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const { app, sequelize, User, CabBooking } = require('./helpers/testApp');
 
 describe('Booking System', () => {
-  let testUser, testDriver, testAdmin;
+  let testUser, testDriver, testAdmin, userToken, adminToken;
 
   beforeAll(async () => {
     await sequelize.authenticate();
@@ -40,21 +40,38 @@ describe('Booking System', () => {
       name: 'Test Admin',
       role: 'company_admin'
     });
+
+    // Get authentication tokens
+    const userLoginResponse = await request(app)
+      .post('/api/auth/login')
+      .send({
+        email: 'user@booking.test',
+        password: 'password123'
+      });
+    userToken = userLoginResponse.body.token;
+
+    const adminLoginResponse = await request(app)
+      .post('/api/auth/login')
+      .send({
+        email: 'admin@booking.test',
+        password: 'password123'
+      });
+    adminToken = adminLoginResponse.body.token;
   });
 
   describe('POST /api/bookings', () => {
     test('should create a new booking successfully', async () => {
       const bookingData = {
-        userId: testUser.id,
         tripType: 'home_to_office',
-        date: '2024-12-25',
-        time: '09:00:00',
+        pickupDate: '2024-12-25',
+        pickupTime: '09:00:00',
         pickupAddress: '123 Home Street, Noida',
         destinationAddress: '456 Office Tower, Noida'
       };
 
       const response = await request(app)
         .post('/api/bookings')
+        .set('Authorization', `Bearer ${userToken}`)
         .send(bookingData)
         .expect(201);
 
@@ -71,16 +88,16 @@ describe('Booking System', () => {
 
       for (let i = 0; i < tripTypes.length; i++) {
         const bookingData = {
-          userId: testUser.id,
           tripType: tripTypes[i],
-          date: '2024-12-25',
-          time: `0${9 + i}:00:00`,
+          pickupDate: '2024-12-25',
+          pickupTime: `0${9 + i}:00:00`,
           pickupAddress: `Pickup Address ${i + 1}`,
           destinationAddress: `Destination Address ${i + 1}`
         };
 
         const response = await request(app)
           .post('/api/bookings')
+          .set('Authorization', `Bearer ${userToken}`)
           .send(bookingData)
           .expect(201);
 
@@ -90,25 +107,24 @@ describe('Booking System', () => {
 
     test('should generate unique booking IDs', async () => {
       const bookingData1 = {
-        userId: testUser.id,
         tripType: 'home_to_office',
-        date: '2024-12-25',
-        time: '09:00:00',
+        pickupDate: '2024-12-25',
+        pickupTime: '09:00:00',
         pickupAddress: 'Address 1',
         destinationAddress: 'Address 2'
       };
 
       const bookingData2 = {
-        userId: testUser.id,
         tripType: 'office_to_home',
-        date: '2024-12-25',
-        time: '18:00:00',
+        pickupDate: '2024-12-25',
+        pickupTime: '18:00:00',
         pickupAddress: 'Address 2',
         destinationAddress: 'Address 1'
       };
 
       const response1 = await request(app)
         .post('/api/bookings')
+        .set('Authorization', `Bearer ${userToken}`)
         .send(bookingData1)
         .expect(201);
 
@@ -117,6 +133,7 @@ describe('Booking System', () => {
 
       const response2 = await request(app)
         .post('/api/bookings')
+        .set('Authorization', `Bearer ${userToken}`)
         .send(bookingData2)
         .expect(201);
 
@@ -127,13 +144,13 @@ describe('Booking System', () => {
 
     test('should not create booking with missing required fields', async () => {
       const incompleteBookingData = {
-        userId: testUser.id,
         tripType: 'home_to_office'
-        // Missing: date, time, pickupAddress, destinationAddress
+        // Missing: pickupDate, pickupTime, pickupAddress, destinationAddress
       };
 
       const response = await request(app)
         .post('/api/bookings')
+        .set('Authorization', `Bearer ${userToken}`)
         .send(incompleteBookingData)
         .expect(400);
 
@@ -142,16 +159,16 @@ describe('Booking System', () => {
 
     test('should not create booking with invalid trip type', async () => {
       const invalidBookingData = {
-        userId: testUser.id,
         tripType: 'invalid_trip_type',
-        date: '2024-12-25',
-        time: '09:00:00',
+        pickupDate: '2024-12-25',
+        pickupTime: '09:00:00',
         pickupAddress: 'Pickup',
         destinationAddress: 'Destination'
       };
 
       const response = await request(app)
         .post('/api/bookings')
+        .set('Authorization', `Bearer ${userToken}`)
         .send(invalidBookingData)
         .expect(400);
 
@@ -199,21 +216,23 @@ describe('Booking System', () => {
     test('should retrieve all bookings', async () => {
       const response = await request(app)
         .get('/api/bookings')
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(200);
 
-      expect(response.body.bookings).toBeDefined();
-      expect(response.body.bookings).toHaveLength(3);
-      expect(response.body.bookings[0]).toHaveProperty('bookingId');
-      expect(response.body.bookings[0]).toHaveProperty('tripType');
-      expect(response.body.bookings[0]).toHaveProperty('status');
+      expect(response.body).toBeDefined();
+      expect(response.body).toHaveLength(3);
+      expect(response.body[0]).toHaveProperty('bookingId');
+      expect(response.body[0]).toHaveProperty('tripType');
+      expect(response.body[0]).toHaveProperty('status');
     });
 
     test('should return bookings with user information', async () => {
       const response = await request(app)
         .get('/api/bookings')
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(200);
 
-      const booking = response.body.bookings.find(b => b.userId === testUser.id);
+      const booking = response.body.find(b => b.userId === testUser.id);
       expect(booking).toBeDefined();
       expect(booking.User).toBeDefined();
       expect(booking.User.name).toBe('Test User');
@@ -223,9 +242,10 @@ describe('Booking System', () => {
     test('should return bookings ordered by creation date (newest first)', async () => {
       const response = await request(app)
         .get('/api/bookings')
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(200);
 
-      const bookings = response.body.bookings;
+      const bookings = response.body;
       expect(bookings).toHaveLength(3);
 
       // Check that bookings are ordered by createdAt DESC
@@ -240,16 +260,16 @@ describe('Booking System', () => {
   describe('Booking Status Management', () => {
     test('should set default status to confirmed for new bookings', async () => {
       const bookingData = {
-        userId: testUser.id,
         tripType: 'home_to_office',
-        date: '2024-12-25',
-        time: '09:00:00',
+        pickupDate: '2024-12-25',
+        pickupTime: '09:00:00',
         pickupAddress: 'Home',
         destinationAddress: 'Office'
       };
 
       const response = await request(app)
         .post('/api/bookings')
+        .set('Authorization', `Bearer ${userToken}`)
         .send(bookingData)
         .expect(201);
 
@@ -274,9 +294,10 @@ describe('Booking System', () => {
 
       const response = await request(app)
         .get('/api/bookings')
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(200);
 
-      const createdStatuses = response.body.bookings.map(b => b.status);
+      const createdStatuses = response.body.map(b => b.status);
       statuses.forEach(status => {
         expect(createdStatuses).toContain(status);
       });
@@ -286,16 +307,16 @@ describe('Booking System', () => {
   describe('Booking Data Validation', () => {
     test('should validate date format', async () => {
       const bookingData = {
-        userId: testUser.id,
         tripType: 'home_to_office',
-        date: 'invalid-date',
-        time: '09:00:00',
+        pickupDate: 'invalid-date',
+        pickupTime: '09:00:00',
         pickupAddress: 'Home',
         destinationAddress: 'Office'
       };
 
       const response = await request(app)
         .post('/api/bookings')
+        .set('Authorization', `Bearer ${userToken}`)
         .send(bookingData)
         .expect(400);
 
@@ -304,16 +325,16 @@ describe('Booking System', () => {
 
     test('should validate time format', async () => {
       const bookingData = {
-        userId: testUser.id,
         tripType: 'home_to_office',
-        date: '2024-12-25',
-        time: 'invalid-time',
+        pickupDate: '2024-12-25',
+        pickupTime: 'invalid-time',
         pickupAddress: 'Home',
         destinationAddress: 'Office'
       };
 
       const response = await request(app)
         .post('/api/bookings')
+        .set('Authorization', `Bearer ${userToken}`)
         .send(bookingData)
         .expect(400);
 
@@ -322,16 +343,16 @@ describe('Booking System', () => {
 
     test('should require non-empty addresses', async () => {
       const bookingData = {
-        userId: testUser.id,
         tripType: 'home_to_office',
-        date: '2024-12-25',
-        time: '09:00:00',
+        pickupDate: '2024-12-25',
+        pickupTime: '09:00:00',
         pickupAddress: '',
         destinationAddress: ''
       };
 
       const response = await request(app)
         .post('/api/bookings')
+        .set('Authorization', `Bearer ${userToken}`)
         .send(bookingData)
         .expect(400);
 
@@ -342,10 +363,9 @@ describe('Booking System', () => {
   describe('Advanced Booking Features', () => {
     test('should store optional booking details', async () => {
       const bookingData = {
-        userId: testUser.id,
         tripType: 'home_to_office',
-        date: '2024-12-25',
-        time: '09:00:00',
+        pickupDate: '2024-12-25',
+        pickupTime: '09:00:00',
         pickupAddress: 'Home',
         destinationAddress: 'Office',
         driverName: 'John Driver',
@@ -357,6 +377,7 @@ describe('Booking System', () => {
 
       const response = await request(app)
         .post('/api/bookings')
+        .set('Authorization', `Bearer ${userToken}`)
         .send(bookingData)
         .expect(201);
 

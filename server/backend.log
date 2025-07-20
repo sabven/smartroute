@@ -1,0 +1,76 @@
+[dotenv@17.2.0] injecting env (6) from .env (tip: ⚙️  write to custom object with { processEnv: myObject })
+🔗 Connecting to PostgreSQL...
+✅ PostgreSQL connected successfully
+🔄 Synchronizing database...
+✅ Database synchronized
+🚀 SmartRoute API running on http://localhost:8000
+📊 Health check: http://localhost:8000/api/health
+🗃️ Database: PostgreSQL
+🌍 Environment: development
+🔐 Demo credentials:
+   Employee: priya@techcorp.com / emp123
+   Driver: rajesh@smartroute.com / driver123
+   Admin: admin@techcorp.com / admin123
+Login attempt for: rajesh@smartroute.com
+Login successful for: rajesh@smartroute.com
+Login attempt for: rajesh@smartroute.com
+Login successful for: rajesh@smartroute.com
+Login attempt for: rajesh@smartroute.com
+Login successful for: rajesh@smartroute.com
+Login attempt for: rajesh@smartroute.com
+Login successful for: rajesh@smartroute.com
+Login attempt for: admin@techcorp.com
+Login successful for: admin@techcorp.com
+Login attempt for: rajesh@smartroute.com
+Login successful for: rajesh@smartroute.com
+Login attempt for: priya@techcorp.com
+Login successful for: priya@techcorp.com
+Login attempt for: priya@techcorp.com
+Login successful for: priya@techcorp.com
+Create booking error: ValidationError [SequelizeValidationError]: notNull Violation: CabBooking.userId cannot be null,
+notNull Violation: CabBooking.date cannot be null,
+notNull Violation: CabBooking.time cannot be null
+    at InstanceValidator._validate (/Users/ranjusaba/Documents/repo/SmartRoute/server/node_modules/sequelize/lib/instance-validator.js:50:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async InstanceValidator._validateAndRunHooks (/Users/ranjusaba/Documents/repo/SmartRoute/server/node_modules/sequelize/lib/instance-validator.js:60:7)
+    at async InstanceValidator.validate (/Users/ranjusaba/Documents/repo/SmartRoute/server/node_modules/sequelize/lib/instance-validator.js:54:12)
+    at async model.save (/Users/ranjusaba/Documents/repo/SmartRoute/server/node_modules/sequelize/lib/model.js:2426:7)
+    at async CabBooking.create (/Users/ranjusaba/Documents/repo/SmartRoute/server/node_modules/sequelize/lib/model.js:1362:12)
+    at async /Users/ranjusaba/Documents/repo/SmartRoute/server/server-postgres-working.js:214:21 {
+  errors: [
+    ValidationErrorItem {
+      message: 'CabBooking.userId cannot be null',
+      type: 'notNull Violation',
+      path: 'userId',
+      value: null,
+      origin: 'CORE',
+      instance: [CabBooking],
+      validatorKey: 'is_null',
+      validatorName: null,
+      validatorArgs: []
+    },
+    ValidationErrorItem {
+      message: 'CabBooking.date cannot be null',
+      type: 'notNull Violation',
+      path: 'date',
+      value: null,
+      origin: 'CORE',
+      instance: [CabBooking],
+      validatorKey: 'is_null',
+      validatorName: null,
+      validatorArgs: []
+    },
+    ValidationErrorItem {
+      message: 'CabBooking.time cannot be null',
+      type: 'notNull Violation',
+      path: 'time',
+      value: null,
+      origin: 'CORE',
+      instance: [CabBooking],
+      validatorKey: 'is_null',
+      validatorName: null,
+      validatorArgs: []
+    }
+  ]
+}
+SIGTERM received, shutting down gracefully

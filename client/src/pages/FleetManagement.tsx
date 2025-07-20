@@ -22,11 +22,15 @@ interface Booking {
   time: string;
   pickupAddress: string;
   destinationAddress: string;
-  status: 'confirmed' | 'driver_assigned' | 'in_progress' | 'completed' | 'cancelled';
+  status: 'confirmed' | 'driver_assigned' | 'driver_accepted' | 'driver_declined' | 'in_progress' | 'completed' | 'cancelled';
   driverName?: string;
   driverPhone?: string;
   cabNumber?: string;
   cabModel?: string;
+  driverId?: string;
+  driverResponse?: string;
+  driverResponseAt?: string;
+  assignedAt?: string;
   fare?: number;
   createdAt: string;
   updatedAt: string;
@@ -138,7 +142,7 @@ const FleetManagement: React.FC = () => {
   const filteredBookings = bookings.filter(booking => {
     const matchesSearch = 
       booking.bookingId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      booking.User.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (booking.User?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       booking.pickupAddress.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === 'All' || booking.status === filterStatus;
     return matchesSearch && matchesFilter;
@@ -149,9 +153,13 @@ const FleetManagement: React.FC = () => {
       case 'confirmed':
         return 'bg-yellow-100 text-yellow-800';
       case 'driver_assigned':
-        return 'bg-green-100 text-green-800';
-      case 'in_progress':
         return 'bg-blue-100 text-blue-800';
+      case 'driver_accepted':
+        return 'bg-green-100 text-green-800';
+      case 'driver_declined':
+        return 'bg-red-100 text-red-800';
+      case 'in_progress':
+        return 'bg-purple-100 text-purple-800';
       case 'completed':
         return 'bg-gray-100 text-gray-800';
       case 'cancelled':
@@ -164,9 +172,13 @@ const FleetManagement: React.FC = () => {
   const getStatusText = (status: Booking['status']) => {
     switch (status) {
       case 'confirmed':
-        return 'Awaiting Driver';
+        return 'Awaiting Assignment';
       case 'driver_assigned':
         return 'Driver Assigned';
+      case 'driver_accepted':
+        return 'Driver Accepted';
+      case 'driver_declined':
+        return 'Driver Declined';
       case 'in_progress':
         return 'In Progress';
       case 'completed':
@@ -222,8 +234,10 @@ const FleetManagement: React.FC = () => {
               className="block border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
             >
               <option value="All">All Status</option>
-              <option value="confirmed">Awaiting Driver</option>
+              <option value="confirmed">Awaiting Assignment</option>
               <option value="driver_assigned">Driver Assigned</option>
+              <option value="driver_accepted">Driver Accepted</option>
+              <option value="driver_declined">Driver Declined</option>
               <option value="in_progress">In Progress</option>
               <option value="completed">Completed</option>
               <option value="cancelled">Cancelled</option>
@@ -233,7 +247,7 @@ const FleetManagement: React.FC = () => {
       </div>
 
       {/* Booking Overview Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         <div className="bg-white overflow-hidden shadow rounded-lg">
           <div className="p-5">
             <div className="flex items-center">
@@ -261,7 +275,7 @@ const FleetManagement: React.FC = () => {
               <div className="ml-5 w-0 flex-1">
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">
-                    Awaiting Driver
+                    Awaiting Assignment
                   </dt>
                   <dd className="text-lg font-medium text-gray-900">
                     {bookings.filter(b => b.status === 'confirmed').length}
@@ -276,7 +290,7 @@ const FleetManagement: React.FC = () => {
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="w-6 h-6 bg-green-500 rounded-full"></div>
+                <div className="w-6 h-6 bg-blue-500 rounded-full"></div>
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
@@ -296,7 +310,47 @@ const FleetManagement: React.FC = () => {
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="w-6 h-6 bg-blue-500 rounded-full"></div>
+                <div className="w-6 h-6 bg-green-500 rounded-full"></div>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-gray-500 truncate">
+                    Driver Accepted
+                  </dt>
+                  <dd className="text-lg font-medium text-gray-900">
+                    {bookings.filter(b => b.status === 'driver_accepted').length}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="p-5">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-6 h-6 bg-red-500 rounded-full"></div>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-gray-500 truncate">
+                    Driver Declined
+                  </dt>
+                  <dd className="text-lg font-medium text-gray-900">
+                    {bookings.filter(b => b.status === 'driver_declined').length}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="p-5">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-6 h-6 bg-purple-500 rounded-full"></div>
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
@@ -356,7 +410,7 @@ const FleetManagement: React.FC = () => {
                         </div>
                       </div>
                       <div className="text-sm text-gray-500 mt-1">
-                        Customer: {booking.User.name} • {booking.tripType.replace('_', ' ')}
+                        Customer: {booking.User?.name || 'Unknown'} • {booking.tripType.replace('_', ' ')}
                       </div>
                       <div className="text-sm text-gray-500 mt-1">
                         <div className="flex items-center">
@@ -373,6 +427,16 @@ const FleetManagement: React.FC = () => {
                           Driver: {booking.driverName} • {booking.cabNumber} ({booking.cabModel})
                         </div>
                       )}
+                      {booking.driverResponse && (
+                        <div className={`text-sm mt-1 ${booking.status === 'driver_declined' ? 'text-red-600' : 'text-green-600'}`}>
+                          Response: {booking.driverResponse}
+                          {booking.driverResponseAt && (
+                            <span className="text-gray-500 ml-2">
+                              ({new Date(booking.driverResponseAt).toLocaleDateString()})
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2 ml-4">
@@ -386,6 +450,22 @@ const FleetManagement: React.FC = () => {
                       >
                         Assign Driver
                       </button>
+                    )}
+                    {booking.status === 'driver_declined' && (
+                      <button
+                        onClick={() => {
+                          setSelectedBooking(booking);
+                          setShowAssignModal(true);
+                        }}
+                        className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700"
+                      >
+                        Reassign Driver
+                      </button>
+                    )}
+                    {booking.status === 'driver_accepted' && (
+                      <span className="inline-flex items-center px-3 py-1 text-xs font-medium rounded-md text-green-800 bg-green-100">
+                        Driver Ready
+                      </span>
                     )}
                     <button className="text-gray-400 hover:text-gray-600">
                       <EyeIcon className="h-5 w-5" />
@@ -419,7 +499,7 @@ const FleetManagement: React.FC = () => {
               </h3>
               <div className="mb-4 p-3 bg-gray-50 rounded">
                 <p className="text-sm text-gray-600 mb-1">
-                  <strong>Customer:</strong> {selectedBooking.User.name}
+                  <strong>Customer:</strong> {selectedBooking.User?.name || 'Unknown'}
                 </p>
                 <p className="text-sm text-gray-600 mb-1">
                   <strong>Trip:</strong> {selectedBooking.tripType.replace('_', ' ')}

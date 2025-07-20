@@ -89,14 +89,47 @@ const CabBooking = sequelize.define('CabBooking', {
     allowNull: false
   },
   status: {
-    type: DataTypes.ENUM('pending', 'confirmed', 'driver_assigned', 'in_progress', 'completed', 'cancelled'),
+    type: DataTypes.ENUM('pending', 'confirmed', 'driver_assigned', 'driver_accepted', 'driver_declined', 'in_progress', 'completed', 'cancelled'),
     defaultValue: 'pending'
   },
   driverName: DataTypes.STRING,
   driverPhone: DataTypes.STRING,
   cabNumber: DataTypes.STRING,
   cabModel: DataTypes.STRING,
-  fare: DataTypes.DECIMAL(10, 2)
+  fare: DataTypes.DECIMAL(10, 2),
+  driverId: DataTypes.UUID,
+  driverResponse: DataTypes.TEXT,
+  driverResponseAt: DataTypes.DATE,
+  assignedAt: DataTypes.DATE
+});
+
+// Notification Model
+const Notification = sequelize.define('Notification', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true
+  },
+  type: {
+    type: DataTypes.ENUM('driver_declined', 'driver_accepted', 'booking_created'),
+    allowNull: false
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  message: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+  bookingId: DataTypes.UUID,
+  driverId: DataTypes.UUID,
+  adminId: DataTypes.UUID,
+  isRead: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  readAt: DataTypes.DATE
 });
 
 // Health check
@@ -295,11 +328,15 @@ app.put('/api/bookings/:bookingId/assign-driver', authenticateToken, async (req,
     
     // Update booking with driver details
     await booking.update({
+      driverId,
       driverName,
       driverPhone,
       cabNumber,
       cabModel,
-      status: 'driver_assigned'
+      status: 'driver_assigned',
+      assignedAt: new Date(),
+      driverResponse: null,
+      driverResponseAt: null
     });
     
     // Fetch updated booking with user details
@@ -316,6 +353,155 @@ app.put('/api/bookings/:bookingId/assign-driver', authenticateToken, async (req,
     });
   } catch (error) {
     console.error('Assign driver error:', error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Driver response endpoints
+app.put('/api/bookings/:bookingId/driver-response', authenticateToken, async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const { response, message } = req.body; // response: 'accept' or 'decline'
+    const driverId = req.user.userId;
+    
+    console.log('Driver response:', { bookingId, driverId, response, message });
+    
+    if (!response || !['accept', 'decline'].includes(response)) {
+      return res.status(400).json({ error: 'Valid response (accept/decline) is required' });
+    }
+    
+    const booking = await CabBooking.findByPk(bookingId);
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    
+    // Check if this driver is assigned to this booking
+    if (booking.driverId !== driverId) {
+      return res.status(403).json({ error: 'You are not assigned to this booking' });
+    }
+    
+    // Check if driver has already responded
+    if (booking.driverResponseAt) {
+      return res.status(400).json({ error: 'You have already responded to this booking' });
+    }
+    
+    const newStatus = response === 'accept' ? 'driver_accepted' : 'driver_declined';
+    
+    // Update booking with driver response
+    await booking.update({
+      status: newStatus,
+      driverResponse: message || `Driver ${response}ed the trip`,
+      driverResponseAt: new Date()
+    });
+    
+    // Create notification for admin
+    const driver = await User.findByPk(driverId);
+    const adminUsers = await User.findAll({ where: { role: 'company_admin' } });
+    
+    for (const admin of adminUsers) {
+      await Notification.create({
+        type: response === 'accept' ? 'driver_accepted' : 'driver_declined',
+        title: `Driver ${response === 'accept' ? 'Accepted' : 'Declined'} Trip`,
+        message: `${driver.name} has ${response}ed trip ${booking.bookingId}. ${message || ''}`,
+        bookingId: booking.id,
+        driverId: driverId,
+        adminId: admin.id
+      });
+    }
+    
+    // Fetch updated booking with user details
+    const updatedBooking = await CabBooking.findByPk(bookingId, {
+      include: [{
+        model: User,
+        attributes: ['name', 'email']
+      }]
+    });
+    
+    res.json({
+      message: `Trip ${response}ed successfully`,
+      booking: updatedBooking
+    });
+  } catch (error) {
+    console.error('Driver response error:', error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Get driver-assigned bookings for specific driver
+app.get('/api/bookings/driver/:driverId', authenticateToken, async (req, res) => {
+  try {
+    const { driverId } = req.params;
+    
+    // Check if requesting user is the driver or an admin
+    if (req.user.userId !== driverId) {
+      const user = await User.findByPk(req.user.userId);
+      if (user.role !== 'company_admin') {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+    }
+    
+    const bookings = await CabBooking.findAll({
+      where: { 
+        driverId,
+        status: ['driver_assigned', 'driver_accepted', 'in_progress', 'completed']
+      },
+      order: [['createdAt', 'DESC']],
+      include: [{
+        model: User,
+        attributes: ['name', 'email', 'phone']
+      }]
+    });
+    
+    res.json(bookings);
+  } catch (error) {
+    console.error('Get driver bookings error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get notifications for admin
+app.get('/api/notifications', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.userId);
+    if (user.role !== 'company_admin') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    
+    const notifications = await Notification.findAll({
+      where: { adminId: req.user.userId },
+      order: [['createdAt', 'DESC']],
+      limit: 50
+    });
+    
+    res.json(notifications);
+  } catch (error) {
+    console.error('Get notifications error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Mark notification as read
+app.put('/api/notifications/:notificationId/read', authenticateToken, async (req, res) => {
+  try {
+    const { notificationId } = req.params;
+    
+    const notification = await Notification.findByPk(notificationId);
+    if (!notification) {
+      return res.status(404).json({ error: 'Notification not found' });
+    }
+    
+    if (notification.adminId !== req.user.userId) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    
+    await notification.update({
+      isRead: true,
+      readAt: new Date()
+    });
+    
+    res.json({ message: 'Notification marked as read' });
+  } catch (error) {
+    console.error('Mark notification read error:', error);
     res.status(400).json({ error: error.message });
   }
 });
@@ -389,6 +575,18 @@ async function startServer() {
     // Define associations
     User.hasMany(CabBooking, { foreignKey: 'userId' });
     CabBooking.belongsTo(User, { foreignKey: 'userId' });
+    
+    // Driver associations
+    User.hasMany(CabBooking, { foreignKey: 'driverId', as: 'DriverBookings' });
+    CabBooking.belongsTo(User, { foreignKey: 'driverId', as: 'Driver' });
+    
+    // Notification associations
+    User.hasMany(Notification, { foreignKey: 'adminId', as: 'AdminNotifications' });
+    User.hasMany(Notification, { foreignKey: 'driverId', as: 'DriverNotifications' });
+    CabBooking.hasMany(Notification, { foreignKey: 'bookingId' });
+    Notification.belongsTo(User, { foreignKey: 'adminId', as: 'Admin' });
+    Notification.belongsTo(User, { foreignKey: 'driverId', as: 'Driver' });
+    Notification.belongsTo(CabBooking, { foreignKey: 'bookingId' });
     
     // Create demo users if they don't exist
     const demoUsers = [
