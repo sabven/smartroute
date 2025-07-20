@@ -9,6 +9,7 @@ import {
   PlusIcon,
   CheckCircleIcon,
 } from '@heroicons/react/24/outline';
+import { API_BASE_URL } from '../config';
 
 interface BookingForm {
   tripType: 'home_to_office' | 'office_to_home';
@@ -59,11 +60,45 @@ const BookCab: React.FC = () => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    // Simulate booking submission
-    setTimeout(() => {
+    
+    try {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      const bookingData = {
+        tripType: bookingForm.tripType,
+        pickupDate: bookingForm.date,
+        pickupTime: bookingForm.time,
+        pickupAddress: bookingForm.pickupAddress,
+        destinationAddress: bookingForm.destinationAddress,
+        specialRequests: bookingForm.specialRequests,
+        employeeId: user.id
+      };
+
+      const response = await fetch(`${API_BASE_URL}/bookings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        setIsSubmitting(false);
+        setStep(4); // Success step
+      } else {
+        console.error('Booking creation failed:', data);
+        alert('Failed to create booking: ' + (data.error || 'Unknown error'));
+        setIsSubmitting(false);
+      }
+    } catch (error) {
+      console.error('Booking submission error:', error);
+      alert('Network error. Please check if the server is running.');
       setIsSubmitting(false);
-      setStep(4); // Success step
-    }, 2000);
+    }
   };
 
   const getCurrentDate = () => {

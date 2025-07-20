@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ClockIcon,
   MapPinIcon,
@@ -9,6 +9,7 @@ import {
   StarIcon,
   CalendarIcon,
 } from '@heroicons/react/24/outline';
+import { API_BASE_URL } from '../config';
 
 interface Booking {
   id: string;
@@ -40,62 +41,45 @@ interface Booking {
 const MyBookings: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'completed' | 'cancelled'>('upcoming');
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Mock data
-  const bookings: Booking[] = [
-    {
-      id: '1',
-      bookingId: 'SR20241019001',
-      tripType: 'home_to_office',
-      date: '2024-01-20',
-      time: '09:00',
-      pickupAddress: 'A-101, Green Valley Apartments, Sector 18, Noida, UP 201301',
-      destinationAddress: 'Tech Tower, Sector 62, Noida, UP 201309',
-      status: 'driver_assigned',
-      driver: {
-        name: 'Rajesh Kumar',
-        phone: '+91 98765 43210',
-        rating: 4.8,
-        photo: 'https://via.placeholder.com/100x100/4F46E5/FFFFFF?text=RK',
-      },
-      cab: {
-        number: 'UP14 AB 1234',
-        model: 'Maruti Swift',
-        color: 'White',
-      },
-      fare: {
-        amount: 175,
-        currency: 'INR',
-      },
-      canCancel: true,
-    },
-    {
-      id: '2',
-      bookingId: 'SR20241019002',
-      tripType: 'office_to_home',
-      date: '2024-01-19',
-      time: '18:30',
-      pickupAddress: 'Tech Tower, Sector 62, Noida, UP 201309',
-      destinationAddress: 'A-101, Green Valley Apartments, Sector 18, Noida, UP 201301',
-      status: 'trip_completed',
-      driver: {
-        name: 'Suresh Singh',
-        phone: '+91 87654 32109',
-        rating: 4.6,
-        photo: 'https://via.placeholder.com/100x100/059669/FFFFFF?text=SS',
-      },
-      cab: {
-        number: 'UP16 CD 5678',
-        model: 'Hyundai i20',
-        color: 'Blue',
-      },
-      fare: {
-        amount: 180,
-        currency: 'INR',
-      },
-      canCancel: false,
-    },
-  ];
+  const fetchBookings = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      if (!token || !user.id) {
+        setError('Please log in to view bookings');
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/bookings/user/${user.id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBookings(data);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || 'Failed to fetch bookings');
+      }
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+      setError('Network error. Please check if the server is running.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBookings();
+  }, []);
 
   const getStatusColor = (status: Booking['status']) => {
     switch (status) {
@@ -195,7 +179,18 @@ const MyBookings: React.FC = () => {
 
         {/* Bookings List */}
         <div className="p-6">
-          {filteredBookings.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600">Loading bookings...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative">
+                <span className="block sm:inline">{error}</span>
+              </div>
+            </div>
+          ) : filteredBookings.length === 0 ? (
             <div className="text-center py-12">
               <CalendarIcon className="mx-auto h-12 w-12 text-gray-400" />
               <h3 className="mt-2 text-sm font-medium text-gray-900">No bookings</h3>

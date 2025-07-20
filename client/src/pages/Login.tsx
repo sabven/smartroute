@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { API_BASE_URL } from '../config';
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -20,13 +23,54 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
     
-    // Simulate login process
-    setTimeout(() => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      console.log('Login response:', data);
+
+      if (response.ok) {
+        // Store token and user data
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        console.log('User role:', data.user.role);
+        console.log('Navigating to dashboard...');
+        
+        // Navigate based on user role
+        switch (data.user.role) {
+          case 'driver':
+            console.log('Navigating to /driver-dashboard');
+            window.location.href = '/driver-dashboard';
+            break;
+          case 'company_admin':
+            console.log('Navigating to /dashboard');
+            window.location.href = '/dashboard';
+            break;
+          case 'employee':
+          default:
+            console.log('Navigating to /employee-dashboard');
+            window.location.href = '/employee-dashboard';
+            break;
+        }
+      } else {
+        console.error('Login failed:', data);
+        setError(data.error || 'Invalid credentials');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Network error. Please check if the server is running.');
+    } finally {
       setIsLoading(false);
-      // In real implementation, handle authentication
-      console.log('Login attempted with:', formData);
-    }, 1000);
+    }
   };
 
   return (
@@ -47,6 +91,11 @@ const Login: React.FC = () => {
 
         {/* Login Form */}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative">
+              <span className="block sm:inline">{error}</span>
+            </div>
+          )}
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">

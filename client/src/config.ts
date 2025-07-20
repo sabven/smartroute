@@ -1,6 +1,4 @@
-export const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://smartroute-cab-api.azurewebsites.net/api'
-  : 'http://localhost:5000/api';
+export const API_BASE_URL = 'http://localhost:8000/api';
 
 export const APP_VERSION = '1.0.0';
 export const APP_NAME = 'SmartRoute Corporate Cab Booking';
