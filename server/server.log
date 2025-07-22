@@ -1,0 +1,17 @@
+[dotenv@17.2.0] injecting env (7) from .env (tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] })
+🔗 Connecting to PostgreSQL...
+✅ PostgreSQL connected successfully
+🔄 Synchronizing database...
+✅ Database synchronized
+🚀 SmartRoute API running on http://localhost:8000
+📊 Health check: http://localhost:8000/api/health
+🗃️ Database: PostgreSQL
+🌍 Environment: development
+🔐 Demo credentials:
+   Employee: priya@techcorp.com / emp123
+   Driver: rajesh@smartroute.com / driver123
+   Admin: admin@techcorp.com / admin123
+Login attempt for: priya@techcorp.com
+Login successful for: priya@techcorp.com
+Login attempt for: admin@techcorp.com
+Login successful for: admin@techcorp.com

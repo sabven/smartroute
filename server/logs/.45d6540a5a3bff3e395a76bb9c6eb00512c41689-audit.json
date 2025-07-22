@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/ranjusaba/Documents/repo/SmartRoute/server/logs/.45d6540a5a3bff3e395a76bb9c6eb00512c41689-audit.json",
+    "files": [
+        {
+            "date": 1753193008549,
+            "name": "/Users/ranjusaba/Documents/repo/SmartRoute/server/logs/access-2025-07-22.log",
+            "hash": "9d1931f9d17f08da35aace76a0aaad757f92535fe4f5d735c0114feb3acd3be6"
+        }
+    ],
+    "hashType": "sha256"
+}

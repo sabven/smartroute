@@ -74,7 +74,16 @@
       "Bash(git reset:*)",
       "Bash(git push:*)",
       "Bash(PORT=8000 node server-postgres-working.js)",
-      "Bash(psql:*)"
+      "Bash(psql:*)",
+      "Bash(./start.sh:*)",
+      "Bash(./start-persistent.sh:*)",
+      "Bash(./node_modules/.bin/pm2 delete:*)",
+      "Bash(./node_modules/.bin/pm2 start:*)",
+      "Bash(git commit:*)",
+      "Bash(./stop.sh)",
+      "Bash(./node_modules/.bin/pm2 restart:*)",
+      "Bash(./node_modules/.bin/pm2 status:*)",
+      "Bash(./node_modules/.bin/pm2 logs:*)"
     ],
     "deny": []
   }

@@ -6,7 +6,10 @@ import DriverDashboard from './pages/DriverDashboard';
 import BookCab from './pages/BookCab';
 import MyBookings from './pages/MyBookings';
 import FleetManagement from './pages/FleetManagement';
+import IntelligentFleetDashboard from './pages/IntelligentFleetDashboard';
 import Login from './pages/Login';
+import LogViewer from './components/LogViewer';
+import logger from './utils/logger';
 
 type UserRole = 'employee' | 'driver' | 'company_admin';
 
@@ -16,24 +19,37 @@ function App() {
   const [user, setUser] = useState<any>(null);
 
   const checkAuthState = () => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
-    
-    console.log('Checking authentication:', { token: !!token, userData: !!userData });
-    
-    if (token && userData) {
-      const parsedUser = JSON.parse(userData);
-      console.log('Found user in localStorage:', parsedUser);
-      setUser(parsedUser);
-      setUserRole(parsedUser.role);
-      setIsAuthenticated(true);
-    } else {
+    try {
+      const token = localStorage.getItem('token');
+      const userData = localStorage.getItem('user');
+      
+      logger.debug('Checking authentication state', { hasToken: !!token, hasUserData: !!userData });
+      
+      if (token && userData) {
+        const parsedUser = JSON.parse(userData);
+        logger.info('User authenticated from localStorage', { 
+          userId: parsedUser.id, 
+          email: parsedUser.email, 
+          role: parsedUser.role 
+        });
+        logger.setUserId(parsedUser.id);
+        setUser(parsedUser);
+        setUserRole(parsedUser.role);
+        setIsAuthenticated(true);
+      } else {
+        logger.debug('No valid authentication found');
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    } catch (error) {
+      logger.error('Error checking authentication state', error);
       setIsAuthenticated(false);
       setUser(null);
     }
   };
 
   useEffect(() => {
+    logger.info('App initialized');
     checkAuthState();
   }, []);
 
@@ -106,10 +122,14 @@ function App() {
             <Route path="/book" element={<BookCab />} />
             <Route path="/bookings" element={<MyBookings />} />
             <Route path="/fleet" element={<FleetManagement />} />
+            <Route path="/intelligent-fleet" element={<IntelligentFleetDashboard />} />
             <Route path="/login" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
       </div>
+      
+      {/* Log Viewer - only in development */}
+      {process.env.NODE_ENV === 'development' && <LogViewer />}
     </Router>
   );
 }

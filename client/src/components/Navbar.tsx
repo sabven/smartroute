@@ -6,7 +6,8 @@ import {
   HomeIcon,
   MapIcon,
   TruckIcon,
-  UserIcon
+  UserIcon,
+  CpuChipIcon
 } from '@heroicons/react/24/outline';
 
 const Navbar: React.FC = () => {
@@ -17,6 +18,7 @@ const Navbar: React.FC = () => {
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
     { name: 'Book Cab', href: '/book', icon: MapIcon },
     { name: 'My Bookings', href: '/bookings', icon: TruckIcon },
+    { name: 'AI Fleet', href: '/intelligent-fleet', icon: CpuChipIcon },
   ];
 
   const isActive = (path: string) => location.pathname === path;

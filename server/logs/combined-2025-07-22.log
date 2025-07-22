@@ -1,0 +1,90 @@
+{
+  service: 'smartroute-server',
+  port: '8000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-22 22:03:28',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: '61wb8fx3r',
+  email: 'priya@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-22 22:04:05'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: '61wb8fx3r',
+  email: 'priya@techcorp.com',
+  userId: '24bcd40c-e8ac-4a95-b832-c1f88c2168ec',
+  role: 'employee',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-22 22:04:05'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '61wb8fx3r',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-22 22:04:05'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'hqemx26pp',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-22 22:06:48'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'hqemx26pp',
+  email: 'admin@techcorp.com',
+  userId: '91af8ccb-6c72-4a64-b3e6-1f4defad9fd2',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-22 22:06:48'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'hqemx26pp',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-22 22:06:48'
+}
+{
+  service: 'smartroute-server',
+  port: '8000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-22 22:21:48',
+  level: 'info',
+  message: 'Server started successfully'
+}

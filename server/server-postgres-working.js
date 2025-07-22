@@ -5,8 +5,19 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Sequelize, DataTypes } = require('sequelize');
 
+// Import logging
+const { logger, authLogger, apiLogger, dbLogger, bookingLogger } = require('./logger');
+const { requestLogger, requestIdMiddleware, errorLogger, actionLogger } = require('./middleware/logging');
+
+// Import smart allocation engine
+const SmartAllocationEngine = require('./src/utils/smartAllocation');
+
 const app = express();
 const PORT = process.env.PORT || 5001;
+
+// Logging middleware (before other middleware)
+app.use(requestIdMiddleware);
+app.use(requestLogger);
 
 app.use(cors());
 app.use(express.json());
@@ -20,7 +31,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
       rejectUnauthorized: false
     }
   } : {},
-  logging: false
+  logging: (msg) => dbLogger.debug(msg)
 });
 
 // User Model
@@ -143,27 +154,33 @@ app.get('/api/health', (req, res) => {
 });
 
 // Auth endpoints
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', actionLogger('login_attempt'), async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log('Login attempt for:', email);
+    authLogger.info('Login attempt', { requestId: req.id, email, ip: req.ip });
     
     const user = await User.findOne({ where: { email } });
     
     if (!user) {
-      console.log('User not found:', email);
+      authLogger.warn('Login failed - user not found', { requestId: req.id, email, ip: req.ip });
       return res.status(401).json({ error: 'Invalid credentials' });
     }
     
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-      console.log('Invalid password for:', email);
+      authLogger.warn('Login failed - invalid password', { requestId: req.id, email, ip: req.ip });
       return res.status(401).json({ error: 'Invalid credentials' });
     }
     
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
     
-    console.log('Login successful for:', email);
+    authLogger.info('Login successful', { 
+      requestId: req.id, 
+      email, 
+      userId: user.id, 
+      role: user.role,
+      ip: req.ip 
+    });
     res.json({ 
       message: 'Login successful',
       token, 
@@ -177,7 +194,12 @@ app.post('/api/auth/login', async (req, res) => {
       } 
     });
   } catch (error) {
-    console.error('Login error:', error);
+    authLogger.error('Login error', { 
+      requestId: req.id, 
+      error: error.message, 
+      stack: error.stack,
+      ip: req.ip 
+    });
     res.status(500).json({ error: error.message });
   }
 });
@@ -622,8 +644,177 @@ async function startServer() {
         console.log(`✅ Created demo user: ${userData.email}`);
       }
     }
+
+// Smart allocation endpoints
+const allocationEngine = new SmartAllocationEngine();
+
+app.post('/api/fleet/smart-allocate', actionLogger('smart_allocate'), async (req, res) => {
+  try {
+    const { bookingIds } = req.body;
+    
+    // Fetch bookings, drivers, and vehicles
+    const bookings = await CabBooking.findAll({
+      where: {
+        id: bookingIds || undefined,
+        status: 'pending'
+      }
+    });
+
+    // Mock drivers and vehicles data (in real app, fetch from database)
+    const mockDrivers = Array.from({ length: 10 }, (_, i) => ({
+      id: `driver-${i + 1}`,
+      name: `Driver ${i + 1}`,
+      efficiency: 70 + Math.random() * 30,
+      rating: 3.5 + Math.random() * 1.5,
+      totalRides: 50 + Math.floor(Math.random() * 500),
+      currentLocation: ['Tech Park', 'Koramangala', 'Whitefield'][Math.floor(Math.random() * 3)]
+    }));
+
+    const mockVehicles = Array.from({ length: 8 }, (_, i) => ({
+      id: `vehicle-${i + 1}`,
+      plateNumber: `KA${String(Math.floor(Math.random() * 10)).padStart(2, '0')}${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`,
+      capacity: [2, 4, 6][Math.floor(Math.random() * 3)],
+      fuelLevel: 20 + Math.random() * 80
+    }));
+
+    bookingLogger.info('Smart allocation request', {
+      requestId: req.id,
+      bookingCount: bookings.length,
+      driverCount: mockDrivers.length,
+      vehicleCount: mockVehicles.length
+    });
+
+    if (bookings.length === 0) {
+      return res.json({ 
+        success: false, 
+        message: 'No pending bookings found',
+        allocations: []
+      });
+    }
+
+    // Perform bulk allocation
+    const result = await allocationEngine.bulkAllocate(
+      bookings.map(b => ({
+        id: b.id,
+        pickupLocation: b.pickupLocation || 'Unknown',
+        dropoffLocation: b.dropoffLocation || 'Unknown',
+        requestedTime: b.pickupTime,
+        priority: b.priority || 'medium',
+        department: b.department || 'General'
+      })),
+      mockDrivers,
+      mockVehicles
+    );
+
+    // Generate optimization suggestions
+    const suggestions = allocationEngine.generateOptimizationSuggestions(
+      bookings,
+      mockDrivers,
+      mockVehicles
+    );
+
+    res.json({
+      success: true,
+      allocations: result.results,
+      summary: result.summary,
+      suggestions,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    bookingLogger.error('Smart allocation error', {
+      requestId: req.id,
+      error: error.message,
+      stack: error.stack
+    });
+    res.status(500).json({ error: 'Smart allocation failed' });
+  }
+});
+
+app.get('/api/fleet/optimization-suggestions', actionLogger('get_optimization_suggestions'), async (req, res) => {
+  try {
+    // Fetch recent bookings for analysis
+    const recentBookings = await CabBooking.findAll({
+      limit: 100,
+      order: [['createdAt', 'DESC']]
+    });
+
+    // Mock data for analysis
+    const mockDrivers = Array.from({ length: 10 }, (_, i) => ({
+      id: `driver-${i + 1}`,
+      status: Math.random() > 0.3 ? 'available' : 'busy'
+    }));
+
+    const mockVehicles = Array.from({ length: 8 }, (_, i) => ({
+      id: `vehicle-${i + 1}`,
+      status: Math.random() > 0.4 ? 'available' : 'in_use'
+    }));
+
+    const suggestions = allocationEngine.generateOptimizationSuggestions(
+      recentBookings,
+      mockDrivers,
+      mockVehicles
+    );
+
+    res.json({
+      success: true,
+      suggestions,
+      analysisDate: new Date().toISOString()
+    });
+
+  } catch (error) {
+    apiLogger.error('Optimization suggestions error', {
+      requestId: req.id,
+      error: error.message
+    });
+    res.status(500).json({ error: 'Failed to generate suggestions' });
+  }
+});
+
+// Client logging endpoint
+app.post('/api/logs/client', (req, res) => {
+  try {
+    const { logs } = req.body;
+    
+    if (Array.isArray(logs)) {
+      logs.forEach(log => {
+        const clientLogger = require('./logger').logger;
+        const logLevel = log.level || 'info';
+        
+        clientLogger[logLevel](`CLIENT: ${log.message}`, {
+          requestId: req.id,
+          clientTimestamp: log.timestamp,
+          sessionId: log.sessionId,
+          url: log.url,
+          userId: log.userId,
+          userAgent: log.userAgent,
+          data: log.data,
+          stack: log.stack
+        });
+      });
+    }
+    
+    res.json({ success: true, received: logs?.length || 0 });
+  } catch (error) {
+    apiLogger.error('Client logging error', { 
+      requestId: req.id, 
+      error: error.message 
+    });
+    res.status(500).json({ error: 'Failed to process client logs' });
+  }
+});
+    
+    // Error logging middleware (should be last)
+    app.use(errorLogger);
     
     app.listen(PORT, '0.0.0.0', () => {
+      logger.info('Server started successfully', {
+        port: PORT,
+        environment: process.env.NODE_ENV,
+        database: 'PostgreSQL',
+        timestamp: new Date().toISOString()
+      });
+      
       console.log(`🚀 SmartRoute API running on http://localhost:${PORT}`);
       console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
       console.log(`🗃️ Database: PostgreSQL`);

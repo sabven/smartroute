@@ -66,11 +66,39 @@ npm start
 # View service status
 ./node_modules/.bin/pm2 status
 
-# View logs
+# View logs (interactive)
+./view-logs.sh
+
+# View logs (direct)
 ./node_modules/.bin/pm2 logs
 
 # Restart services
 ./node_modules/.bin/pm2 restart all
+```
+
+## Logging Features
+
+The application includes comprehensive logging:
+
+### Server-side Logging
+- **Winston** with daily rotation
+- Separate files: `combined`, `error`, `access`
+- Request/response logging with unique IDs
+- Authentication events tracking
+- Database query logging
+
+### Client-side Logging  
+- JavaScript errors and API calls
+- User actions and performance metrics
+- Local storage backup when server unavailable
+- Debug viewer in development (Ctrl+Shift+L)
+
+### Log Files Location
+```
+server/logs/
+├── combined-YYYY-MM-DD.log  # All logs
+├── error-YYYY-MM-DD.log     # Errors only  
+└── access-YYYY-MM-DD.log    # API requests
 ```
 
 ## Troubleshooting
