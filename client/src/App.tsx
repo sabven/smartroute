@@ -7,6 +7,7 @@ import BookCab from './pages/BookCab';
 import MyBookings from './pages/MyBookings';
 import FleetManagement from './pages/FleetManagement';
 import IntelligentFleetDashboard from './pages/IntelligentFleetDashboard';
+import DriverManagement from './pages/DriverManagement';
 import Login from './pages/Login';
 import LogViewer from './components/LogViewer';
 import logger from './utils/logger';
@@ -123,6 +124,7 @@ function App() {
             <Route path="/bookings" element={<MyBookings />} />
             <Route path="/fleet" element={<FleetManagement />} />
             <Route path="/intelligent-fleet" element={<IntelligentFleetDashboard />} />
+            <Route path="/drivers" element={<DriverManagement />} />
             <Route path="/login" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

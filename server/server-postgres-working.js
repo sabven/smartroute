@@ -4,6 +4,7 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Sequelize, DataTypes } = require('sequelize');
+const path = require('path');
 
 // Import logging
 const { logger, authLogger, apiLogger, dbLogger, bookingLogger } = require('./logger');
@@ -11,6 +12,9 @@ const { requestLogger, requestIdMiddleware, errorLogger, actionLogger } = requir
 
 // Import smart allocation engine
 const SmartAllocationEngine = require('./src/utils/smartAllocation');
+
+// Import driver management routes
+const { router: driverManagementRouter, injectModels } = require('./src/routes/driverManagement');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -33,6 +37,10 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
   } : {},
   logging: (msg) => dbLogger.debug(msg)
 });
+
+// Import and create DriverProfile model
+const createDriverProfile = require('./src/models/DriverProfile');
+const DriverProfile = createDriverProfile(sequelize);
 
 // User Model
 const User = sequelize.define('User', {
@@ -62,6 +70,13 @@ const User = sequelize.define('User', {
   employeeId: DataTypes.STRING,
   phone: DataTypes.STRING
 });
+
+// Set up associations
+User.hasOne(DriverProfile, { foreignKey: 'userId', as: 'driverProfile' });
+DriverProfile.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+// Inject models into driver management routes
+injectModels({ User, DriverProfile });
 
 // CabBooking Model
 const CabBooking = sequelize.define('CabBooking', {
@@ -554,6 +569,12 @@ app.get('/api/drivers', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Driver Management Routes
+app.use('/api/driver-management', driverManagementRouter);
+
+// Static file serving for uploaded documents
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Vehicles endpoint (mock data for now)
 app.get('/api/vehicles', (req, res) => {
