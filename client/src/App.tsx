@@ -14,6 +14,35 @@ import logger from './utils/logger';
 
 type UserRole = 'employee' | 'driver' | 'company_admin';
 
+// Protected Route Component
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  allowedRoles: UserRole[];
+  userRole: UserRole;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles, userRole }) => {
+  if (!allowedRoles.includes(userRole)) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6">
+          <div className="text-center">
+            <div className="text-red-500 text-6xl mb-4">🔒</div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
+            <p className="text-gray-600 mb-4">
+              You don't have permission to access this page.
+            </p>
+            <p className="text-sm text-gray-500">
+              Your role: <span className="font-medium capitalize">{userRole}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return <>{children}</>;
+};
+
 function App() {
   const [userRole, setUserRole] = useState<UserRole>('employee');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -113,18 +142,46 @@ function App() {
             </button>
           </div>
         </div>
-        <Navbar />
+        <Navbar userRole={userRole} />
         <main className="container mx-auto px-4 py-6">
           <Routes>
             <Route path="/" element={getDashboardComponent()} />
             <Route path="/dashboard" element={<FleetManagement />} />
             <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
             <Route path="/driver-dashboard" element={<DriverDashboard />} />
-            <Route path="/book" element={<BookCab />} />
-            <Route path="/bookings" element={<MyBookings />} />
+            <Route 
+              path="/book" 
+              element={
+                <ProtectedRoute allowedRoles={['employee']} userRole={userRole}>
+                  <BookCab />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/bookings" 
+              element={
+                <ProtectedRoute allowedRoles={['employee']} userRole={userRole}>
+                  <MyBookings />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="/fleet" element={<FleetManagement />} />
-            <Route path="/intelligent-fleet" element={<IntelligentFleetDashboard />} />
-            <Route path="/drivers" element={<DriverManagement />} />
+            <Route 
+              path="/intelligent-fleet" 
+              element={
+                <ProtectedRoute allowedRoles={['company_admin']} userRole={userRole}>
+                  <IntelligentFleetDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/drivers" 
+              element={
+                <ProtectedRoute allowedRoles={['company_admin']} userRole={userRole}>
+                  <DriverManagement />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="/login" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

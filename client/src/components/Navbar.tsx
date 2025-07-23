@@ -11,17 +11,28 @@ import {
   UsersIcon
 } from '@heroicons/react/24/outline';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  userRole?: string;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ userRole }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
-    { name: 'Book Cab', href: '/book', icon: MapIcon },
-    { name: 'My Bookings', href: '/bookings', icon: TruckIcon },
-    { name: 'AI Fleet', href: '/intelligent-fleet', icon: CpuChipIcon },
-    { name: 'Drivers', href: '/drivers', icon: UsersIcon },
+  // Define navigation items with role permissions
+  const allNavigationItems = [
+    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, roles: ['company_admin'] },
+    { name: 'Book Cab', href: '/book', icon: MapIcon, roles: ['employee'] },
+    { name: 'My Bookings', href: '/bookings', icon: TruckIcon, roles: ['employee'] },
+    { name: 'AI Fleet', href: '/intelligent-fleet', icon: CpuChipIcon, roles: ['company_admin'] },
+    { name: 'Drivers', href: '/drivers', icon: UsersIcon, roles: ['company_admin'] },
   ];
+
+  // Filter navigation items based on user role
+  const navigation = allNavigationItems.filter(item => {
+    if (!userRole) return true; // Show all if no role specified (fallback)
+    return item.roles.includes(userRole);
+  });
 
   const isActive = (path: string) => location.pathname === path;
 
