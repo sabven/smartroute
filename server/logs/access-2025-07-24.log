@@ -1,0 +1,5423 @@
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 18:47:36',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ckkjnpqlv GET /api/health 200 113 - 10.877 ms',
+  timestamp: '2025-07-24 18:49:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'q4eo5nzt5 OPTIONS /api/auth/login 204 0 - 1.985 ms',
+  timestamp: '2025-07-24 18:49:55'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: '8rnxe1p4d',
+  email: 'priya@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 18:49:55'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: '8rnxe1p4d',
+  email: 'priya@techcorp.com',
+  userId: 'f9b05d4e-b2b0-4806-9553-44e73f2c0153',
+  role: 'employee',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 18:49:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8rnxe1p4d POST /api/auth/login 200 393 - 678.273 ms',
+  timestamp: '2025-07-24 18:49:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '8rnxe1p4d',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 18:49:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'cr5eq4kc9 OPTIONS /api/bookings/user/f9b05d4e-b2b0-4806-9553-44e73f2c0153 204 0 - 0.576 ms',
+  timestamp: '2025-07-24 18:50:06'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'bmdizsfhu OPTIONS /api/bookings/user/f9b05d4e-b2b0-4806-9553-44e73f2c0153 204 0 - 0.156 ms',
+  timestamp: '2025-07-24 18:50:06'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ocimrcjj7 GET /api/bookings/user/f9b05d4e-b2b0-4806-9553-44e73f2c0153 200 2 - 190.095 ms',
+  timestamp: '2025-07-24 18:50:06'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'eabiil5s1 GET /api/bookings/user/f9b05d4e-b2b0-4806-9553-44e73f2c0153 304 - - 6.059 ms',
+  timestamp: '2025-07-24 18:50:06'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '07ka7ogu9 OPTIONS /api/auth/login 204 0 - 0.535 ms',
+  timestamp: '2025-07-24 19:02:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'rv5wa334u',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 19:02:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'rv5wa334u',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 19:02:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'rv5wa334u POST /api/auth/login 200 396 - 942.065 ms',
+  timestamp: '2025-07-24 19:02:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'rv5wa334u',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 19:02:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '5c9m7wcm1 OPTIONS /api/bookings 204 0 - 0.390 ms',
+  timestamp: '2025-07-24 19:02:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ir5pdme11 OPTIONS /api/drivers 204 0 - 0.360 ms',
+  timestamp: '2025-07-24 19:02:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'cipz87201 OPTIONS /api/drivers 204 0 - 0.415 ms',
+  timestamp: '2025-07-24 19:02:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '50c3eh0xs GET /api/bookings 200 2 - 19.767 ms',
+  timestamp: '2025-07-24 19:02:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'avlan6qby GET /api/drivers 200 268 - 18.876 ms',
+  timestamp: '2025-07-24 19:02:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'kj52tjyvb GET /api/bookings 304 - - 28.216 ms',
+  timestamp: '2025-07-24 19:02:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ycllt2718 GET /api/drivers 304 - - 41.279 ms',
+  timestamp: '2025-07-24 19:02:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ozw0bq6qz GET /api/drivers 304 - - 18.384 ms',
+  timestamp: '2025-07-24 19:02:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'xat9natdp GET /api/bookings 304 - - 31.939 ms',
+  timestamp: '2025-07-24 19:02:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'er4utewri GET /api/drivers 304 - - 76.144 ms',
+  timestamp: '2025-07-24 19:02:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'n6y0k6xa9 GET /api/bookings 304 - - 76.486 ms',
+  timestamp: '2025-07-24 19:02:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mwwe2dmbv GET /api/drivers 304 - - 20.948 ms',
+  timestamp: '2025-07-24 19:02:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '54ykl72cs GET /api/bookings 304 - - 16.600 ms',
+  timestamp: '2025-07-24 19:02:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'lrn0hna8v GET /api/drivers 304 - - 14.667 ms',
+  timestamp: '2025-07-24 19:02:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'xf4tx5kdb GET /api/bookings 304 - - 18.126 ms',
+  timestamp: '2025-07-24 19:02:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8eofakhny OPTIONS /api/auth/login 204 0 - 1.137 ms',
+  timestamp: '2025-07-24 19:02:38'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'm58tm4acp',
+  email: 'priya@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 19:02:38'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'm58tm4acp',
+  email: 'priya@techcorp.com',
+  userId: 'f9b05d4e-b2b0-4806-9553-44e73f2c0153',
+  role: 'employee',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 19:02:39'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'm58tm4acp POST /api/auth/login 200 393 - 840.837 ms',
+  timestamp: '2025-07-24 19:02:39'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'm58tm4acp',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 19:02:39'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '30tw0qwgh OPTIONS /api/bookings 204 0 - 2.158 ms',
+  timestamp: '2025-07-24 19:03:05'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'h7k50m071 POST /api/bookings 201 564 - 157.647 ms',
+  timestamp: '2025-07-24 19:03:05'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'nmm6iwtmo OPTIONS /api/bookings/user/f9b05d4e-b2b0-4806-9553-44e73f2c0153 204 0 - 0.390 ms',
+  timestamp: '2025-07-24 19:03:13'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'jvjhsv16l OPTIONS /api/bookings/user/f9b05d4e-b2b0-4806-9553-44e73f2c0153 204 0 - 0.358 ms',
+  timestamp: '2025-07-24 19:03:13'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'xw2fkmzi3 GET /api/bookings/user/f9b05d4e-b2b0-4806-9553-44e73f2c0153 200 572 - 18.397 ms',
+  timestamp: '2025-07-24 19:03:13'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '5n29369z2 GET /api/bookings/user/f9b05d4e-b2b0-4806-9553-44e73f2c0153 304 - - 9.825 ms',
+  timestamp: '2025-07-24 19:03:13'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'fnmeekws2 OPTIONS /api/auth/login 204 0 - 0.430 ms',
+  timestamp: '2025-07-24 19:04:33'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'ml03dbp05',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 19:04:33'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'ml03dbp05',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ml03dbp05 POST /api/auth/login 200 396 - 918.831 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'ml03dbp05',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'r6i74cbx5 OPTIONS /api/bookings 204 0 - 0.196 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'xlgllwx2j OPTIONS /api/drivers 204 0 - 0.420 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'zxicaxsov OPTIONS /api/drivers 204 0 - 0.236 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'nvpm7ylfp GET /api/bookings 200 572 - 26.744 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'uuts32v10 GET /api/drivers 304 - - 9.675 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ay5ktva7b GET /api/bookings 304 - - 10.542 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'o1c9xv3nk GET /api/drivers 304 - - 5.942 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'woatswqrd GET /api/drivers 304 - - 9.458 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'lecf4uasm GET /api/bookings 304 - - 27.066 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'uzixj3bkl GET /api/drivers 304 - - 15.612 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'v5dmj722b GET /api/bookings 304 - - 14.396 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'qqlgsyez6 GET /api/bookings 304 - - 15.410 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'h0n3c3rrg GET /api/drivers 304 - - 11.401 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'idrylbgg5 GET /api/bookings 304 - - 16.919 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '6qouigvt9 GET /api/drivers 304 - - 8.006 ms',
+  timestamp: '2025-07-24 19:04:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'vs7nsg7zo OPTIONS /api/bookings/9c2e2107-be84-40ba-a806-37ccd775e440/assign-driver 204 0 - 0.379 ms',
+  timestamp: '2025-07-24 19:04:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'c8zqqdp4b PUT /api/bookings/9c2e2107-be84-40ba-a806-37ccd775e440/assign-driver 200 716 - 113.371 ms',
+  timestamp: '2025-07-24 19:04:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'roc6gqksk OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.473 ms',
+  timestamp: '2025-07-24 19:05:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '2yrcyje72 OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.284 ms',
+  timestamp: '2025-07-24 19:05:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'r3qtorl38 OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.461 ms',
+  timestamp: '2025-07-24 19:05:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'c80ja930n GET /api/driver-management?page=1&limit=10 200 133 - 140.897 ms',
+  timestamp: '2025-07-24 19:05:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'c80ja930n',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:05:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '818nbsqa2 GET /api/driver-management/dashboard/stats 200 197 - 140.128 ms',
+  timestamp: '2025-07-24 19:05:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '818nbsqa2',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:05:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'fiykg6ar1 GET /api/driver-management/dashboard/stats 304 - - 120.225 ms',
+  timestamp: '2025-07-24 19:05:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'fiykg6ar1',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:05:20'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '1nw50p12i GET /api/driver-management?page=1&limit=10 304 - - 132.717 ms',
+  timestamp: '2025-07-24 19:05:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '1nw50p12i',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:05:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '12c6im06e OPTIONS /api/driver-management 204 0 - 0.227 ms',
+  timestamp: '2025-07-24 19:14:44'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mtcgbjzjz POST /api/driver-management 400 159 - 35.132 ms',
+  timestamp: '2025-07-24 19:14:44'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'vt1msucop OPTIONS /api/driver-management 204 0 - 0.105 ms',
+  timestamp: '2025-07-24 19:15:06'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '75z46h0ud POST /api/driver-management 201 1572 - 871.663 ms',
+  timestamp: '2025-07-24 19:15:07'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '75z46h0ud',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/',
+  statusCode: 201,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: create_driver',
+  timestamp: '2025-07-24 19:15:07'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 19:18:17',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 19:25:19',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'py52ji3k8 OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.179 ms',
+  timestamp: '2025-07-24 19:33:52'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'f9wxx4ib0 OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.196 ms',
+  timestamp: '2025-07-24 19:33:52'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'kisg2v9bc OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.357 ms',
+  timestamp: '2025-07-24 19:33:52'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'tpou8cx1f OPTIONS /api/driver-management/dashboard/stats 204 0 - 1.980 ms',
+  timestamp: '2025-07-24 19:33:52'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'gnu11ahjm OPTIONS /api/drivers 204 0 - 0.605 ms',
+  timestamp: '2025-07-24 19:33:52'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'r8bmeacb1 OPTIONS /api/bookings 204 0 - 0.125 ms',
+  timestamp: '2025-07-24 19:33:52'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mnin1xf8x OPTIONS /api/drivers 204 0 - 0.733 ms',
+  timestamp: '2025-07-24 19:33:52'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '0t37ede9w OPTIONS /api/bookings 204 0 - 0.233 ms',
+  timestamp: '2025-07-24 19:33:52'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'k93a6also GET /api/driver-management?page=1&limit=10 200 1576 - 141.313 ms',
+  timestamp: '2025-07-24 19:33:52'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'k93a6also',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:33:52'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'c4i4u7vd9 GET /api/drivers 200 527 - 139.077 ms',
+  timestamp: '2025-07-24 19:33:52'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'zjgsrpfn5 GET /api/driver-management/dashboard/stats 200 199 - 169.333 ms',
+  timestamp: '2025-07-24 19:33:53'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'zjgsrpfn5',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:33:53'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ecrpqj57w GET /api/bookings 200 665 - 190.864 ms',
+  timestamp: '2025-07-24 19:33:53'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ino9ff40h GET /api/driver-management?page=1&limit=10 304 - - 28.968 ms',
+  timestamp: '2025-07-24 19:33:53'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'ino9ff40h',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:33:53'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'bsrn8f4kp GET /api/drivers 304 - - 26.213 ms',
+  timestamp: '2025-07-24 19:33:53'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'pd1zpsc4l GET /api/driver-management/dashboard/stats 304 - - 27.690 ms',
+  timestamp: '2025-07-24 19:33:53'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'pd1zpsc4l',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:33:53'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'bndqd342t GET /api/bookings 304 - - 30.685 ms',
+  timestamp: '2025-07-24 19:33:53'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '1w2hol8g8 GET /api/driver-management?page=1&limit=10 304 - - 48.184 ms',
+  timestamp: '2025-07-24 19:33:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '1w2hol8g8',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:33:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mmy7u369g GET /api/driver-management/dashboard/stats 304 - - 49.198 ms',
+  timestamp: '2025-07-24 19:33:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'mmy7u369g',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:33:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'vyphvu92c GET /api/driver-management?page=1&limit=10 304 - - 20.919 ms',
+  timestamp: '2025-07-24 19:33:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'vyphvu92c',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:33:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '3ris5yxv0 GET /api/driver-management/dashboard/stats 304 - - 22.262 ms',
+  timestamp: '2025-07-24 19:33:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '3ris5yxv0',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:33:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'tstzmg8gk OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.266 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'nol1x8rrj GET /api/driver-management?page=1&limit=10 304 - - 12.340 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'nol1x8rrj',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'nlpf7mh3b OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.188 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'us01n9lz9 OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.478 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '9bbblkof8 GET /api/driver-management?page=1&limit=10 304 - - 41.135 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '9bbblkof8',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'oulphxkyt GET /api/driver-management/dashboard/stats 304 - - 37.067 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'oulphxkyt',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ldmikmakp GET /api/driver-management/dashboard/stats 304 - - 17.434 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'ldmikmakp',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'wy6kfftry OPTIONS /api/bookings 204 0 - 0.174 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ekjcqy5r4 GET /api/bookings 304 - - 10.273 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8ylvi5d9r OPTIONS /api/drivers 204 0 - 0.191 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'gjrl30xng OPTIONS /api/drivers 204 0 - 0.383 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'iy3pt57zj GET /api/bookings 304 - - 9.222 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'qbnp9x3h2 GET /api/drivers 304 - - 11.652 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'rehi6a1v6 GET /api/drivers 304 - - 3.559 ms',
+  timestamp: '2025-07-24 19:34:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'bbb77l3qr OPTIONS /api/auth/login 204 0 - 0.295 ms',
+  timestamp: '2025-07-24 19:34:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: '9fcztf9qo',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 19:34:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: '9fcztf9qo',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 19:34:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '9fcztf9qo POST /api/auth/login 200 396 - 401.289 ms',
+  timestamp: '2025-07-24 19:34:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '9fcztf9qo',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 19:34:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'x5058q14x OPTIONS /api/bookings 204 0 - 0.156 ms',
+  timestamp: '2025-07-24 19:34:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'esmfi1yz4 GET /api/bookings 304 - - 15.710 ms',
+  timestamp: '2025-07-24 19:34:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8w75zpyp2 OPTIONS /api/drivers 204 0 - 0.116 ms',
+  timestamp: '2025-07-24 19:34:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'qf13qfo8m OPTIONS /api/drivers 204 0 - 0.152 ms',
+  timestamp: '2025-07-24 19:34:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'qquta2mvh GET /api/bookings 304 - - 2.968 ms',
+  timestamp: '2025-07-24 19:34:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ufaezle4a GET /api/drivers 304 - - 3.477 ms',
+  timestamp: '2025-07-24 19:34:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8ub1y456z GET /api/drivers 304 - - 4.981 ms',
+  timestamp: '2025-07-24 19:34:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'dl7gzrd5y GET /api/bookings 304 - - 16.637 ms',
+  timestamp: '2025-07-24 19:34:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '81h7mafia GET /api/drivers 304 - - 15.325 ms',
+  timestamp: '2025-07-24 19:34:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 't11rwado6 GET /api/bookings 304 - - 24.401 ms',
+  timestamp: '2025-07-24 19:34:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'nkbpon0n6 GET /api/drivers 304 - - 17.756 ms',
+  timestamp: '2025-07-24 19:34:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '7xot9hwah GET /api/bookings 304 - - 13.725 ms',
+  timestamp: '2025-07-24 19:34:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'w2q7sneyy GET /api/drivers 304 - - 10.923 ms',
+  timestamp: '2025-07-24 19:34:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'pjcjbiyte GET /api/bookings 304 - - 38.343 ms',
+  timestamp: '2025-07-24 19:34:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'xi3rjp2tw GET /api/drivers 304 - - 31.524 ms',
+  timestamp: '2025-07-24 19:34:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'nws1m3mlm OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.131 ms',
+  timestamp: '2025-07-24 19:34:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'spztq5cw3 OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.176 ms',
+  timestamp: '2025-07-24 19:34:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'fnj54ygn1 OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.867 ms',
+  timestamp: '2025-07-24 19:34:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'yvfxeo7ny OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.183 ms',
+  timestamp: '2025-07-24 19:34:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'xfv3zf4q8 GET /api/driver-management?page=1&limit=10 304 - - 56.180 ms',
+  timestamp: '2025-07-24 19:34:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'xfv3zf4q8',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:34:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '42ealj56j GET /api/driver-management/dashboard/stats 304 - - 25.811 ms',
+  timestamp: '2025-07-24 19:34:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '42ealj56j',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:34:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'wu5nlem2f GET /api/driver-management?page=1&limit=10 304 - - 50.566 ms',
+  timestamp: '2025-07-24 19:34:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'wu5nlem2f',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:34:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '5x8n2nd10 GET /api/driver-management/dashboard/stats 304 - - 35.616 ms',
+  timestamp: '2025-07-24 19:34:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '5x8n2nd10',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:34:19'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mjk0r3ezv OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.276 ms',
+  timestamp: '2025-07-24 19:34:59'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'x635u39ms OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.223 ms',
+  timestamp: '2025-07-24 19:34:59'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'b5tipeiar GET /api/driver-management?page=1&limit=10 304 - - 310.563 ms',
+  timestamp: '2025-07-24 19:34:59'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'b5tipeiar',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:34:59'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'qrwksdjck GET /api/driver-management/dashboard/stats 304 - - 583.387 ms',
+  timestamp: '2025-07-24 19:35:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'qrwksdjck',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:35:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '4niiy9ue2 GET /api/driver-management?page=1&limit=10 304 - - 32.917 ms',
+  timestamp: '2025-07-24 19:35:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '4niiy9ue2',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:35:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'jlshagnf4 GET /api/driver-management/dashboard/stats 304 - - 25.871 ms',
+  timestamp: '2025-07-24 19:35:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'jlshagnf4',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:35:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 's4emn6o9c OPTIONS /api/bookings 204 0 - 0.210 ms',
+  timestamp: '2025-07-24 19:35:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '0okce9eiy OPTIONS /api/drivers 204 0 - 0.275 ms',
+  timestamp: '2025-07-24 19:35:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'csv76i8rx GET /api/drivers 304 - - 12.015 ms',
+  timestamp: '2025-07-24 19:35:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'hy4q3dhfa GET /api/bookings 304 - - 20.927 ms',
+  timestamp: '2025-07-24 19:35:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '6pxonihwn GET /api/drivers 304 - - 8.509 ms',
+  timestamp: '2025-07-24 19:35:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '5j05zez9a GET /api/bookings 304 - - 12.409 ms',
+  timestamp: '2025-07-24 19:35:01'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '2dzmwv8zw OPTIONS /api/bookings 204 0 - 0.429 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'k9c40th5y OPTIONS /api/drivers 204 0 - 0.310 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'vsoh36hnl OPTIONS /api/bookings 204 0 - 0.329 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'i5zhxu6g5 OPTIONS /api/drivers 204 0 - 0.332 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '3dpklqfk9 OPTIONS /api/bookings 204 0 - 0.231 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'enojikeb8 OPTIONS /api/drivers 204 0 - 0.202 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8nu8aa7f9 OPTIONS /api/bookings 204 0 - 0.233 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'wh7l2wrf1 OPTIONS /api/drivers 204 0 - 0.210 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'u64lloz2s GET /api/drivers 304 - - 61.709 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'twjn491ld GET /api/bookings 304 - - 70.341 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '409e3rklx GET /api/drivers 304 - - 9.000 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'l46e1n37j GET /api/bookings 304 - - 9.366 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '87cj20q4e GET /api/drivers 304 - - 7.026 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '804g9vx6t GET /api/bookings 304 - - 6.933 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'c8glwgsho GET /api/drivers 304 - - 4.561 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'tq46d6or5 GET /api/bookings 304 - - 5.752 ms',
+  timestamp: '2025-07-24 19:35:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'pldf8hefo OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.183 ms',
+  timestamp: '2025-07-24 19:35:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '9lxthvof0 OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.175 ms',
+  timestamp: '2025-07-24 19:35:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'e972q1r8w OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.234 ms',
+  timestamp: '2025-07-24 19:35:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '66hira7vm GET /api/driver-management/dashboard/stats 304 - - 28.041 ms',
+  timestamp: '2025-07-24 19:35:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '66hira7vm',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:35:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'yvubb2nev GET /api/driver-management?page=1&limit=10 304 - - 57.570 ms',
+  timestamp: '2025-07-24 19:35:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'yvubb2nev',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:35:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'u4iddmuds GET /api/driver-management/dashboard/stats 304 - - 24.933 ms',
+  timestamp: '2025-07-24 19:35:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'u4iddmuds',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 19:35:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 's7d7mro2x GET /api/driver-management?page=1&limit=10 304 - - 21.818 ms',
+  timestamp: '2025-07-24 19:35:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 's7d7mro2x',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 19:35:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '4u27h7bfz OPTIONS /api/bookings 204 0 - 0.194 ms',
+  timestamp: '2025-07-24 19:36:48'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'sqe210eb7 OPTIONS /api/drivers 204 0 - 0.209 ms',
+  timestamp: '2025-07-24 19:36:48'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'da65akcqf OPTIONS /api/bookings 204 0 - 0.238 ms',
+  timestamp: '2025-07-24 19:36:48'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'gzkoxty0g OPTIONS /api/drivers 204 0 - 0.257 ms',
+  timestamp: '2025-07-24 19:36:48'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '1t5p9yzeb GET /api/bookings 304 - - 72.282 ms',
+  timestamp: '2025-07-24 19:36:48'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '2opq1typ6 GET /api/drivers 304 - - 69.342 ms',
+  timestamp: '2025-07-24 19:36:48'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'sjhzatiut GET /api/drivers 304 - - 2.740 ms',
+  timestamp: '2025-07-24 19:36:48'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '82lglp94i GET /api/bookings 304 - - 9.474 ms',
+  timestamp: '2025-07-24 19:36:48'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 19:40:03',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ebo2vvbu4 OPTIONS /api/bookings 204 0 - 0.349 ms',
+  timestamp: '2025-07-24 19:44:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '01hvxatfw OPTIONS /api/drivers 204 0 - 0.163 ms',
+  timestamp: '2025-07-24 19:44:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'o4x1hdvti OPTIONS /api/bookings 204 0 - 0.230 ms',
+  timestamp: '2025-07-24 19:44:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'p5hvlyb2j OPTIONS /api/drivers 204 0 - 0.133 ms',
+  timestamp: '2025-07-24 19:44:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '79y2j04wl GET /api/bookings 304 - - 80.302 ms',
+  timestamp: '2025-07-24 19:44:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'vax64lv40 GET /api/drivers 304 - - 77.849 ms',
+  timestamp: '2025-07-24 19:44:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'hfmh4tvx1 GET /api/bookings 304 - - 9.222 ms',
+  timestamp: '2025-07-24 19:44:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '9j36okda3 GET /api/drivers 304 - - 8.082 ms',
+  timestamp: '2025-07-24 19:44:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'gjj0czqlb OPTIONS /api/bookings 204 0 - 0.299 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'zq56ckwv3 OPTIONS /api/drivers 204 0 - 1.446 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '7bv81vjlm OPTIONS /api/vehicles/available 204 0 - 1.865 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '16enxu6lu OPTIONS /api/bookings 204 0 - 0.239 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'sfn87mwyx OPTIONS /api/vehicles/available 204 0 - 0.246 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'cife2xaqc GET /api/vehicles/available 404 161 - 15.294 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ua6x7wbyj OPTIONS /api/drivers 204 0 - 0.306 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'u5ucilx8d GET /api/vehicles/available 404 161 - 9.999 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'cdriebseq GET /api/vehicles/available 404 161 - 0.922 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'w1jb7avb7 GET /api/vehicles/available 404 161 - 11.387 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'jukw19dnj GET /api/drivers 304 - - 242.276 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'i75vn32rt GET /api/bookings 304 - - 252.927 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'wq833xzdg GET /api/drivers 304 - - 43.640 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'c0skp7rf4 GET /api/bookings 304 - - 46.932 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'v616drjn6 GET /api/drivers 304 - - 25.997 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mhagdpgwk GET /api/bookings 304 - - 68.941 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'i52a5jmjk GET /api/drivers 304 - - 36.477 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8ry7uxrc8 GET /api/bookings 304 - - 96.870 ms',
+  timestamp: '2025-07-24 20:50:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '57zrbd4k9 OPTIONS /api/vehicles?page=1&limit=10 204 0 - 0.349 ms',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'yhwo0rc7b OPTIONS /api/driver-management?status=active 204 0 - 0.202 ms',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'fzx3hjf6d OPTIONS /api/vehicles/stats 204 0 - 0.262 ms',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'npdcfi0pw OPTIONS /api/vehicles?page=1&limit=10 204 0 - 0.350 ms',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mwkuenqlg OPTIONS /api/driver-management?status=active 204 0 - 0.275 ms',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'vvxocnq77 OPTIONS /api/vehicles/stats 204 0 - 0.774 ms',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'wuxr9kunn GET /api/vehicles?page=1&limit=10 200 389 - 1.150 ms',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'vx4ehjdgd GET /api/vehicles?page=1&limit=10 304 - - 1.345 ms',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '5idzncwf6 GET /api/vehicles/stats 404 157 - 1.373 ms',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'iel25i2cw GET /api/vehicles/stats 404 157 - 2.317 ms',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'k547mlblr GET /api/driver-management?status=active 200 1576 - 223.936 ms',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'k547mlblr',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'jwi6kf96t GET /api/driver-management?status=active 304 - - 9.708 ms',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'jwi6kf96t',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 20:50:58'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 20:52:51',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 20:53:53',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 20:54:14',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 20:54:28',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 20:55:58',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 20:56:41',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 20:57:09',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'ucpdt2e35',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 20:57:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'ucpdt2e35',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 20:57:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ucpdt2e35 POST /api/auth/login 200 396 - 473.142 ms',
+  timestamp: '2025-07-24 20:57:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'ucpdt2e35',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 20:57:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'q9nf25b6n POST /api/vehicles 404 152 - 0.969 ms',
+  timestamp: '2025-07-24 20:57:15'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'fijqg50as POST /api/vehicles 404 152 - 1.039 ms',
+  timestamp: '2025-07-24 20:57:16'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ckvzplkvv POST /api/vehicles 404 152 - 0.639 ms',
+  timestamp: '2025-07-24 20:57:16'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '7gqqtwtxi POST /api/vehicles 404 152 - 0.995 ms',
+  timestamp: '2025-07-24 20:57:16'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'x9l1ueb38 POST /api/vehicles 404 152 - 0.699 ms',
+  timestamp: '2025-07-24 20:57:17'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'kr701wyxd GET /api/vehicles/stats 404 157 - 0.823 ms',
+  timestamp: '2025-07-24 20:57:17'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'gxdbqm88g OPTIONS /api/vehicles?page=1&limit=10 204 0 - 0.561 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '6oruar11z OPTIONS /api/driver-management?status=active 204 0 - 0.259 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'tii5spy07 OPTIONS /api/vehicles/stats 204 0 - 0.192 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'wiutajr8r OPTIONS /api/vehicles?page=1&limit=10 204 0 - 0.167 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'd7wu4wbl2 OPTIONS /api/driver-management?status=active 204 0 - 0.228 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'yd1n321j1 OPTIONS /api/vehicles/stats 204 0 - 0.289 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'kh45pjc31 OPTIONS /api/bookings 204 0 - 0.364 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'kxv34r8ts OPTIONS /api/drivers 204 0 - 0.194 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'e1wkrxdm3 OPTIONS /api/vehicles/available 204 0 - 0.146 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'xoupoiozd OPTIONS /api/bookings 204 0 - 0.253 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'glgpixo70 OPTIONS /api/drivers 204 0 - 0.296 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'wqf2ygrwx OPTIONS /api/vehicles/available 204 0 - 0.276 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '9vqt7vnzg GET /api/vehicles?page=1&limit=10 304 - - 0.581 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '495sczphi GET /api/vehicles/stats 404 157 - 6.358 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'xzeae2kei GET /api/vehicles?page=1&limit=10 304 - - 2.878 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ux1tvg9fe GET /api/vehicles/available 404 161 - 17.633 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '7u1a2z382 GET /api/vehicles/stats 404 157 - 11.160 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'k5z18dzdx GET /api/vehicles/available 404 161 - 2.714 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'qeqf53huz GET /api/drivers 200 2609 - 120.216 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'qzmck51te GET /api/bookings 304 - - 135.485 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'khhhfp9yi GET /api/drivers 304 - - 30.116 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '6s49rbvdc GET /api/driver-management?status=active 200 13694 - 180.769 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '6s49rbvdc',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'bem39n9yr GET /api/bookings 304 - - 26.318 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'yo255zo01 GET /api/driver-management?status=active 304 - - 24.961 ms',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'yo255zo01',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:22:11'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ti4hmoust GET /api/vehicles?page=1&limit=10 304 - - 0.480 ms',
+  timestamp: '2025-07-24 21:22:13'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'r7yabr8v9 GET /api/vehicles?page=1&limit=10 304 - - 7.414 ms',
+  timestamp: '2025-07-24 21:22:13'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'zsyzn3cr9 GET /api/vehicles/stats 404 157 - 23.071 ms',
+  timestamp: '2025-07-24 21:22:13'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'qprzs0xc8 GET /api/driver-management?status=active 304 - - 51.186 ms',
+  timestamp: '2025-07-24 21:22:13'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'qprzs0xc8',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:22:13'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '43cd03dn7 GET /api/vehicles/stats 404 157 - 72.002 ms',
+  timestamp: '2025-07-24 21:22:13'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '58xm5xwkz GET /api/driver-management?status=active 304 - - 109.450 ms',
+  timestamp: '2025-07-24 21:22:13'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '58xm5xwkz',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:22:13'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'oyowr1jh3 OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.156 ms',
+  timestamp: '2025-07-24 21:22:18'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'cbqiz47ja GET /api/driver-management?page=1&limit=10 200 13694 - 10.168 ms',
+  timestamp: '2025-07-24 21:22:18'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'cbqiz47ja',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:22:18'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'pkyc8zw68 OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.179 ms',
+  timestamp: '2025-07-24 21:22:18'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'yo6e426f5 OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.186 ms',
+  timestamp: '2025-07-24 21:22:18'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'vh5t3h3kk GET /api/driver-management?page=1&limit=10 304 - - 40.828 ms',
+  timestamp: '2025-07-24 21:22:18'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'vh5t3h3kk',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:22:18'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'w25ltjdjv GET /api/driver-management/dashboard/stats 200 199 - 38.669 ms',
+  timestamp: '2025-07-24 21:22:18'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'w25ltjdjv',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 21:22:18'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'nknh7xrwd GET /api/driver-management/dashboard/stats 304 - - 12.983 ms',
+  timestamp: '2025-07-24 21:22:18'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'nknh7xrwd',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 21:22:18'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'v9eq5uyhs OPTIONS /api/vehicles?page=1&limit=10 204 0 - 0.176 ms',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'dbmu4j4t0 OPTIONS /api/driver-management?status=active 204 0 - 0.280 ms',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'q1mal8gt2 OPTIONS /api/vehicles/stats 204 0 - 0.251 ms',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '4zn14zehl OPTIONS /api/vehicles?page=1&limit=10 204 0 - 0.314 ms',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ozc6mf7xz OPTIONS /api/driver-management?status=active 204 0 - 0.312 ms',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'vtkn7dxqh OPTIONS /api/vehicles/stats 204 0 - 0.260 ms',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'gxrjqttpo GET /api/vehicles?page=1&limit=10 304 - - 0.750 ms',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'h4ra68ksv GET /api/vehicles?page=1&limit=10 304 - - 0.868 ms',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'kjrl56bcu GET /api/driver-management?status=active 304 - - 23.247 ms',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'kjrl56bcu',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'p2lnmksrj GET /api/vehicles/stats 404 157 - 15.781 ms',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'cn12wyxso GET /api/driver-management?status=active 304 - - 15.394 ms',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'cn12wyxso',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '22gs32w38 GET /api/vehicles/stats 404 157 - 10.300 ms',
+  timestamp: '2025-07-24 21:22:29'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '6ari5wikc OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.396 ms',
+  timestamp: '2025-07-24 21:23:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '1drh6a49v OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.455 ms',
+  timestamp: '2025-07-24 21:23:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'tyteboex0 OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.254 ms',
+  timestamp: '2025-07-24 21:23:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'egbxbtia9 OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.693 ms',
+  timestamp: '2025-07-24 21:23:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'zj2riwceu GET /api/driver-management?page=1&limit=10 304 - - 95.958 ms',
+  timestamp: '2025-07-24 21:23:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'zj2riwceu',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:23:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'a9xpif45f GET /api/driver-management/dashboard/stats 304 - - 106.325 ms',
+  timestamp: '2025-07-24 21:23:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'a9xpif45f',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 21:23:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'jfs9cfdke GET /api/driver-management?page=1&limit=10 304 - - 14.458 ms',
+  timestamp: '2025-07-24 21:23:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'jfs9cfdke',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:23:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'z2uvlmciy GET /api/driver-management/dashboard/stats 304 - - 15.071 ms',
+  timestamp: '2025-07-24 21:23:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'z2uvlmciy',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 21:23:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '4i0bvmigr OPTIONS /api/driver-management/f6b79170-7a95-4505-b1c7-86864a10a110 204 0 - 0.413 ms',
+  timestamp: '2025-07-24 21:24:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '2didjthmo OPTIONS /api/driver-management/f6b79170-7a95-4505-b1c7-86864a10a110 204 0 - 0.187 ms',
+  timestamp: '2025-07-24 21:24:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'v1dzwj33f GET /api/driver-management/f6b79170-7a95-4505-b1c7-86864a10a110 200 1612 - 163.354 ms',
+  timestamp: '2025-07-24 21:24:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'v1dzwj33f',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/f6b79170-7a95-4505-b1c7-86864a10a110',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver',
+  timestamp: '2025-07-24 21:24:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '44yoi9l0l GET /api/driver-management/f6b79170-7a95-4505-b1c7-86864a10a110 304 - - 5.726 ms',
+  timestamp: '2025-07-24 21:24:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '44yoi9l0l',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/f6b79170-7a95-4505-b1c7-86864a10a110',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver',
+  timestamp: '2025-07-24 21:24:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'zxt7ndvlm OPTIONS /api/vehicles?page=1&limit=10 204 0 - 0.296 ms',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'lgpmsgrsu OPTIONS /api/driver-management?status=active 204 0 - 0.227 ms',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'i2nq9nb9q OPTIONS /api/vehicles/stats 204 0 - 0.225 ms',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'l3lgfmnfb OPTIONS /api/vehicles?page=1&limit=10 204 0 - 0.425 ms',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'exu6vdcuu OPTIONS /api/driver-management?status=active 204 0 - 0.297 ms',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ukqblkk2p OPTIONS /api/vehicles/stats 204 0 - 0.256 ms',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'aejthj4qs GET /api/vehicles?page=1&limit=10 304 - - 0.611 ms',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'dmmxr4ut5 GET /api/vehicles/stats 404 157 - 0.623 ms',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8nvnzzlwd GET /api/vehicles?page=1&limit=10 304 - - 0.493 ms',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8vzv0vf96 GET /api/vehicles/stats 404 157 - 0.722 ms',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'sc9o0wj2l GET /api/driver-management?status=active 304 - - 109.559 ms',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'sc9o0wj2l',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'dhjqm1yvk GET /api/driver-management?status=active 304 - - 7.302 ms',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'dhjqm1yvk',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:24:35'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'bul3e6i91 OPTIONS /api/vehicles?page=1&limit=10 204 0 - 0.329 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '5xr19snfb OPTIONS /api/driver-management?status=active 204 0 - 0.265 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'sw7g8mxv1 OPTIONS /api/vehicles/stats 204 0 - 0.236 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'nsf4ijbvz OPTIONS /api/vehicles?page=1&limit=10 204 0 - 0.225 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'fby6t2ybv OPTIONS /api/driver-management?status=active 204 0 - 0.222 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '4dxo12bk5 OPTIONS /api/vehicles/stats 204 0 - 0.181 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'cpaf9j0m3 OPTIONS /api/bookings 204 0 - 0.195 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'n9i3kr9g9 OPTIONS /api/drivers 204 0 - 0.200 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'cz48iyw8q OPTIONS /api/vehicles/available 204 0 - 0.145 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '3k1fxnwdd OPTIONS /api/bookings 204 0 - 0.174 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mfqt2nwzr OPTIONS /api/drivers 204 0 - 0.164 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '5zufn430u OPTIONS /api/vehicles/available 204 0 - 0.200 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'xl3s1z7cc GET /api/vehicles?page=1&limit=10 304 - - 0.496 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '23zooqegc GET /api/vehicles/stats 404 157 - 7.667 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8lop4gchp GET /api/vehicles?page=1&limit=10 304 - - 0.454 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'o8xd00w9d GET /api/vehicles/available 404 161 - 6.749 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'hnvvh5woq GET /api/vehicles/stats 404 157 - 6.462 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'h713wflm4 GET /api/vehicles/available 404 161 - 14.065 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '4azjcewn7 GET /api/bookings 304 - - 102.815 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'o05li8v5i GET /api/drivers 304 - - 101.465 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'x27ueufik GET /api/driver-management?status=active 304 - - 129.683 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'x27ueufik',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'iuvlu477a GET /api/bookings 304 - - 30.396 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'sytryvl4d GET /api/drivers 304 - - 22.328 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '9p4vr463g GET /api/driver-management?status=active 304 - - 24.090 ms',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '9p4vr463g',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:29:30'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:32:19',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:32:31',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:32:45',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:33:14',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:33:26',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:33:39',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:33:51',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:34:03',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:34:13',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:34:30',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'wn3wrk1wi',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 21:34:33'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'wn3wrk1wi',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 21:34:33'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'wn3wrk1wi POST /api/auth/login 200 396 - 350.636 ms',
+  timestamp: '2025-07-24 21:34:33'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'wn3wrk1wi',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 21:34:33'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ltr4svku7 GET /api/driver-management?status=active 200 13694 - 14.074 ms',
+  timestamp: '2025-07-24 21:34:33'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'ltr4svku7',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:34:33'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:34:47',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'x3ttncd4f',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 21:34:50'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'x3ttncd4f',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'x3ttncd4f POST /api/auth/login 200 396 - 364.569 ms',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'x3ttncd4f',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'o1ceo3yjh GET /api/driver-management?status=active 200 13694 - 13.130 ms',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'o1ceo3yjh',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '9fdzhujgf POST /api/vehicles 404 152 - 0.594 ms',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'y9t0wrmh6 POST /api/vehicles 404 152 - 0.542 ms',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mdesbudvx POST /api/vehicles 404 152 - 0.638 ms',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'nfd5j1pjv POST /api/vehicles 404 152 - 0.454 ms',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'aqbueek9f POST /api/vehicles 404 152 - 0.473 ms',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'bgksf7zpa POST /api/vehicles 404 152 - 0.518 ms',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '0ft4qd4hu POST /api/vehicles 404 152 - 0.447 ms',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8h625qf6x POST /api/vehicles 404 152 - 0.736 ms',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'qfk7mlxo1 GET /api/vehicles/stats 404 157 - 0.546 ms',
+  timestamp: '2025-07-24 21:34:51'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:35:00',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'ye2f9r95w',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 21:35:09'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'ye2f9r95w',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ye2f9r95w POST /api/auth/login 200 396 - 457.370 ms',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'ye2f9r95w',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'bh5vwseb0 GET /api/driver-management?status=active 200 13694 - 13.848 ms',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'bh5vwseb0',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'xv2nmdwql POST /api/vehicles 404 152 - 0.643 ms',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '6xsc178fg POST /api/vehicles 404 152 - 0.741 ms',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '14wv5sqe2 POST /api/vehicles 404 152 - 0.424 ms',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '7os5zr485 POST /api/vehicles 404 152 - 0.430 ms',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'hibd02i0g POST /api/vehicles 404 152 - 0.438 ms',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '6afmv5tx9 POST /api/vehicles 404 152 - 0.500 ms',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'w1zm5qlni POST /api/vehicles 404 152 - 0.713 ms',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '7mkx5oom3 POST /api/vehicles 404 152 - 0.485 ms',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ozbk8paxr GET /api/vehicles/stats 404 157 - 0.333 ms',
+  timestamp: '2025-07-24 21:35:10'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:35:12',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:35:25',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:36:28',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:36:34',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'kjrv5yqy5',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'kjrv5yqy5',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'kjrv5yqy5 POST /api/auth/login 200 396 - 348.788 ms',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'kjrv5yqy5',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '0s9hjk6pu GET /api/driver-management?status=active 200 13694 - 14.969 ms',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '0s9hjk6pu',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ogr82l84w POST /api/vehicles 404 152 - 0.803 ms',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'oaur03mrq POST /api/vehicles 404 152 - 0.510 ms',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'k8q641nw6 POST /api/vehicles 404 152 - 0.495 ms',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'n5qwf1lzq POST /api/vehicles 404 152 - 0.452 ms',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '316g8m9yl POST /api/vehicles 404 152 - 0.432 ms',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'z512sbymk POST /api/vehicles 404 152 - 0.730 ms',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '0uaa92gsc POST /api/vehicles 404 152 - 0.537 ms',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '2kirtsf07 POST /api/vehicles 404 152 - 0.399 ms',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ap1fp17lm GET /api/vehicles/stats 404 157 - 0.308 ms',
+  timestamp: '2025-07-24 21:36:47'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'liup6h8n7',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 21:38:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'liup6h8n7',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 21:38:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'liup6h8n7 POST /api/auth/login 200 396 - 488.183 ms',
+  timestamp: '2025-07-24 21:38:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'liup6h8n7',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 21:38:00'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ev0yt7j05 GET /api/vehicles 200 389 - 0.248 ms',
+  timestamp: '2025-07-24 21:38:00'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:39:38',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:40:15',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:40:55',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:41:07',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'f41udkesc',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 21:41:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'f41udkesc',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'f41udkesc POST /api/auth/login 200 396 - 506.063 ms',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'f41udkesc',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'bxwlh06e6 GET /api/driver-management?status=active 200 13694 - 14.420 ms',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'bxwlh06e6',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'o3ztotjlg POST /api/vehicles 404 152 - 0.585 ms',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'pgau1iget POST /api/vehicles 404 152 - 0.639 ms',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'nwsadkdhn POST /api/vehicles 404 152 - 0.697 ms',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '5kuf84lfk POST /api/vehicles 404 152 - 0.808 ms',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'tmxo1l2bp POST /api/vehicles 404 152 - 0.575 ms',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '3jcy5e7fn POST /api/vehicles 404 152 - 0.760 ms',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'i17xud084 POST /api/vehicles 404 152 - 1.342 ms',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'l4upz0zwf POST /api/vehicles 404 152 - 0.483 ms',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'wk6x0k7be GET /api/vehicles/stats 404 157 - 0.869 ms',
+  timestamp: '2025-07-24 21:41:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: '31eczmx39',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 21:41:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: '31eczmx39',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 21:41:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '31eczmx39 POST /api/auth/login 200 396 - 429.441 ms',
+  timestamp: '2025-07-24 21:41:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '31eczmx39',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 21:41:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'pp83vqqvi GET /api/vehicles 200 389 - 0.910 ms',
+  timestamp: '2025-07-24 21:41:34'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'oxd5x3378 GET /api/vehicles 200 389 - 0.250 ms',
+  timestamp: '2025-07-24 21:41:45'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:42:59',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:43:13',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:43:25',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:43:58',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:44:09',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  port: '5000',
+  environment: 'development',
+  database: 'PostgreSQL',
+  timestamp: '2025-07-24 21:44:21',
+  level: 'info',
+  message: 'Server started successfully'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ffy7qc3vw OPTIONS /api/auth/login 204 0 - 0.202 ms',
+  timestamp: '2025-07-24 21:45:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: '6mrum1x9q',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 21:45:21'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: '6mrum1x9q',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '6mrum1x9q POST /api/auth/login 200 396 - 503.393 ms',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '6mrum1x9q',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'r37r79p3s OPTIONS /api/bookings 204 0 - 0.123 ms',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'qeny3yz6q OPTIONS /api/drivers 204 0 - 0.185 ms',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '08n5f4935 GET /api/bookings 304 - - 11.547 ms',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ztt3sx6ww OPTIONS /api/vehicles/available 204 0 - 0.348 ms',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '7i494krje OPTIONS /api/drivers 204 0 - 0.193 ms',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'yuxpf8jo9 OPTIONS /api/vehicles/available 204 0 - 0.182 ms',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '2k1bw97e5 GET /api/drivers 304 - - 9.279 ms',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '455x15mzn GET /api/bookings 304 - - 9.446 ms',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '1lbxt15nk GET /api/vehicles/available 404 161 - 2.565 ms',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'kuy6sb56s GET /api/drivers 304 - - 7.069 ms',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mlftodz99 GET /api/vehicles/available 404 161 - 0.837 ms',
+  timestamp: '2025-07-24 21:45:22'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '62hwt4cks GET /api/bookings 304 - - 17.366 ms',
+  timestamp: '2025-07-24 21:45:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'v15789yaj GET /api/drivers 304 - - 3.154 ms',
+  timestamp: '2025-07-24 21:45:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'v71t870a6 GET /api/vehicles/available 404 161 - 9.555 ms',
+  timestamp: '2025-07-24 21:45:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ln92knu28 GET /api/bookings 304 - - 13.431 ms',
+  timestamp: '2025-07-24 21:45:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '5wu0shsnf GET /api/drivers 304 - - 10.226 ms',
+  timestamp: '2025-07-24 21:45:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'bmt7kbomn GET /api/vehicles/available 404 161 - 6.023 ms',
+  timestamp: '2025-07-24 21:45:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '7ootpzg7h GET /api/vehicles/available 404 161 - 0.600 ms',
+  timestamp: '2025-07-24 21:45:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '595grfik3 GET /api/bookings 304 - - 26.443 ms',
+  timestamp: '2025-07-24 21:45:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'fzydhsp26 GET /api/drivers 304 - - 12.473 ms',
+  timestamp: '2025-07-24 21:45:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'w0bbp6zxo GET /api/vehicles/available 404 161 - 9.115 ms',
+  timestamp: '2025-07-24 21:45:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'f3yxvw5oh GET /api/bookings 304 - - 11.511 ms',
+  timestamp: '2025-07-24 21:45:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'i4d5l5cpy GET /api/drivers 304 - - 4.915 ms',
+  timestamp: '2025-07-24 21:45:23'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'sv9s5vr2p OPTIONS /api/vehicles?page=1&limit=10 204 0 - 0.088 ms',
+  timestamp: '2025-07-24 21:45:27'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '9ddfn9eel GET /api/vehicles?page=1&limit=10 304 - - 0.215 ms',
+  timestamp: '2025-07-24 21:45:27'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'o69ta9u7m OPTIONS /api/driver-management?status=active 204 0 - 0.099 ms',
+  timestamp: '2025-07-24 21:45:27'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'r4z9pm7q9 OPTIONS /api/vehicles/stats 204 0 - 0.129 ms',
+  timestamp: '2025-07-24 21:45:27'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'i0l2u7ylr OPTIONS /api/vehicles/stats 204 0 - 0.246 ms',
+  timestamp: '2025-07-24 21:45:27'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'tmja3l3ps GET /api/vehicles?page=1&limit=10 304 - - 0.556 ms',
+  timestamp: '2025-07-24 21:45:27'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ib9efzfg3 GET /api/vehicles/stats 404 157 - 0.673 ms',
+  timestamp: '2025-07-24 21:45:27'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ln44dosb7 GET /api/vehicles/stats 404 157 - 0.583 ms',
+  timestamp: '2025-07-24 21:45:27'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'q5mqlak6n GET /api/driver-management?status=active 304 - - 22.218 ms',
+  timestamp: '2025-07-24 21:45:27'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'q5mqlak6n',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:45:27'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'q1covr8ur GET /api/driver-management?status=active 304 - - 11.680 ms',
+  timestamp: '2025-07-24 21:45:27'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'q1covr8ur',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:45:27'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'lzc72ibr6 OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.193 ms',
+  timestamp: '2025-07-24 21:45:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '2hs79b1q2 OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.155 ms',
+  timestamp: '2025-07-24 21:45:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8efstz8et OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.201 ms',
+  timestamp: '2025-07-24 21:45:37'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ezagjojl2 GET /api/driver-management/dashboard/stats 304 - - 77.418 ms',
+  timestamp: '2025-07-24 21:45:38'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'ezagjojl2',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 21:45:38'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ky4fntwpg GET /api/driver-management?page=1&limit=10 304 - - 138.975 ms',
+  timestamp: '2025-07-24 21:45:38'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'ky4fntwpg',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:45:38'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '4ez08hguh GET /api/driver-management/dashboard/stats 304 - - 20.182 ms',
+  timestamp: '2025-07-24 21:45:38'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '4ez08hguh',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 21:45:38'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'pm7l6acez GET /api/driver-management?page=1&limit=10 304 - - 20.610 ms',
+  timestamp: '2025-07-24 21:45:38'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'pm7l6acez',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:45:38'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '133ga8eri OPTIONS /api/bookings 204 0 - 0.196 ms',
+  timestamp: '2025-07-24 21:45:40'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'r6mldj7mf OPTIONS /api/drivers 204 0 - 0.150 ms',
+  timestamp: '2025-07-24 21:45:40'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '3bxj9qzug OPTIONS /api/vehicles/available 204 0 - 0.136 ms',
+  timestamp: '2025-07-24 21:45:40'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'rwods0mif OPTIONS /api/bookings 204 0 - 0.176 ms',
+  timestamp: '2025-07-24 21:45:40'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '3avyqjaoc OPTIONS /api/drivers 204 0 - 0.165 ms',
+  timestamp: '2025-07-24 21:45:40'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'gcsl6pbb3 GET /api/vehicles/available 404 161 - 0.583 ms',
+  timestamp: '2025-07-24 21:45:40'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'sgmonvkkh OPTIONS /api/vehicles/available 204 0 - 0.177 ms',
+  timestamp: '2025-07-24 21:45:40'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '75zen797w GET /api/vehicles/available 404 161 - 0.755 ms',
+  timestamp: '2025-07-24 21:45:40'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '6ieialnhs GET /api/drivers 304 - - 7.152 ms',
+  timestamp: '2025-07-24 21:45:40'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'nxji5ltyy GET /api/bookings 304 - - 14.256 ms',
+  timestamp: '2025-07-24 21:45:40'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '0anjlhz19 GET /api/drivers 304 - - 7.853 ms',
+  timestamp: '2025-07-24 21:45:40'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'gkpsw3uhk GET /api/bookings 304 - - 8.535 ms',
+  timestamp: '2025-07-24 21:45:40'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ode5hblm1 OPTIONS /api/bookings 204 0 - 0.198 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'kjwsenhbx OPTIONS /api/drivers 204 0 - 0.206 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '6jqq06sb8 OPTIONS /api/vehicles/available 204 0 - 0.189 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'c5jzrqoz6 OPTIONS /api/bookings 204 0 - 0.168 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'wqh9xhihj OPTIONS /api/drivers 204 0 - 0.150 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '6dyj94jj5 OPTIONS /api/vehicles/available 204 0 - 0.175 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'l2nrf1hla OPTIONS /api/bookings 204 0 - 0.127 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mh4m5mrfo OPTIONS /api/drivers 204 0 - 0.195 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '3bo3chv6j OPTIONS /api/vehicles/available 204 0 - 0.162 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'aykubkqpq OPTIONS /api/bookings 204 0 - 0.159 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8hwbf3br7 OPTIONS /api/drivers 204 0 - 0.135 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'l8w9lh5bo OPTIONS /api/vehicles/available 204 0 - 0.094 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'r117ra038 GET /api/vehicles/available 404 161 - 0.344 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '60uwhr30s GET /api/vehicles/available 404 161 - 0.575 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '56cu5wb9r GET /api/vehicles/available 404 161 - 0.554 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '9kb95dncj GET /api/vehicles/available 404 161 - 0.566 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '1g381clt4 GET /api/bookings 304 - - 68.869 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'f9nifkhl5 GET /api/drivers 304 - - 66.429 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'u6bj5ybfq GET /api/drivers 304 - - 2.856 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'va4wgcnox GET /api/bookings 304 - - 7.866 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ngzovtl79 GET /api/drivers 304 - - 3.965 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'lpevzwkc3 GET /api/bookings 304 - - 4.392 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 't52nunhrv GET /api/drivers 304 - - 5.327 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ugvs1zuop GET /api/bookings 304 - - 5.916 ms',
+  timestamp: '2025-07-24 21:47:31'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'a6z8hxqef OPTIONS /api/auth/login 204 0 - 0.289 ms',
+  timestamp: '2025-07-24 21:47:43'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'bzij414lm',
+  email: 'priya@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 21:47:43'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'bzij414lm',
+  email: 'priya@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'warn',
+  message: 'Login failed - invalid password',
+  timestamp: '2025-07-24 21:47:43'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'bzij414lm POST /api/auth/login 401 31 - 379.416 ms',
+  timestamp: '2025-07-24 21:47:43'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mnk4h0vs1 OPTIONS /api/auth/login 204 0 - 0.250 ms',
+  timestamp: '2025-07-24 21:47:48'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'b1cykt303',
+  email: 'priya@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 21:47:48'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'b1cykt303',
+  email: 'priya@techcorp.com',
+  userId: 'f9b05d4e-b2b0-4806-9553-44e73f2c0153',
+  role: 'employee',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 21:47:49'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'b1cykt303 POST /api/auth/login 200 393 - 298.025 ms',
+  timestamp: '2025-07-24 21:47:49'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'b1cykt303',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 21:47:49'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'p8kz68bqj OPTIONS /api/bookings/user/f9b05d4e-b2b0-4806-9553-44e73f2c0153 204 0 - 0.106 ms',
+  timestamp: '2025-07-24 21:47:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'pl7e0bhv9 GET /api/bookings/user/f9b05d4e-b2b0-4806-9553-44e73f2c0153 200 665 - 5.737 ms',
+  timestamp: '2025-07-24 21:47:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '1yyucbr8r GET /api/bookings/user/f9b05d4e-b2b0-4806-9553-44e73f2c0153 304 - - 5.121 ms',
+  timestamp: '2025-07-24 21:47:56'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '4o9z3guer OPTIONS /api/auth/login 204 0 - 0.096 ms',
+  timestamp: '2025-07-24 21:49:09'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'b29imp844',
+  email: 'admin@techcorp.com',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login attempt',
+  timestamp: '2025-07-24 21:49:09'
+}
+{
+  service: 'smartroute-server',
+  component: 'auth',
+  requestId: 'b29imp844',
+  email: 'admin@techcorp.com',
+  userId: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d',
+  role: 'company_admin',
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Login successful',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'b29imp844 POST /api/auth/login 200 396 - 464.689 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'b29imp844',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'POST',
+  url: '/api/auth/login',
+  statusCode: 200,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: login_attempt',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'x47ezgtzh OPTIONS /api/bookings 204 0 - 0.197 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'g0vt0gi5q OPTIONS /api/drivers 204 0 - 0.129 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '9yolvbl5i OPTIONS /api/vehicles/available 204 0 - 0.162 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ccny379cp OPTIONS /api/drivers 204 0 - 0.143 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'e7keihehg OPTIONS /api/vehicles/available 204 0 - 0.220 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'imy7otsjy GET /api/bookings 304 - - 7.059 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '46wmkx5yw GET /api/drivers 304 - - 6.226 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '36g8lwzxk GET /api/vehicles/available 404 161 - 0.549 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'hq6jjfx1x GET /api/bookings 304 - - 8.764 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'rean11w1g GET /api/drivers 304 - - 4.841 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ov6livejo GET /api/vehicles/available 404 161 - 1.517 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'oqfm3o9lc GET /api/vehicles/available 404 161 - 0.700 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'e4glulemf GET /api/bookings 304 - - 21.366 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ff6q9z581 GET /api/drivers 304 - - 13.639 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'bh85qnxi1 GET /api/vehicles/available 404 161 - 9.760 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8ri9pklrw GET /api/drivers 304 - - 5.047 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'xwq3s3ojc GET /api/bookings 304 - - 15.089 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'dt4wm36ei GET /api/bookings 304 - - 6.187 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'gzk1cwd21 GET /api/drivers 304 - - 10.683 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'qs4dt9ap4 GET /api/vehicles/available 404 161 - 12.925 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'icz0m63sk GET /api/bookings 304 - - 16.095 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '83fezr5rt GET /api/drivers 304 - - 31.729 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'qhnf6mdix GET /api/vehicles/available 404 161 - 4.319 ms',
+  timestamp: '2025-07-24 21:49:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '1qe3b1pdh OPTIONS /api/vehicles?page=1&limit=10 204 0 - 0.084 ms',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'nai7hfzbr OPTIONS /api/driver-management?status=active 204 0 - 0.204 ms',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'jifoeb17b OPTIONS /api/vehicles/stats 204 0 - 0.174 ms',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'gmw739d6l OPTIONS /api/driver-management?status=active 204 0 - 0.162 ms',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ebelwiayl OPTIONS /api/vehicles/stats 204 0 - 0.363 ms',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'kppl4kuus GET /api/vehicles?page=1&limit=10 304 - - 0.419 ms',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'k1qc9paho GET /api/vehicles?page=1&limit=10 304 - - 1.245 ms',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ctuo3aw44 GET /api/vehicles/stats 404 157 - 0.770 ms',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '5jl4dy3w8 GET /api/driver-management?status=active 304 - - 25.081 ms',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '5jl4dy3w8',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'h05a720dq GET /api/vehicles/stats 404 157 - 9.059 ms',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 't3ruquntp GET /api/driver-management?status=active 304 - - 14.552 ms',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 't3ruquntp',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?status=active',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:49:14'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'b33ss0mlb OPTIONS /api/bookings 204 0 - 0.297 ms',
+  timestamp: '2025-07-24 21:51:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'vwei6jrx1 OPTIONS /api/drivers 204 0 - 0.206 ms',
+  timestamp: '2025-07-24 21:51:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'umrf6fgff OPTIONS /api/vehicles/available 204 0 - 0.720 ms',
+  timestamp: '2025-07-24 21:51:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'wqtzarbvi OPTIONS /api/bookings 204 0 - 0.142 ms',
+  timestamp: '2025-07-24 21:51:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'q2mgpx1d1 OPTIONS /api/drivers 204 0 - 0.228 ms',
+  timestamp: '2025-07-24 21:51:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '8lane38q3 OPTIONS /api/vehicles/available 204 0 - 0.236 ms',
+  timestamp: '2025-07-24 21:51:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'pl0ijp4wm GET /api/vehicles/available 404 161 - 1.569 ms',
+  timestamp: '2025-07-24 21:51:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'gv2tef3lu GET /api/vehicles/available 404 161 - 0.685 ms',
+  timestamp: '2025-07-24 21:51:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '18w5xg2pi GET /api/bookings 304 - - 118.858 ms',
+  timestamp: '2025-07-24 21:51:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ucfhaulgh GET /api/drivers 304 - - 103.024 ms',
+  timestamp: '2025-07-24 21:51:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'zqmgqpg62 GET /api/bookings 304 - - 37.063 ms',
+  timestamp: '2025-07-24 21:51:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'sz60a6ef3 GET /api/drivers 304 - - 40.713 ms',
+  timestamp: '2025-07-24 21:51:10'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ovlu8fmve OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.138 ms',
+  timestamp: '2025-07-24 21:51:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'x36yputff OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.117 ms',
+  timestamp: '2025-07-24 21:51:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'kmoey8e4e OPTIONS /api/driver-management?page=1&limit=10 204 0 - 0.083 ms',
+  timestamp: '2025-07-24 21:51:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '0r7p9yomz OPTIONS /api/driver-management/dashboard/stats 204 0 - 0.115 ms',
+  timestamp: '2025-07-24 21:51:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ns4moctx2 GET /api/driver-management?page=1&limit=10 304 - - 89.081 ms',
+  timestamp: '2025-07-24 21:51:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'ns4moctx2',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:51:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'r3hvlgipa GET /api/driver-management/dashboard/stats 304 - - 97.017 ms',
+  timestamp: '2025-07-24 21:51:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'r3hvlgipa',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 21:51:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'dgnjh359o GET /api/driver-management?page=1&limit=10 304 - - 32.241 ms',
+  timestamp: '2025-07-24 21:51:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'dgnjh359o',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/?page=1&limit=10',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: list_drivers',
+  timestamp: '2025-07-24 21:51:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: '59ys0vsxw GET /api/driver-management/dashboard/stats 304 - - 31.207 ms',
+  timestamp: '2025-07-24 21:51:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: '59ys0vsxw',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/dashboard/stats',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver_stats',
+  timestamp: '2025-07-24 21:51:32'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'dnm1mhyap OPTIONS /api/driver-management/f6b79170-7a95-4505-b1c7-86864a10a110 204 0 - 0.224 ms',
+  timestamp: '2025-07-24 21:51:36'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'ndjk31v5n OPTIONS /api/driver-management/f6b79170-7a95-4505-b1c7-86864a10a110 204 0 - 0.147 ms',
+  timestamp: '2025-07-24 21:51:36'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'xs2e02a6t GET /api/driver-management/f6b79170-7a95-4505-b1c7-86864a10a110 304 - - 13.838 ms',
+  timestamp: '2025-07-24 21:51:36'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'xs2e02a6t',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/f6b79170-7a95-4505-b1c7-86864a10a110',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver',
+  timestamp: '2025-07-24 21:51:36'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  level: 'http',
+  message: 'mw4683fbd GET /api/driver-management/f6b79170-7a95-4505-b1c7-86864a10a110 304 - - 2.807 ms',
+  timestamp: '2025-07-24 21:51:36'
+}
+{
+  service: 'smartroute-server',
+  component: 'api',
+  requestId: 'mw4683fbd',
+  userId: undefined,
+  userEmail: undefined,
+  method: 'GET',
+  url: '/f6b79170-7a95-4505-b1c7-86864a10a110',
+  statusCode: 304,
+  ip: '127.0.0.1',
+  level: 'info',
+  message: 'Action: get_driver',
+  timestamp: '2025-07-24 21:51:36'
+}

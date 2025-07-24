@@ -8,6 +8,7 @@ import MyBookings from './pages/MyBookings';
 import FleetManagement from './pages/FleetManagement';
 import IntelligentFleetDashboard from './pages/IntelligentFleetDashboard';
 import DriverManagement from './pages/DriverManagement';
+import VehicleManagement from './pages/VehicleManagement';
 import Login from './pages/Login';
 import LogViewer from './components/LogViewer';
 import logger from './utils/logger';
@@ -179,6 +180,14 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles={['company_admin']} userRole={userRole}>
                   <DriverManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/vehicles" 
+              element={
+                <ProtectedRoute allowedRoles={['company_admin']} userRole={userRole}>
+                  <VehicleManagement />
                 </ProtectedRoute>
               } 
             />

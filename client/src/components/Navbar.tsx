@@ -8,7 +8,8 @@ import {
   TruckIcon,
   UserIcon,
   CpuChipIcon,
-  UsersIcon
+  UsersIcon,
+  BuildingOffice2Icon
 } from '@heroicons/react/24/outline';
 
 interface NavbarProps {
@@ -26,6 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({ userRole }) => {
     { name: 'My Bookings', href: '/bookings', icon: TruckIcon, roles: ['employee'] },
     { name: 'AI Fleet', href: '/intelligent-fleet', icon: CpuChipIcon, roles: ['company_admin'] },
     { name: 'Drivers', href: '/drivers', icon: UsersIcon, roles: ['company_admin'] },
+    { name: 'Vehicles', href: '/vehicles', icon: BuildingOffice2Icon, roles: ['company_admin'] },
   ];
 
   // Filter navigation items based on user role

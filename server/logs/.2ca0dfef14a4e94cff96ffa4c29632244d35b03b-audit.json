@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Sabaresh\\Smartroute\\smartroute\\server\\logs\\.2ca0dfef14a4e94cff96ffa4c29632244d35b03b-audit.json",
+    "files": [
+        {
+            "date": 1753351613628,
+            "name": "C:\\Sabaresh\\Smartroute\\smartroute\\server\\logs\\access-2025-07-24.log",
+            "hash": "3cda2386d0cfa2fcc63896571e073ce25b29a790581593a7c1163c35bf870adb"
+        }
+    ],
+    "hashType": "sha256"
+}

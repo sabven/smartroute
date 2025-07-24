@@ -83,7 +83,8 @@
       "Bash(./stop.sh)",
       "Bash(./node_modules/.bin/pm2 restart:*)",
       "Bash(./node_modules/.bin/pm2 status:*)",
-      "Bash(./node_modules/.bin/pm2 logs:*)"
+      "Bash(./node_modules/.bin/pm2 logs:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }

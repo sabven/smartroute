@@ -401,7 +401,7 @@ const DriverManagement: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                        {driver.rating ? (
+                        {driver.rating && typeof driver.rating === 'number' ? (
                           <span>⭐ {driver.rating.toFixed(1)}</span>
                         ) : (
                           <span className="text-gray-400">No rating</span>
@@ -1288,7 +1288,7 @@ const DriverDetailsModal: React.FC<DriverDetailsModalProps> = ({ driver, onClose
                   <div>
                     <span className="block text-sm font-medium text-gray-500">Rating</span>
                     <span className="text-gray-900">
-                      {driverData.rating ? `⭐ ${driverData.rating.toFixed(1)}` : 'No rating yet'}
+                      {driverData.rating && typeof driverData.rating === 'number' ? `⭐ ${driverData.rating.toFixed(1)}` : 'No rating yet'}
                     </span>
                   </div>
                   <div>

@@ -1,0 +1,567 @@
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const { Sequelize, DataTypes } = require('sequelize');
+const Vehicle = require('../models/Vehicle');
+
+// Sample data with Indian names and Bengaluru addresses
+const sampleDrivers = [
+  {
+    firstName: 'Ravi',
+    lastName: 'Kumar',
+    email: 'ravi.kumar@smartroute.com',
+    phone: '+91 9876543210',
+    dateOfBirth: '1985-03-15',
+    gender: 'male',
+    address: 'No. 45, 2nd Main Road, Indiranagar, Bengaluru',
+    city: 'Bengaluru',
+    state: 'Karnataka',
+    postalCode: '560038',
+    licenseNumber: 'KA0320170001234',
+    licenseType: 'light_motor_vehicle',
+    licenseIssueDate: '2017-01-10',
+    licenseExpiryDate: '2037-01-09',
+    licenseIssuingAuthority: 'RTO Bengaluru East',
+    employmentType: 'full_time',
+    joinDate: '2022-01-15',
+    emergencyContactName: 'Lakshmi Kumar',
+    emergencyContactPhone: '+91 9876543211',
+    emergencyContactRelation: 'Wife'
+  },
+  {
+    firstName: 'Suresh',
+    lastName: 'Reddy',
+    email: 'suresh.reddy@smartroute.com',
+    phone: '+91 9876543220',
+    dateOfBirth: '1982-07-22',
+    gender: 'male',
+    address: '123, 4th Cross, Koramangala 5th Block, Bengaluru',
+    city: 'Bengaluru',
+    state: 'Karnataka',
+    postalCode: '560095',
+    licenseNumber: 'KA0320180002345',
+    licenseType: 'light_motor_vehicle',
+    licenseIssueDate: '2018-03-15',
+    licenseExpiryDate: '2038-03-14',
+    licenseIssuingAuthority: 'RTO Bengaluru South',
+    employmentType: 'full_time',
+    joinDate: '2022-03-01',
+    emergencyContactName: 'Padma Reddy',
+    emergencyContactPhone: '+91 9876543221',
+    emergencyContactRelation: 'Wife'
+  },
+  {
+    firstName: 'Prakash',
+    lastName: 'Sharma',
+    email: 'prakash.sharma@smartroute.com',
+    phone: '+91 9876543230',
+    dateOfBirth: '1988-11-08',
+    gender: 'male',
+    address: '67, 1st Floor, Brigade Road, Richmond Town, Bengaluru',
+    city: 'Bengaluru',
+    state: 'Karnataka',
+    postalCode: '560025',
+    licenseNumber: 'KA0320190003456',
+    licenseType: 'light_motor_vehicle',
+    licenseIssueDate: '2019-05-20',
+    licenseExpiryDate: '2039-05-19',
+    licenseIssuingAuthority: 'RTO Bengaluru Central',
+    employmentType: 'full_time',
+    joinDate: '2022-06-10',
+    emergencyContactName: 'Meera Sharma',
+    emergencyContactPhone: '+91 9876543231',
+    emergencyContactRelation: 'Wife'
+  },
+  {
+    firstName: 'Anand',
+    lastName: 'Nair',
+    email: 'anand.nair@smartroute.com',
+    phone: '+91 9876543240',
+    dateOfBirth: '1990-05-12',
+    gender: 'male',
+    address: '89, 3rd Main, HSR Layout Sector 2, Bengaluru',
+    city: 'Bengaluru',
+    state: 'Karnataka',
+    postalCode: '560102',
+    licenseNumber: 'KA0320200004567',
+    licenseType: 'light_motor_vehicle',
+    licenseIssueDate: '2020-02-10',
+    licenseExpiryDate: '2040-02-09',
+    licenseIssuingAuthority: 'RTO Bengaluru HSR',
+    employmentType: 'full_time',
+    joinDate: '2022-08-15',
+    emergencyContactName: 'Priya Nair',
+    emergencyContactPhone: '+91 9876543241',
+    emergencyContactRelation: 'Wife'
+  },
+  {
+    firstName: 'Rajesh',
+    lastName: 'Iyer',
+    email: 'rajesh.iyer@smartroute.com',
+    phone: '+91 9876543250',
+    dateOfBirth: '1987-09-30',
+    gender: 'male',
+    address: '34, 5th Cross, Jayanagar 4th Block, Bengaluru',
+    city: 'Bengaluru',
+    state: 'Karnataka',
+    postalCode: '560011',
+    licenseNumber: 'KA0320210005678',
+    licenseType: 'light_motor_vehicle',
+    licenseIssueDate: '2021-01-15',
+    licenseExpiryDate: '2041-01-14',
+    licenseIssuingAuthority: 'RTO Bengaluru South',
+    employmentType: 'part_time',
+    joinDate: '2023-01-20',
+    emergencyContactName: 'Kavitha Iyer',
+    emergencyContactPhone: '+91 9876543251',
+    emergencyContactRelation: 'Wife'
+  },
+  {
+    firstName: 'Deepak',
+    lastName: 'Gupta',
+    email: 'deepak.gupta@smartroute.com',
+    phone: '+91 9876543260',
+    dateOfBirth: '1984-12-18',
+    gender: 'male',
+    address: '156, 2nd Floor, Commercial Street, Shivaji Nagar, Bengaluru',
+    city: 'Bengaluru',
+    state: 'Karnataka',
+    postalCode: '560001',
+    licenseNumber: 'KA0320160006789',
+    licenseType: 'transport_vehicle',
+    licenseIssueDate: '2016-11-25',
+    licenseExpiryDate: '2036-11-24',
+    licenseIssuingAuthority: 'RTO Bengaluru Central',
+    employmentType: 'full_time',
+    joinDate: '2021-11-10',
+    emergencyContactName: 'Sunita Gupta',
+    emergencyContactPhone: '+91 9876543261',
+    emergencyContactRelation: 'Wife'
+  },
+  {
+    firstName: 'Venkat',
+    lastName: 'Rao',
+    email: 'venkat.rao@smartroute.com',
+    phone: '+91 9876543270',
+    dateOfBirth: '1989-04-05',
+    gender: 'male',
+    address: '78, 6th Main Road, RT Nagar, Bengaluru',
+    city: 'Bengaluru',
+    state: 'Karnataka',
+    postalCode: '560032',
+    licenseNumber: 'KA0320220007890',
+    licenseType: 'light_motor_vehicle',
+    licenseIssueDate: '2022-06-30',
+    licenseExpiryDate: '2042-06-29',
+    licenseIssuingAuthority: 'RTO Bengaluru North',
+    employmentType: 'full_time',
+    joinDate: '2023-02-28',
+    emergencyContactName: 'Shanti Rao',
+    emergencyContactPhone: '+91 9876543271',
+    emergencyContactRelation: 'Mother'
+  },
+  {
+    firstName: 'Krishna',
+    lastName: 'Murthy',
+    email: 'krishna.murthy@smartroute.com',
+    phone: '+91 9876543280',
+    dateOfBirth: '1986-08-14',
+    gender: 'male',
+    address: '92, 1st Cross, Malleswaram 8th Cross, Bengaluru',
+    city: 'Bengaluru',
+    state: 'Karnataka',
+    postalCode: '560003',
+    licenseNumber: 'KA0320180008901',
+    licenseType: 'light_motor_vehicle',
+    licenseIssueDate: '2018-12-12',
+    licenseExpiryDate: '2038-12-11',
+    licenseIssuingAuthority: 'RTO Bengaluru North',
+    employmentType: 'contract',
+    joinDate: '2023-04-01',
+    emergencyContactName: 'Radha Murthy',
+    emergencyContactPhone: '+91 9876543281',
+    emergencyContactRelation: 'Wife'
+  }
+];
+
+const sampleVehicles = [
+  {
+    name: 'Swift Dzire - KA01',
+    type: 'car',
+    licensePlate: 'KA01MN1234',
+    make: 'Maruti Suzuki',
+    model: 'Swift Dzire',
+    year: 2022,
+    cabNumber: 'SR001',
+    seatingCapacity: 4,
+    features: {
+      ac: true,
+      musicSystem: true,
+      wheelchairAccessible: false,
+      gps: true,
+      dashcam: true
+    },
+    fuel: {
+      level: 85,
+      capacity: 37,
+      type: 'gasoline'
+    },
+    status: 'active',
+    company: '60f1b0b0b0b0b0b0b0b0b0b0' // Placeholder company ID
+  },
+  {
+    name: 'Innova Crysta - KA02',
+    type: 'van',
+    licensePlate: 'KA02AB5678',
+    make: 'Toyota',
+    model: 'Innova Crysta',
+    year: 2023,
+    cabNumber: 'SR002',
+    seatingCapacity: 7,
+    features: {
+      ac: true,
+      musicSystem: true,
+      wheelchairAccessible: false,
+      gps: true,
+      dashcam: true
+    },
+    fuel: {
+      level: 75,
+      capacity: 55,
+      type: 'diesel'
+    },
+    status: 'active',
+    company: '60f1b0b0b0b0b0b0b0b0b0b0'
+  },
+  {
+    name: 'Ertiga - KA03',
+    type: 'van',
+    licensePlate: 'KA03CD9012',
+    make: 'Maruti Suzuki',
+    model: 'Ertiga',
+    year: 2021,
+    cabNumber: 'SR003',
+    seatingCapacity: 7,
+    features: {
+      ac: true,
+      musicSystem: true,
+      wheelchairAccessible: false,
+      gps: true,
+      dashcam: false
+    },
+    fuel: {
+      level: 60,
+      capacity: 45,
+      type: 'gasoline'
+    },
+    status: 'active',
+    company: '60f1b0b0b0b0b0b0b0b0b0b0'
+  },
+  {
+    name: 'Etios - KA04',
+    type: 'car',
+    licensePlate: 'KA04EF3456',
+    make: 'Toyota',
+    model: 'Etios',
+    year: 2020,
+    cabNumber: 'SR004',
+    seatingCapacity: 4,
+    features: {
+      ac: true,
+      musicSystem: false,
+      wheelchairAccessible: false,
+      gps: true,
+      dashcam: false
+    },
+    fuel: {
+      level: 90,
+      capacity: 42,
+      type: 'gasoline'
+    },
+    status: 'active',
+    company: '60f1b0b0b0b0b0b0b0b0b0b0'
+  },
+  {
+    name: 'Verna - KA05',
+    type: 'car',
+    licensePlate: 'KA05GH7890',
+    make: 'Hyundai',
+    model: 'Verna',
+    year: 2023,
+    cabNumber: 'SR005',
+    seatingCapacity: 4,
+    features: {
+      ac: true,
+      musicSystem: true,
+      wheelchairAccessible: false,
+      gps: true,
+      dashcam: true
+    },
+    fuel: {
+      level: 70,
+      capacity: 40,
+      type: 'gasoline'
+    },
+    status: 'active',
+    company: '60f1b0b0b0b0b0b0b0b0b0b0'
+  },
+  {
+    name: 'XUV300 - KA06',
+    type: 'van',
+    licensePlate: 'KA06IJ1357',
+    make: 'Mahindra',
+    model: 'XUV300',
+    year: 2022,
+    cabNumber: 'SR006',
+    seatingCapacity: 5,
+    features: {
+      ac: true,
+      musicSystem: true,
+      wheelchairAccessible: false,
+      gps: true,
+      dashcam: true
+    },
+    fuel: {
+      level: 80,
+      capacity: 42,
+      type: 'diesel'
+    },
+    status: 'active',
+    company: '60f1b0b0b0b0b0b0b0b0b0b0'
+  },
+  {
+    name: 'City - KA07',
+    type: 'car',
+    licensePlate: 'KA07KL2468',
+    make: 'Honda',
+    model: 'City',
+    year: 2021,
+    cabNumber: 'SR007',
+    seatingCapacity: 4,
+    features: {
+      ac: true,
+      musicSystem: true,
+      wheelchairAccessible: false,
+      gps: true,
+      dashcam: false
+    },
+    fuel: {
+      level: 65,
+      capacity: 40,
+      type: 'gasoline'
+    },
+    status: 'active',
+    company: '60f1b0b0b0b0b0b0b0b0b0b0'
+  },
+  {
+    name: 'Creta - KA08',
+    type: 'van',
+    licensePlate: 'KA08MN3579',
+    make: 'Hyundai',
+    model: 'Creta',
+    year: 2023,
+    cabNumber: 'SR008',
+    seatingCapacity: 5,
+    features: {
+      ac: true,
+      musicSystem: true,
+      wheelchairAccessible: false,
+      gps: true,
+      dashcam: true
+    },
+    fuel: {
+      level: 55,
+      capacity: 50,
+      type: 'gasoline'
+    },
+    status: 'active',
+    company: '60f1b0b0b0b0b0b0b0b0b0b0'
+  },
+  {
+    name: 'Baleno - KA09',
+    type: 'car',
+    licensePlate: 'KA09OP4680',
+    make: 'Maruti Suzuki',
+    model: 'Baleno',
+    year: 2022,
+    cabNumber: 'SR009',
+    seatingCapacity: 4,
+    features: {
+      ac: true,
+      musicSystem: true,
+      wheelchairAccessible: false,
+      gps: true,
+      dashcam: false
+    },
+    fuel: {
+      level: 95,
+      capacity: 37,
+      type: 'gasoline'
+    },
+    status: 'active',
+    company: '60f1b0b0b0b0b0b0b0b0b0b0'
+  },
+  {
+    name: 'Scorpio - KA10',
+    type: 'van',
+    licensePlate: 'KA10QR5791',
+    make: 'Mahindra',
+    model: 'Scorpio',
+    year: 2021,
+    cabNumber: 'SR010',
+    seatingCapacity: 7,
+    features: {
+      ac: true,
+      musicSystem: true,
+      wheelchairAccessible: false,
+      gps: true,
+      dashcam: true
+    },
+    fuel: {
+      level: 40,
+      capacity: 60,
+      type: 'diesel'
+    },
+    status: 'active',
+    company: '60f1b0b0b0b0b0b0b0b0b0b0'
+  }
+];
+
+async function seedDatabase(sequelize, User, DriverProfile) {
+  try {
+    console.log('🌱 Starting database seeding...');
+    
+    // Clear existing data
+    console.log('🗑️ Clearing existing sample data...');
+    const { Op } = require('sequelize');
+    await User.destroy({ 
+      where: { 
+        email: { 
+          [Op.in]: sampleDrivers.map(d => d.email) 
+        } 
+      } 
+    });
+    await Vehicle.deleteMany({ 
+      licensePlate: { 
+        $in: sampleVehicles.map(v => v.licensePlate) 
+      } 
+    });
+
+    console.log('👨‍💼 Creating sample drivers...');
+    
+    // Create drivers
+    for (const driverData of sampleDrivers) {
+      // Create user account
+      const hashedPassword = await bcrypt.hash('driver123', 12);
+      const user = await User.create({
+        email: driverData.email,
+        password: hashedPassword,
+        name: `${driverData.firstName} ${driverData.lastName}`,
+        role: 'driver',
+        phone: driverData.phone
+      });
+
+      // Create driver profile
+      await DriverProfile.create({
+        ...driverData,
+        userId: user.id,
+        status: 'active',
+        bloodGroup: 'O+', // Default blood group
+        createdBy: 'face9c3b-3fb3-4bc8-a227-84630d32cb4d' // Default admin ID
+      });
+
+      console.log(`✅ Created driver: ${driverData.firstName} ${driverData.lastName}`);
+    }
+
+    console.log('🚗 Creating sample vehicles...');
+    
+    // Create vehicles
+    for (const vehicleData of sampleVehicles) {
+      const vehicle = new Vehicle(vehicleData);
+      await vehicle.save();
+      console.log(`✅ Created vehicle: ${vehicleData.name} (${vehicleData.licensePlate})`);
+    }
+
+    console.log('\n🎉 Database seeding completed successfully!');
+    console.log(`📊 Created ${sampleDrivers.length} drivers and ${sampleVehicles.length} vehicles`);
+    console.log('\n📋 Sample Driver Accounts:');
+    sampleDrivers.forEach((driver, index) => {
+      console.log(`${index + 1}. ${driver.firstName} ${driver.lastName} - ${driver.email} / driver123`);
+    });
+
+  } catch (error) {
+    console.error('❌ Error seeding database:', error);
+    throw error;
+  }
+}
+
+module.exports = { seedDatabase, sampleDrivers, sampleVehicles };
+
+// Run seeding if this file is executed directly
+if (require.main === module) {
+  require('dotenv').config();
+  
+  (async () => {
+    try {
+      // Connect to MongoDB
+      await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/smartroute');
+      console.log('🔗 Connected to MongoDB');
+      
+      // Setup PostgreSQL connection
+      const sequelize = new Sequelize(process.env.DATABASE_URL, {
+        dialect: 'postgres',
+        logging: false
+      });
+      
+      await sequelize.authenticate();
+      console.log('🔗 Connected to PostgreSQL');
+      
+      // Create models like in the main server
+      const createDriverProfile = require('../models/DriverProfile');
+      const DriverProfile = createDriverProfile(sequelize);
+      
+      const User = sequelize.define('User', {
+        id: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true
+        },
+        email: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          unique: true,
+          validate: {
+            isEmail: true
+          }
+        },
+        password: {
+          type: DataTypes.STRING,
+          allowNull: false
+        },
+        name: {
+          type: DataTypes.STRING,
+          allowNull: false
+        },
+        role: {
+          type: DataTypes.ENUM('employee', 'driver', 'company_admin'),
+          allowNull: false
+        },
+        phone: {
+          type: DataTypes.STRING
+        }
+      });
+      
+      // Sync models
+      await sequelize.sync();
+      
+      await seedDatabase(sequelize, User, DriverProfile);
+      
+      console.log('🏁 Seeding completed. Closing connections...');
+      await mongoose.connection.close();
+      await sequelize.close();
+      process.exit(0);
+    } catch (error) {
+      console.error('💥 Seeding failed:', error);
+      process.exit(1);
+    }
+  })();
+}

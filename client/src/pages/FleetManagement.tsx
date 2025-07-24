@@ -50,19 +50,39 @@ interface Driver {
   vehicleModel?: string;
 }
 
+interface Vehicle {
+  _id: string;
+  name: string;
+  licensePlate: string;
+  cabNumber: string;
+  make: string; 
+  model: string;
+  seatingCapacity: number;
+  status: string;
+  driver?: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+}
+
 const FleetManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [selectedDriver, setSelectedDriver] = useState('');
+  const [selectedVehicle, setSelectedVehicle] = useState('');
   const [showAssignModal, setShowAssignModal] = useState(false);
 
   useEffect(() => {
     fetchBookings();
     fetchDrivers();
+    fetchVehicles();
   }, []);
 
   const fetchBookings = async () => {
@@ -105,6 +125,26 @@ const FleetManagement: React.FC = () => {
       }
     } catch (error) {
       console.error('Error fetching drivers:', error);
+    }
+  };
+
+  const fetchVehicles = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_BASE_URL}/vehicles/available`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setVehicles(data.data || []);
+      } else {
+        console.error('Failed to fetch vehicles');
+      }
+    } catch (error) {
+      console.error('Error fetching vehicles:', error);
     }
   };
 
@@ -515,12 +555,12 @@ const FleetManagement: React.FC = () => {
                     Select Driver
                   </label>
                   <select
-                    id="driverSelect"
+                    value={selectedDriver}
+                    onChange={(e) => setSelectedDriver(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                    defaultValue=""
                   >
                     <option value="">Choose a driver...</option>
-                    {drivers.map((driver) => (
+                    {drivers.filter(driver => !vehicles.some(v => v.driver?._id === driver.id)).map((driver) => (
                       <option key={driver.id} value={driver.id}>
                         {driver.name} ({driver.email})
                       </option>
@@ -530,39 +570,38 @@ const FleetManagement: React.FC = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Driver Phone (Optional)
+                    Select Vehicle
                   </label>
-                  <input
-                    type="tel"
-                    id="driverPhone"
-                    placeholder="Enter driver phone number"
+                  <select
+                    value={selectedVehicle}
+                    onChange={(e) => setSelectedVehicle(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                  />
+                  >
+                    <option value="">Choose a vehicle...</option>
+                    {vehicles.filter(vehicle => !vehicle.driver).map((vehicle) => (
+                      <option key={vehicle._id} value={vehicle._id}>
+                        {vehicle.name} - {vehicle.licensePlate} ({vehicle.make} {vehicle.model})
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Vehicle Number
-                  </label>
-                  <input
-                    type="text"
-                    id="cabNumber"
-                    placeholder="e.g., UP14 AB 1234"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Vehicle Model
-                  </label>
-                  <input
-                    type="text"
-                    id="cabModel"
-                    placeholder="e.g., Maruti Swift"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                  />
-                </div>
+
+                {selectedVehicle && (
+                  <div className="p-3 bg-blue-50 rounded-md">
+                    <h4 className="text-sm font-medium text-blue-900 mb-2">Vehicle Details</h4>
+                    {(() => {
+                      const vehicle = vehicles.find(v => v._id === selectedVehicle);
+                      return vehicle ? (
+                        <div className="text-sm text-blue-800">
+                          <p><strong>Cab Number:</strong> {vehicle.cabNumber}</p>
+                          <p><strong>License Plate:</strong> {vehicle.licensePlate}</p>
+                          <p><strong>Model:</strong> {vehicle.make} {vehicle.model}</p>
+                          <p><strong>Seating:</strong> {vehicle.seatingCapacity} seats</p>
+                        </div>
+                      ) : null;
+                    })()}
+                  </div>
+                )}
               </div>
               
               <div className="flex items-center justify-end space-x-3 mt-6">
@@ -570,6 +609,8 @@ const FleetManagement: React.FC = () => {
                   onClick={() => {
                     setShowAssignModal(false);
                     setSelectedBooking(null);
+                    setSelectedDriver('');
+                    setSelectedVehicle('');
                   }}
                   className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
                 >
@@ -577,35 +618,32 @@ const FleetManagement: React.FC = () => {
                 </button>
                 <button
                   onClick={() => {
-                    const driverSelect = document.getElementById('driverSelect') as HTMLSelectElement;
-                    const driverPhone = document.getElementById('driverPhone') as HTMLInputElement;
-                    const cabNumber = document.getElementById('cabNumber') as HTMLInputElement;
-                    const cabModel = document.getElementById('cabModel') as HTMLInputElement;
+                    const driver = drivers.find(d => d.id === selectedDriver);
+                    const vehicle = vehicles.find(v => v._id === selectedVehicle);
                     
-                    const selectedDriverId = driverSelect.value;
-                    const selectedDriver = drivers.find(d => d.id === selectedDriverId);
-                    
-                    if (!selectedDriverId || !selectedDriver) {
+                    if (!selectedDriver || !driver) {
                       alert('Please select a driver');
                       return;
                     }
                     
-                    if (!cabNumber.value || !cabModel.value) {
-                      alert('Please enter vehicle number and model');
+                    if (!selectedVehicle || !vehicle) {
+                      alert('Please select a vehicle');
                       return;
                     }
                     
                     assignDriver(selectedBooking.id, {
-                      driverId: selectedDriverId,
-                      driverName: selectedDriver.name,
-                      driverPhone: driverPhone.value || selectedDriver.phone,
-                      cabNumber: cabNumber.value,
-                      cabModel: cabModel.value
+                      driverId: selectedDriver,
+                      driverName: driver.name,
+                      driverPhone: driver.phone,
+                      cabNumber: vehicle.cabNumber,
+                      cabModel: `${vehicle.make} ${vehicle.model}`,
+                      vehicleId: vehicle._id,
+                      licensePlate: vehicle.licensePlate
                     });
                   }}
                   className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
                 >
-                  Assign Driver
+                  Assign Driver & Vehicle
                 </button>
               </div>
             </div>

@@ -164,6 +164,10 @@ router.post('/',
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        // Log validation errors for debugging
+        console.log('Validation errors:', errors.array());
+        console.log('Request body:', req.body);
+        
         // Clean up uploaded files if validation fails
         if (req.files) {
           Object.values(req.files).flat().forEach(file => {

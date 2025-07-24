@@ -1,178 +1,205 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
 
-const vehicleSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
-  type: {
-    type: String,
-    required: true,
-    enum: ['truck', 'van', 'car', 'motorcycle', 'other'],
-  },
-  licensePlate: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
-  make: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  model: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  year: {
-    type: Number,
-    required: true,
-    min: 1900,
-    max: new Date().getFullYear() + 1,
-  },
-  capacity: {
-    weight: {
-      type: Number,
-      required: true,
-      min: 0,
+module.exports = (sequelize) => {
+  const Vehicle = sequelize.define('Vehicle', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
     },
-    volume: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    unit: {
-      type: String,
-      enum: ['kg', 'tons', 'lbs'],
-      default: 'kg',
-    },
-  },
-  company: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Company',
-    required: true,
-  },
-  driver: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  },
-  cabNumber: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
-  seatingCapacity: {
-    type: Number,
-    required: true,
-    min: 1,
-    max: 20,
-    default: 4,
-  },
-  features: {
-    ac: {
-      type: Boolean,
-      default: true,
-    },
-    musicSystem: {
-      type: Boolean,
-      default: true,
-    },
-    wheelchairAccessible: {
-      type: Boolean,
-      default: false,
-    },
-    gps: {
-      type: Boolean,
-      default: true,
-    },
-    dashcam: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  documents: {
-    rcNumber: String,
-    insuranceNumber: String,
-    pucCertificate: String,
-    permitNumber: String,
-    rcExpiry: Date,
-    insuranceExpiry: Date,
-    pucExpiry: Date,
-    permitExpiry: Date,
-  },
-  status: {
-    type: String,
-    enum: ['active', 'inactive', 'maintenance', 'en_route'],
-    default: 'inactive',
-  },
-  location: {
-    address: String,
-    coordinates: {
-      latitude: Number,
-      longitude: Number,
-    },
-    lastUpdated: {
-      type: Date,
-      default: Date.now,
-    },
-  },
-  fuel: {
-    level: {
-      type: Number,
-      min: 0,
-      max: 100,
-      default: 100,
-    },
-    capacity: {
-      type: Number,
-      required: true,
-      min: 0,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        notEmpty: true,
+        len: [2, 100]
+      }
     },
     type: {
-      type: String,
-      enum: ['gasoline', 'diesel', 'electric', 'hybrid'],
-      default: 'gasoline',
+      type: DataTypes.ENUM('truck', 'van', 'car', 'motorcycle', 'other'),
+      allowNull: false
     },
-  },
-  maintenance: {
-    lastService: Date,
-    nextService: Date,
-    mileage: {
-      type: Number,
-      default: 0,
+    licensePlate: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        notEmpty: true,
+        len: [3, 20]
+      }
     },
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
-}, {
-  timestamps: true,
-});
+    make: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [2, 50]
+      }
+    },
+    model: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [2, 50]
+      }
+    },
+    year: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 1990,
+        max: new Date().getFullYear() + 1
+      }
+    },
+    cabNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        notEmpty: true,
+        len: [2, 20]
+      }
+    },
+    seatingCapacity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 4,
+      validate: {
+        min: 1,
+        max: 20
+      }
+    },
+    // Features stored as JSON
+    features: {
+      type: DataTypes.JSON,
+      defaultValue: {
+        ac: true,
+        musicSystem: true,
+        wheelchairAccessible: false,
+        gps: true,
+        dashcam: false
+      }
+    },
+    // Fuel information stored as JSON
+    fuel: {
+      type: DataTypes.JSON,
+      allowNull: false,
+      defaultValue: {
+        level: 100,
+        capacity: 50,
+        type: 'gasoline'
+      }
+    },
+    // Documents stored as JSON
+    documents: {
+      type: DataTypes.JSON,
+      defaultValue: {
+        rcNumber: null,
+        insuranceNumber: null,
+        pucCertificate: null,
+        permitNumber: null,
+        rcExpiry: null,
+        insuranceExpiry: null,
+        pucExpiry: null,
+        permitExpiry: null
+      }
+    },
+    // Location stored as JSON
+    location: {
+      type: DataTypes.JSON,
+      defaultValue: {
+        address: null,
+        coordinates: {
+          latitude: null,
+          longitude: null
+        },
+        lastUpdated: new Date()
+      }
+    },
+    // Maintenance stored as JSON
+    maintenance: {
+      type: DataTypes.JSON,
+      defaultValue: {
+        lastService: null,
+        nextService: null,
+        mileage: 0
+      }
+    },
+    status: {
+      type: DataTypes.ENUM('active', 'inactive', 'maintenance', 'en_route'),
+      defaultValue: 'active'
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
+    // Foreign key for company (UUID)
+    companyId: {
+      type: DataTypes.UUID,
+      allowNull: true
+    },
+    // Foreign key for driver (UUID)
+    driverId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
+    }
+  }, {
+    tableName: 'vehicles',
+    timestamps: true,
+    indexes: [
+      {
+        unique: true,
+        fields: ['licensePlate']
+      },
+      {
+        unique: true,
+        fields: ['cabNumber']
+      },
+      {
+        fields: ['status']
+      },
+      {
+        fields: ['type']
+      },
+      {
+        fields: ['driverId']
+      }
+    ]
+  });
 
-vehicleSchema.index({ location: '2dsphere' });
-
-vehicleSchema.methods.updateLocation = function(latitude, longitude, address) {
-  this.location = {
-    coordinates: { latitude, longitude },
-    address: address || this.location.address,
-    lastUpdated: new Date(),
+  // Instance methods
+  Vehicle.prototype.updateLocation = function(latitude, longitude, address) {
+    this.location = {
+      coordinates: { latitude, longitude },
+      address: address || this.location.address,
+      lastUpdated: new Date()
+    };
+    return this.save();
   };
-  return this.save();
+
+  Vehicle.prototype.updateFuelLevel = function(level) {
+    this.fuel = {
+      ...this.fuel,
+      level: Math.max(0, Math.min(100, level))
+    };
+    return this.save();
+  };
+
+  // Define associations
+  Vehicle.associate = (models) => {
+    // A vehicle belongs to a driver (User)
+    Vehicle.belongsTo(models.User, {
+      foreignKey: 'driverId',
+      as: 'driver',
+      allowNull: true
+    });
+  };
+
+  return Vehicle;
 };
-
-vehicleSchema.methods.updateFuelLevel = function(level) {
-  this.fuel.level = Math.max(0, Math.min(100, level));
-  return this.save();
-};
-
-vehicleSchema.virtual('fuelPercentage').get(function() {
-  return this.fuel.level;
-});
-
-module.exports = mongoose.model('Vehicle', vehicleSchema);

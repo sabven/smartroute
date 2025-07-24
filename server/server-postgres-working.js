@@ -16,6 +16,9 @@ const SmartAllocationEngine = require('./src/utils/smartAllocation');
 // Import driver management routes
 const { router: driverManagementRouter, injectModels } = require('./src/routes/driverManagement');
 
+// Import vehicles routes
+const createVehiclesRouter = require('./src/routes/vehicles');
+
 const app = express();
 const PORT = process.env.PORT || 5001;
 
@@ -41,6 +44,10 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 // Import and create DriverProfile model
 const createDriverProfile = require('./src/models/DriverProfile');
 const DriverProfile = createDriverProfile(sequelize);
+
+// Import and create Vehicle model
+const createVehicle = require('./src/models/Vehicle');
+const Vehicle = createVehicle(sequelize);
 
 // User Model
 const User = sequelize.define('User', {
@@ -74,6 +81,10 @@ const User = sequelize.define('User', {
 // Set up associations
 User.hasOne(DriverProfile, { foreignKey: 'userId', as: 'driverProfile' });
 DriverProfile.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+// Vehicle associations
+User.hasMany(Vehicle, { foreignKey: 'driverId', as: 'vehicles' });
+Vehicle.belongsTo(User, { foreignKey: 'driverId', as: 'driver' });
 
 // Inject models into driver management routes
 injectModels({ User, DriverProfile });
@@ -573,10 +584,16 @@ app.get('/api/drivers', async (req, res) => {
 // Driver Management Routes
 app.use('/api/driver-management', driverManagementRouter);
 
+// Vehicle Routes (create with models)
+const vehiclesRouter = createVehiclesRouter({ Vehicle, User, DriverProfile });
+app.use('/api/vehicles', vehiclesRouter);
+
 // Static file serving for uploaded documents
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Vehicles endpoint (mock data for now)
+// Vehicles endpoint is now handled by the vehicles router
+// Commented out mock endpoint - using real vehicles router instead
+/*
 app.get('/api/vehicles', (req, res) => {
   res.json({
     vehicles: [
@@ -603,6 +620,7 @@ app.get('/api/vehicles', (req, res) => {
     ]
   });
 });
+*/
 
 // Initialize database and start server
 async function startServer() {
