@@ -40,7 +40,7 @@ const EmployeeDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     thisMonthTrips: 0,
-    totalSavings: 0,
+    totalTrips: 0,
     avgRating: 0,
   });
 
@@ -107,13 +107,12 @@ const EmployeeDashboard: React.FC = () => {
     });
     
     const completedBookings = bookings.filter(booking => booking.status === 'completed');
-    const estimatedSavingsPerTrip = 150; // Average savings vs private transport
     
     setUpcomingBookings(upcoming);
     setRecentBookings(recent);
     setStats({
       thisMonthTrips: thisMonthBookings.length,
-      totalSavings: completedBookings.length * estimatedSavingsPerTrip,
+      totalTrips: completedBookings.length,
       avgRating: 4.6, // This would need to be calculated from actual rating data
     });
   };
@@ -138,10 +137,10 @@ const EmployeeDashboard: React.FC = () => {
       changeType: 'positive' as const,
     },
     {
-      name: 'Total Savings',
-      value: `₹${stats.totalSavings.toLocaleString()}`,
+      name: 'Total Trips',
+      value: stats.totalTrips.toString(),
       icon: CalendarIcon,
-      change: 'vs. private transport',
+      change: 'completed successfully',
       changeType: 'positive' as const,
     },
     {

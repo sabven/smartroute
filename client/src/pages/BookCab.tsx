@@ -543,10 +543,6 @@ const BookCab: React.FC = () => {
                   <span className="text-gray-600">Time:</span>
                   <span>{bookingForm.time}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Estimated Fare:</span>
-                  <span className="font-medium">₹150 - ₹200</span>
-                </div>
               </div>
             </div>
 

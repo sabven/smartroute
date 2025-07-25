@@ -31,10 +31,6 @@ interface Booking {
     model: string;
     color: string;
   };
-  fare?: {
-    amount: number;
-    currency: string;
-  };
   canCancel: boolean;
 }
 
@@ -299,17 +295,6 @@ const MyBookings: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Fare */}
-                  {booking.fare && (
-                    <div className="border-t border-gray-200 pt-4 mt-4">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600">Total Fare</span>
-                        <span className="text-lg font-semibold text-gray-900">
-                          ₹{booking.fare.amount}
-                        </span>
-                      </div>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
