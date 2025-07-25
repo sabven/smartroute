@@ -12,6 +12,11 @@ import {
   UserIcon,
   ExclamationTriangleIcon,
   ArrowPathIcon,
+  CalendarDaysIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  PlayIcon,
+  UserGroupIcon,
 } from '@heroicons/react/24/outline';
 import { API_BASE_URL } from '../config';
 import { useToast } from '../contexts/ToastContext';
@@ -325,121 +330,85 @@ const FleetManagement: React.FC = () => {
       </div>
 
       {/* Booking Overview Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <TruckIcon className="h-6 w-6 text-gray-400" />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Total Bookings
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">{bookings.length}</dd>
-                </dl>
-              </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+              <CalendarDaysIcon className="h-4 w-4 text-gray-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-gray-600 truncate">Total Bookings</p>
+              <p className="text-lg font-bold text-gray-900">{bookings.length}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-6 h-6 bg-yellow-500 rounded-full"></div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Awaiting Assignment
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {bookings.filter(b => b.status === 'confirmed').length}
-                  </dd>
-                </dl>
-              </div>
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+              <ClockIcon className="h-4 w-4 text-yellow-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-gray-600 truncate">Awaiting Assignment</p>
+              <p className="text-lg font-bold text-gray-900">
+                {bookings.filter(b => b.status === 'confirmed').length}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-6 h-6 bg-blue-500 rounded-full"></div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Driver Assigned
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {bookings.filter(b => b.status === 'driver_assigned').length}
-                  </dd>
-                </dl>
-              </div>
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+              <UserGroupIcon className="h-4 w-4 text-blue-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-gray-600 truncate">Driver Assigned</p>
+              <p className="text-lg font-bold text-gray-900">
+                {bookings.filter(b => b.status === 'driver_assigned').length}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-6 h-6 bg-green-500 rounded-full"></div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Driver Accepted
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {bookings.filter(b => b.status === 'driver_accepted').length}
-                  </dd>
-                </dl>
-              </div>
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+              <CheckCircleIcon className="h-4 w-4 text-green-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-gray-600 truncate">Driver Accepted</p>
+              <p className="text-lg font-bold text-gray-900">
+                {bookings.filter(b => b.status === 'driver_accepted').length}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-6 h-6 bg-red-500 rounded-full"></div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Driver Declined
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {bookings.filter(b => b.status === 'driver_declined').length}
-                  </dd>
-                </dl>
-              </div>
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+              <XCircleIcon className="h-4 w-4 text-red-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-gray-600 truncate">Driver Declined</p>
+              <p className="text-lg font-bold text-gray-900">
+                {bookings.filter(b => b.status === 'driver_declined').length}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-6 h-6 bg-purple-500 rounded-full"></div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    In Progress
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {bookings.filter(b => b.status === 'in_progress').length}
-                  </dd>
-                </dl>
-              </div>
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+              <PlayIcon className="h-4 w-4 text-purple-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-gray-600 truncate">In Progress</p>
+              <p className="text-lg font-bold text-gray-900">
+                {bookings.filter(b => b.status === 'in_progress').length}
+              </p>
             </div>
           </div>
         </div>
