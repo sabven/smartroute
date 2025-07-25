@@ -13,6 +13,7 @@ import {
 } from '@heroicons/react/24/outline';
 import logger from '../utils/logger';
 import apiService from '../services/api';
+import { useToast } from '../contexts/ToastContext';
 
 interface Driver {
   id: string;
@@ -71,6 +72,7 @@ const getEmploymentTypeBadge = (type: string) => {
 };
 
 const DriverManagement: React.FC = () => {
+  const { showSuccess, showError } = useToast();
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [stats, setStats] = useState<DriverStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -135,12 +137,13 @@ const DriverManagement: React.FC = () => {
     if (window.confirm(`Are you sure you want to deactivate ${driver.firstName} ${driver.lastName}?`)) {
       try {
         await apiService.delete(`/driver-management/${driver.id}`);
+        showSuccess('Driver Deactivated', `${driver.firstName} ${driver.lastName} has been successfully deactivated`);
         await fetchDrivers();
         await fetchStats();
         logger.logUserAction('delete_driver', { driverId: driver.id });
       } catch (error) {
         logger.error('Failed to delete driver', error);
-        alert('Failed to deactivate driver. Please try again.');
+        showError('Deactivation Failed', 'Unable to deactivate driver. Please try again.');
       }
     }
   };
@@ -150,11 +153,19 @@ const DriverManagement: React.FC = () => {
       await apiService.post(`/driver-management/${driver.id}/verify`, {
         [field]: value
       });
+      
+      const statusText = value ? 'verified' : 'unverified';
+      const fieldName = field.replace(/([A-Z])/g, ' $1').toLowerCase();
+      showSuccess(
+        'Verification Updated',
+        `${driver.firstName} ${driver.lastName}'s ${fieldName} has been marked as ${statusText}`
+      );
+      
       await fetchDrivers();
       logger.logUserAction('verify_driver', { driverId: driver.id, field, value });
     } catch (error) {
       logger.error('Failed to update verification status', error);
-      alert('Failed to update verification status. Please try again.');
+      showError('Verification Update Failed', 'Unable to update document verification status. Please try again.');
     }
   };
 

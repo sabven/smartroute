@@ -15,9 +15,10 @@ import {
 } from '@heroicons/react/24/outline';
 import apiService from '../services/api';
 import logger from '../utils/logger';
+import { useToast } from '../contexts/ToastContext';
 
 interface Vehicle {
-  _id: string;
+  id: string;
   name: string;
   type: 'truck' | 'van' | 'car' | 'motorcycle' | 'other';
   licensePlate: string;
@@ -40,7 +41,7 @@ interface Vehicle {
   };
   status: 'active' | 'inactive' | 'maintenance' | 'en_route';
   driver?: {
-    _id: string;
+    id: string;
     name: string;
     email: string;
   };
@@ -66,6 +67,7 @@ interface Driver {
 }
 
 const VehicleManagement: React.FC = () => {
+  const { showSuccess, showError, showWarning } = useToast();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [stats, setStats] = useState<VehicleStats | null>(null);
@@ -106,9 +108,9 @@ const VehicleManagement: React.FC = () => {
         url: `/vehicles?${params.toString()}`,
       }) as any;
 
-      if (response.data.success) {
-        setVehicles(response.data.data);
-        setTotalPages(response.data.pagination.totalPages);
+      if (response.success) {
+        setVehicles(response.data);
+        setTotalPages(response.pagination.totalPages);
       }
     } catch (error) {
       logger.error('Failed to fetch vehicles', error);
@@ -119,16 +121,46 @@ const VehicleManagement: React.FC = () => {
 
   const fetchDrivers = async () => {
     try {
+      logger.info('Fetching active drivers for vehicle assignment');
+      
       const response = await apiService.request({
         method: 'GET',
         url: '/driver-management?status=active',
       }) as any;
 
-      if (response.data.success) {
-        setDrivers(response.data.data);
+      logger.info('Driver fetch response received', {
+        success: response.success,
+        status: response.status,
+        responseStructure: {
+          hasData: !!response.data,
+          hasDrivers: !!response.data?.drivers,
+          driversCount: response.data?.drivers?.length || 0,
+          responseKeys: Object.keys(response.data || {}),
+          fullResponse: response
+        }
+      });
+
+      if (response.success) {
+        const drivers = response.data.drivers || [];
+        logger.info('Setting drivers for dropdown', {
+          driverCount: drivers.length,
+          drivers: drivers.map((d: any) => ({
+            userId: d.userId,
+            firstName: d.firstName,
+            lastName: d.lastName,
+            email: d.email
+          }))
+        });
+        setDrivers(drivers);
+      } else {
+        logger.warn('Driver fetch returned success=false', response);
       }
     } catch (error) {
-      logger.error('Failed to fetch drivers', error);
+      logger.error('Failed to fetch drivers', {
+        error,
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      });
     }
   };
 
@@ -139,8 +171,8 @@ const VehicleManagement: React.FC = () => {
         url: '/vehicles/stats',
       }) as any;
 
-      if (response.data.success) {
-        setStats(response.data.data);
+      if (response.success) {
+        setStats(response.data);
       }
     } catch (error) {
       logger.error('Failed to fetch vehicle stats', error);
@@ -155,16 +187,18 @@ const VehicleManagement: React.FC = () => {
     try {
       const response = await apiService.request({
         method: 'DELETE',
-        url: `/vehicles/${vehicle._id}`,
+        url: `/vehicles/${vehicle.id}`,
       }) as any;
 
-      if (response.data.success) {
-        logger.info('Vehicle deleted successfully', { vehicleId: vehicle._id });
+      if (response.success) {
+        logger.info('Vehicle deleted successfully', { vehicleId: vehicle.id });
+        showSuccess('Vehicle Deleted', `${vehicle.name} has been successfully removed from the fleet`);
         fetchVehicles();
         fetchStats();
       }
     } catch (error) {
       logger.error('Failed to delete vehicle', error);
+      showError('Deletion Failed', 'Unable to delete vehicle. Please try again.');
     }
   };
 
@@ -176,14 +210,16 @@ const VehicleManagement: React.FC = () => {
         data: { driverId },
       }) as any;
 
-      if (response.data.success) {
+      if (response.success) {
         logger.info('Driver assigned to vehicle successfully', { vehicleId, driverId });
+        showSuccess('Driver Assigned', 'Driver has been successfully assigned to the vehicle');
         fetchVehicles();
         fetchStats();
         setShowAssignModal(false);
       }
     } catch (error) {
       logger.error('Failed to assign driver to vehicle', error);
+      showError('Assignment Failed', 'Unable to assign driver to vehicle. Please try again.');
     }
   };
 
@@ -198,13 +234,15 @@ const VehicleManagement: React.FC = () => {
         url: `/vehicles/${vehicleId}/unassign-driver`,
       }) as any;
 
-      if (response.data.success) {
+      if (response.success) {
         logger.info('Driver unassigned from vehicle successfully', { vehicleId });
+        showSuccess('Driver Unassigned', 'Driver has been successfully removed from the vehicle');
         fetchVehicles();
         fetchStats();
       }
     } catch (error) {
       logger.error('Failed to unassign driver from vehicle', error);
+      showError('Unassignment Failed', 'Unable to remove driver from vehicle. Please try again.');
     }
   };
 
@@ -231,7 +269,7 @@ const VehicleManagement: React.FC = () => {
   };
 
   const availableDrivers = drivers.filter(driver => 
-    !vehicles.some(vehicle => vehicle.driver?._id === driver.userId)
+    !vehicles.some(vehicle => vehicle.driver?.id === driver.userId)
   );
 
   return (
@@ -413,7 +451,7 @@ const VehicleManagement: React.FC = () => {
                 </tr>
               ) : (
                 vehicles.map((vehicle) => (
-                  <tr key={vehicle._id} className="hover:bg-gray-50">
+                  <tr key={vehicle.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
@@ -485,7 +523,7 @@ const VehicleManagement: React.FC = () => {
                         </button>
                         {vehicle.driver ? (
                           <button
-                            onClick={() => handleUnassignDriver(vehicle._id)}
+                            onClick={() => handleUnassignDriver(vehicle.id)}
                             className="text-yellow-600 hover:text-yellow-800 p-1"
                             title="Unassign Driver"
                           >
@@ -614,6 +652,7 @@ interface AddVehicleModalProps {
 }
 
 const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ vehicle, drivers, vehicles, onClose, onSuccess }) => {
+  const { showSuccess, showError } = useToast();
   const [formData, setFormData] = useState({
     name: vehicle?.name || '',
     type: vehicle?.type || 'car',
@@ -623,7 +662,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ vehicle, drivers, veh
     year: vehicle?.year || new Date().getFullYear(),
     cabNumber: vehicle?.cabNumber || '',
     seatingCapacity: vehicle?.seatingCapacity || 4,
-    assignedDriver: vehicle?.driver?._id || '',
+    assignedDriver: vehicle?.driver?.id || '',
     fuel: {
       capacity: vehicle?.fuel.capacity || 50,
       type: vehicle?.fuel.type || 'gasoline',
@@ -641,8 +680,38 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ vehicle, drivers, veh
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  // Log modal initialization
+  useEffect(() => {
+    logger.info('Vehicle modal initialized', {
+      isEdit: !!vehicle?.id,
+      existingVehicle: vehicle ? {
+        id: vehicle.id,
+        name: vehicle.name,
+        licensePlate: vehicle.licensePlate,
+        cabNumber: vehicle.cabNumber,
+        type: vehicle.type,
+        assignedDriver: vehicle.driver?.id
+      } : null,
+      initialFormData: formData,
+      availableDrivers: drivers.length,
+      existingVehicles: vehicles.length,
+      timestamp: new Date().toISOString()
+    });
+  }, []);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
+    
+    // Log input changes for debugging
+    logger.debug('Vehicle form input changed', {
+      fieldName: name,
+      oldValue: name.includes('.') ? 
+        (formData as any)[name.split('.')[0]]?.[name.split('.')[1]] :
+        (formData as any)[name],
+      newValue: type === 'number' ? parseFloat(value) : value,
+      fieldType: type,
+      timestamp: new Date().toISOString()
+    });
     
     if (name.includes('.')) {
       const [parent, child] = name.split('.');
@@ -668,6 +737,15 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ vehicle, drivers, veh
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
+    
+    // Log checkbox changes for debugging
+    logger.debug('Vehicle form checkbox changed', {
+      featureName: name,
+      oldValue: formData.features[name as keyof typeof formData.features],
+      newValue: checked,
+      timestamp: new Date().toISOString()
+    });
+    
     setFormData(prev => ({
       ...prev,
       features: {
@@ -682,25 +760,87 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ vehicle, drivers, veh
     setLoading(true);
     setErrors({});
 
-    try {
-      const method = vehicle?._id ? 'PUT' : 'POST';
-      const url = vehicle?._id ? `/vehicles/${vehicle._id}` : '/vehicles';
+    // Log form submission start
+    logger.info('Starting vehicle form submission', {
+      isEdit: !!vehicle?.id,
+      existingVehicleId: vehicle?.id,
+      formData: {
+        ...formData,
+        timestamp: new Date().toISOString()
+      }
+    });
 
+    try {
+      const method = vehicle?.id ? 'PUT' : 'POST';
+      const url = vehicle?.id ? `/vehicles/${vehicle.id}` : '/vehicles';
+
+      // Log request details
+      logger.info('Sending vehicle API request', {
+        method,
+        url,
+        requestData: formData,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const startTime = performance.now();
       const response = await apiService.request({
         method,
         url,
         data: formData,
       }) as any;
+      const endTime = performance.now();
 
-      if (response.data.success) {
+      // Log successful response
+      logger.info('Vehicle API request successful', {
+        method,
+        url,
+        status: response.status,
+        duration: `${(endTime - startTime).toFixed(2)}ms`,
+        responseData: response.data,
+        success: response.success
+      });
+
+      if (response.success) {
         logger.info('Vehicle saved successfully', { 
-          vehicleId: response.data.data._id,
-          isEdit: !!vehicle?._id 
+          vehicleId: response.data.id,
+          isEdit: !!vehicle?.id,
+          vehicleName: response.data.name,
+          licensePlate: response.data.licensePlate,
+          cabNumber: response.data.cabNumber
         });
+        
+        const isEdit = !!vehicle?.id;
+        const actionText = isEdit ? 'updated' : 'added';
+        showSuccess(
+          `Vehicle ${isEdit ? 'Updated' : 'Added'} Successfully!`,
+          `${response.data.name} (${response.data.licensePlate}) has been ${actionText} to the fleet`
+        );
+        
         onSuccess();
+      } else {
+        logger.warn('Vehicle API returned success=false', response);
+        setErrors({ general: response.message || 'Unknown error occurred' });
       }
     } catch (error: any) {
-      logger.error('Failed to save vehicle', error);
+      // Enhanced error logging
+      logger.error('Failed to save vehicle', {
+        error: {
+          message: error.message,
+          status: error.response?.status,
+          statusText: error.response?.statusText,
+          data: error.response?.data,
+          headers: error.response?.headers,
+          config: {
+            method: error.config?.method,
+            url: error.config?.url,
+            data: error.config?.data
+          }
+        },
+        formData,
+        timestamp: new Date().toISOString()
+      });
       
       if (error.response?.data?.details) {
         const fieldErrors: { [key: string]: string } = {};
@@ -709,12 +849,21 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ vehicle, drivers, veh
             fieldErrors[detail.path] = detail.msg;
           }
         });
+        logger.info('Setting field-specific errors', fieldErrors);
+        showError('Validation Error', 'Please check the form fields and fix the highlighted errors');
         setErrors(fieldErrors);
       } else {
-        setErrors({ general: error.response?.data?.message || 'Failed to save vehicle' });
+        const generalError = error.response?.data?.message || 'Failed to save vehicle';
+        logger.info('Setting general error', { generalError });
+        showError('Save Failed', generalError);
+        setErrors({ general: generalError });
       }
     } finally {
       setLoading(false);
+      logger.info('Vehicle form submission completed', {
+        isEdit: !!vehicle?.id,
+        timestamp: new Date().toISOString()
+      });
     }
   };
 
@@ -723,7 +872,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ vehicle, drivers, veh
       <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-gray-900">
-            {vehicle?._id ? 'Edit Vehicle' : 'Add New Vehicle'}
+            {vehicle?.id ? 'Edit Vehicle' : 'Add New Vehicle'}
           </h2>
         </div>
 
@@ -817,7 +966,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ vehicle, drivers, veh
                   <option value="">No driver assigned</option>
                   {drivers.filter(driver => 
                     // Show all drivers if editing, or only unassigned drivers if creating new
-                    !vehicle || driver.userId === vehicle.driver?._id || !vehicles.some(v => v.driver?._id === driver.userId)
+                    !vehicle || driver.userId === vehicle.driver?.id || !vehicles.some(v => v.driver?.id === driver.userId)
                   ).map((driver) => (
                     <option key={driver.userId} value={driver.userId}>
                       {driver.firstName} {driver.lastName} - {driver.email}
@@ -977,7 +1126,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ vehicle, drivers, veh
               disabled={loading}
               className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
             >
-              {loading ? 'Saving...' : (vehicle?._id ? 'Update Vehicle' : 'Add Vehicle')}
+              {loading ? 'Saving...' : (vehicle?.id ? 'Update Vehicle' : 'Add Vehicle')}
             </button>
           </div>
         </form>
@@ -1000,7 +1149,7 @@ const AssignDriverModal: React.FC<AssignDriverModalProps> = ({ vehicle, drivers,
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedDriverId) {
-      onAssign(vehicle._id, selectedDriverId);
+      onAssign(vehicle.id, selectedDriverId);
     }
   };
 

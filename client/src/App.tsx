@@ -11,6 +11,7 @@ import DriverManagement from './pages/DriverManagement';
 import VehicleManagement from './pages/VehicleManagement';
 import Login from './pages/Login';
 import LogViewer from './components/LogViewer';
+import { ToastProvider } from './contexts/ToastContext';
 import logger from './utils/logger';
 
 type UserRole = 'employee' | 'driver' | 'company_admin';
@@ -110,19 +111,22 @@ function App() {
   // If not authenticated, show login page
   if (!isAuthenticated) {
     return (
-      <Router>
-        <div className="min-h-screen bg-gray-50">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="*" element={<Navigate to="/login" replace />} />
-          </Routes>
-        </div>
-      </Router>
+      <ToastProvider>
+        <Router>
+          <div className="min-h-screen bg-gray-50">
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="*" element={<Navigate to="/login" replace />} />
+            </Routes>
+          </div>
+        </Router>
+      </ToastProvider>
     );
   }
 
   return (
-    <Router>
+    <ToastProvider>
+      <Router>
       <div className="min-h-screen bg-gray-50">
         {/* User Info Bar */}
         <div className="bg-blue-100 border-b border-blue-200 p-2">
@@ -199,6 +203,7 @@ function App() {
       {/* Log Viewer - only in development */}
       {process.env.NODE_ENV === 'development' && <LogViewer />}
     </Router>
+    </ToastProvider>
   );
 }
 

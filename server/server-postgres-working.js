@@ -82,7 +82,7 @@ const User = sequelize.define('User', {
 User.hasOne(DriverProfile, { foreignKey: 'userId', as: 'driverProfile' });
 DriverProfile.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
-// Vehicle associations
+// Vehicle associations  
 User.hasMany(Vehicle, { foreignKey: 'driverId', as: 'vehicles' });
 Vehicle.belongsTo(User, { foreignKey: 'driverId', as: 'driver' });
 
@@ -135,6 +135,8 @@ const CabBooking = sequelize.define('CabBooking', {
   cabModel: DataTypes.STRING,
   fare: DataTypes.DECIMAL(10, 2),
   driverId: DataTypes.UUID,
+  vehicleId: DataTypes.UUID,
+  licensePlate: DataTypes.STRING,
   driverResponse: DataTypes.TEXT,
   driverResponseAt: DataTypes.DATE,
   assignedAt: DataTypes.DATE
@@ -405,6 +407,74 @@ app.put('/api/bookings/:bookingId/assign-driver', authenticateToken, async (req,
   }
 });
 
+// Vehicle assignment endpoint
+app.put('/api/bookings/:bookingId/assign-vehicle', authenticateToken, async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const { vehicleId, driverId, driverName, driverPhone, driverEmail, cabNumber, cabModel, licensePlate } = req.body;
+    
+    console.log('Assigning vehicle to booking:', { bookingId, vehicleId, driverId, driverName });
+    
+    if (!vehicleId || !driverId || !driverName) {
+      return res.status(400).json({ error: 'Vehicle ID, driver ID and driver name are required' });
+    }
+    
+    const booking = await CabBooking.findByPk(bookingId);
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    
+    // Verify the vehicle exists and has the specified driver
+    const vehicle = await Vehicle.findByPk(vehicleId, {
+      include: [{
+        model: User,
+        as: 'driver',
+        attributes: ['id', 'name', 'email', 'phone']
+      }]
+    });
+    
+    if (!vehicle) {
+      return res.status(404).json({ error: 'Vehicle not found' });
+    }
+    
+    if (!vehicle.driver || vehicle.driver.id !== driverId) {
+      return res.status(400).json({ error: 'Vehicle is not assigned to the specified driver' });
+    }
+    
+    // Update booking with vehicle and driver details
+    await booking.update({
+      driverId,
+      driverName,
+      driverPhone: driverPhone || vehicle.driver.phone,
+      cabNumber,
+      cabModel,
+      status: 'driver_assigned',
+      assignedAt: new Date(),
+      driverResponse: null,
+      driverResponseAt: null,
+      // Add vehicle information to booking
+      vehicleId: vehicleId,
+      licensePlate: licensePlate
+    });
+    
+    // Fetch updated booking with user details
+    const updatedBooking = await CabBooking.findByPk(bookingId, {
+      include: [{
+        model: User,
+        attributes: ['name', 'email']
+      }]
+    });
+    
+    res.json({
+      message: 'Vehicle assigned successfully',
+      booking: updatedBooking
+    });
+  } catch (error) {
+    console.error('Assign vehicle error:', error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
 // Driver response endpoints
 app.put('/api/bookings/:bookingId/driver-response', authenticateToken, async (req, res) => {
   try {
@@ -630,7 +700,7 @@ async function startServer() {
     console.log('✅ PostgreSQL connected successfully');
     
     console.log('🔄 Synchronizing database...');
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ alter: true });
     console.log('✅ Database synchronized');
     
     // Define associations

@@ -10,6 +10,7 @@ import {
   CheckCircleIcon,
 } from '@heroicons/react/24/outline';
 import { API_BASE_URL } from '../config';
+import { useToast } from '../contexts/ToastContext';
 
 interface BookingForm {
   tripType: 'home_to_office' | 'office_to_home';
@@ -25,6 +26,7 @@ interface BookingForm {
 }
 
 const BookCab: React.FC = () => {
+  const { showSuccess, showError } = useToast();
   const [step, setStep] = useState(1);
   const [bookingForm, setBookingForm] = useState<BookingForm>({
     tripType: 'home_to_office',
@@ -87,16 +89,20 @@ const BookCab: React.FC = () => {
       const data = await response.json();
       
       if (response.ok) {
+        showSuccess(
+          'Booking Created Successfully!',
+          `Your cab has been booked for ${bookingForm.date} at ${bookingForm.time}. Booking ID: ${data.booking?.bookingId || 'Generated'}`
+        );
         setIsSubmitting(false);
         setStep(4); // Success step
       } else {
         console.error('Booking creation failed:', data);
-        alert('Failed to create booking: ' + (data.error || 'Unknown error'));
+        showError('Booking Failed', data.error || 'Unable to create booking. Please try again.');
         setIsSubmitting(false);
       }
     } catch (error) {
       console.error('Booking submission error:', error);
-      alert('Network error. Please check if the server is running.');
+      showError('Network Error', 'Unable to connect to server. Please check your connection and try again.');
       setIsSubmitting(false);
     }
   };

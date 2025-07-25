@@ -10,8 +10,11 @@ import {
   ClockIcon,
   MapPinIcon,
   UserIcon,
+  ExclamationTriangleIcon,
+  ArrowPathIcon,
 } from '@heroicons/react/24/outline';
 import { API_BASE_URL } from '../config';
+import { useToast } from '../contexts/ToastContext';
 
 interface Booking {
   id: string;
@@ -51,7 +54,7 @@ interface Driver {
 }
 
 interface Vehicle {
-  _id: string;
+  id: string;
   name: string;
   licensePlate: string;
   cabNumber: string;
@@ -60,13 +63,15 @@ interface Vehicle {
   seatingCapacity: number;
   status: string;
   driver?: {
-    _id: string;
+    id: string;
     name: string;
     email: string;
+    phone?: string;
   };
 }
 
 const FleetManagement: React.FC = () => {
+  const { showSuccess, showError, showWarning } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -75,7 +80,6 @@ const FleetManagement: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
-  const [selectedDriver, setSelectedDriver] = useState('');
   const [selectedVehicle, setSelectedVehicle] = useState('');
   const [showAssignModal, setShowAssignModal] = useState(false);
 
@@ -131,7 +135,7 @@ const FleetManagement: React.FC = () => {
   const fetchVehicles = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE_URL}/vehicles/available`, {
+      const response = await fetch(`${API_BASE_URL}/vehicles?status=active`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -148,16 +152,16 @@ const FleetManagement: React.FC = () => {
     }
   };
 
-  const assignDriver = async (bookingId: string, driverData: any) => {
+  const assignVehicle = async (bookingId: string, vehicleData: any) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE_URL}/bookings/${bookingId}/assign-driver`, {
+      const response = await fetch(`${API_BASE_URL}/bookings/${bookingId}/assign-vehicle`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(driverData),
+        body: JSON.stringify(vehicleData),
       });
 
       if (response.ok) {
@@ -168,14 +172,20 @@ const FleetManagement: React.FC = () => {
         ));
         setShowAssignModal(false);
         setSelectedBooking(null);
-        alert('Driver assigned successfully!');
+        
+        // Find the assigned vehicle for the toast message
+        const assignedVehicle = vehicles.find(v => v.id === selectedVehicle);
+        showSuccess(
+          'Vehicle Assigned Successfully!', 
+          `${assignedVehicle?.name} (${assignedVehicle?.licensePlate}) has been assigned to booking ${selectedBooking?.bookingId}`
+        );
       } else {
         const errorData = await response.json();
-        alert('Failed to assign driver: ' + errorData.error);
+        showError('Assignment Failed', errorData.error || 'Failed to assign vehicle');
       }
     } catch (error) {
-      console.error('Error assigning driver:', error);
-      alert('Network error. Please try again.');
+      console.error('Error assigning vehicle:', error);
+      showError('Network Error', 'Unable to connect to server. Please check your connection and try again.');
     }
   };
 
@@ -251,37 +261,59 @@ const FleetManagement: React.FC = () => {
         </div>
       </div>
 
-      {/* Filters and Search */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0 sm:space-x-4">
-          <div className="flex-1 max-w-lg">
-            <div className="relative">
-              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search by booking ID, customer, or address..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-              />
+      {/* Compact Filters and Quick Actions */}
+      <div className="bg-white shadow rounded-lg p-4">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-3 lg:space-y-0 lg:space-x-4">
+          <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+            <div className="flex-1 max-w-md">
+              <div className="relative">
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search bookings..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="block w-full pl-9 pr-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                />
+              </div>
             </div>
-          </div>
-          <div className="flex items-center space-x-3">
-            <FunnelIcon className="h-5 w-5 text-gray-400" />
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="block border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              className="block border-gray-300 rounded-md text-sm focus:ring-primary-500 focus:border-primary-500"
             >
               <option value="All">All Status</option>
-              <option value="confirmed">Awaiting Assignment</option>
-              <option value="driver_assigned">Driver Assigned</option>
-              <option value="driver_accepted">Driver Accepted</option>
-              <option value="driver_declined">Driver Declined</option>
-              <option value="in_progress">In Progress</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
+              <option value="confirmed">⏳ Awaiting Assignment</option>
+              <option value="driver_assigned">🚗 Driver Assigned</option>
+              <option value="driver_accepted">✅ Driver Accepted</option>
+              <option value="driver_declined">❌ Driver Declined</option>
+              <option value="in_progress">🚙 In Progress</option>
+              <option value="completed">✅ Completed</option>
+              <option value="cancelled">🚫 Cancelled</option>
             </select>
+          </div>
+          <div className="flex items-center space-x-2">
+            <button 
+              onClick={() => setFilterStatus('confirmed')}
+              className="inline-flex items-center px-3 py-1 border border-red-300 text-xs font-medium rounded-md text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              <ClockIcon className="w-3 h-3 mr-1" />
+              Need Assignment ({bookings.filter(b => b.status === 'confirmed').length})
+            </button>
+            <button 
+              onClick={() => setFilterStatus('driver_declined')}
+              className="inline-flex items-center px-3 py-1 border border-orange-300 text-xs font-medium rounded-md text-orange-700 bg-orange-50 hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+            >
+              <ExclamationTriangleIcon className="w-3 h-3 mr-1" />
+              Declined ({bookings.filter(b => b.status === 'driver_declined').length})
+            </button>
+            <button 
+              onClick={() => window.location.reload()}
+              className="inline-flex items-center px-3 py-1 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            >
+              <ArrowPathIcon className="w-3 h-3 mr-1" />
+              Refresh
+            </button>
           </div>
         </div>
       </div>
@@ -407,117 +439,151 @@ const FleetManagement: React.FC = () => {
         </div>
       </div>
 
-      {/* Bookings List */}
+      {/* Compact Bookings Table */}
       {loading ? (
-        <div className="bg-white shadow rounded-lg p-12 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading bookings...</p>
+        <div className="bg-white shadow rounded-lg p-8 text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Loading bookings...</p>
         </div>
       ) : error ? (
-        <div className="bg-white shadow rounded-lg p-12 text-center">
+        <div className="bg-white shadow rounded-lg p-6 text-center">
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
             {error}
           </div>
         </div>
       ) : (
-        <div className="bg-white shadow overflow-hidden sm:rounded-md">
-          <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+          <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
             <h3 className="text-lg leading-6 font-medium text-gray-900">
-              Bookings ({filteredBookings.length})
+              Bookings ({filteredBookings.length}) - Quick Assignment View
             </h3>
           </div>
-          <ul className="divide-y divide-gray-200">
-            {filteredBookings.map((booking) => (
-              <li key={booking.id} className="px-4 py-4 hover:bg-gray-50">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center flex-1">
-                    <div className="flex-shrink-0 h-10 w-10">
-                      <div className="h-10 w-10 bg-gray-300 rounded-full flex items-center justify-center">
-                        <UserIcon className="h-6 w-6 text-gray-600" />
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Booking Details
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Customer & Trip
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Route
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Date & Time
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Driver Info
+                  </th>
+                  <th className="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {filteredBookings.map((booking) => (
+                  <tr key={booking.id} className="hover:bg-gray-50">
+                    <td className="px-3 py-2 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">{booking.bookingId}</div>
+                      <div className="text-xs text-gray-500">
+                        {new Date(booking.createdAt).toLocaleDateString()}
                       </div>
-                    </div>
-                    <div className="ml-4 flex-1">
-                      <div className="flex items-center justify-between">
+                    </td>
+                    <td className="px-3 py-2">
+                      <div className="text-sm font-medium text-gray-900">
+                        {booking.User?.name || 'Unknown'}
+                      </div>
+                      <div className="text-xs text-gray-500 capitalize">
+                        {booking.tripType.replace('_', ' ')}
+                      </div>
+                    </td>
+                    <td className="px-3 py-2">
+                      <div className="text-xs text-gray-900 max-w-xs">
                         <div className="flex items-center">
-                          <div className="text-sm font-medium text-gray-900">{booking.bookingId}</div>
-                          <span className={`ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(booking.status)}`}>
-                            {getStatusText(booking.status)}
-                          </span>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-sm text-gray-900">{new Date(booking.date).toLocaleDateString()}</div>
-                          <div className="text-sm text-gray-500">{booking.time}</div>
-                        </div>
-                      </div>
-                      <div className="text-sm text-gray-500 mt-1">
-                        Customer: {booking.User?.name || 'Unknown'} • {booking.tripType.replace('_', ' ')}
-                      </div>
-                      <div className="text-sm text-gray-500 mt-1">
-                        <div className="flex items-center">
-                          <MapPinIcon className="h-4 w-4 mr-1" />
-                          From: {booking.pickupAddress.substring(0, 50)}...
+                          <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                          <span className="truncate">{booking.pickupAddress.substring(0, 30)}</span>
                         </div>
                         <div className="flex items-center mt-1">
-                          <MapPinIcon className="h-4 w-4 mr-1" />
-                          To: {booking.destinationAddress.substring(0, 50)}...
+                          <div className="w-2 h-2 bg-red-500 rounded-full mr-1"></div>
+                          <span className="truncate">{booking.destinationAddress.substring(0, 30)}</span>
                         </div>
                       </div>
-                      {booking.driverName && (
-                        <div className="text-sm text-green-600 mt-1">
-                          Driver: {booking.driverName} • {booking.cabNumber} ({booking.cabModel})
-                        </div>
-                      )}
-                      {booking.driverResponse && (
-                        <div className={`text-sm mt-1 ${booking.status === 'driver_declined' ? 'text-red-600' : 'text-green-600'}`}>
-                          Response: {booking.driverResponse}
-                          {booking.driverResponseAt && (
-                            <span className="text-gray-500 ml-2">
-                              ({new Date(booking.driverResponseAt).toLocaleDateString()})
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2 ml-4">
-                    {booking.status === 'confirmed' && (
-                      <button
-                        onClick={() => {
-                          setSelectedBooking(booking);
-                          setShowAssignModal(true);
-                        }}
-                        className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
-                      >
-                        Assign Driver
-                      </button>
-                    )}
-                    {booking.status === 'driver_declined' && (
-                      <button
-                        onClick={() => {
-                          setSelectedBooking(booking);
-                          setShowAssignModal(true);
-                        }}
-                        className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700"
-                      >
-                        Reassign Driver
-                      </button>
-                    )}
-                    {booking.status === 'driver_accepted' && (
-                      <span className="inline-flex items-center px-3 py-1 text-xs font-medium rounded-md text-green-800 bg-green-100">
-                        Driver Ready
+                    </td>
+                    <td className="px-3 py-2 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{new Date(booking.date).toLocaleDateString()}</div>
+                      <div className="text-xs text-gray-500">{booking.time}</div>
+                    </td>
+                    <td className="px-3 py-2 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(booking.status)}`}>
+                        {getStatusText(booking.status)}
                       </span>
-                    )}
-                    <button className="text-gray-400 hover:text-gray-600">
-                      <EyeIcon className="h-5 w-5" />
-                    </button>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+                      {booking.driverResponse && (
+                        <div className={`text-xs mt-1 ${booking.status === 'driver_declined' ? 'text-red-600' : 'text-green-600'}`}>
+                          {booking.driverResponse.substring(0, 20)}...
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-3 py-2">
+                      {booking.driverName ? (
+                        <div className="text-xs">
+                          <div className="font-medium text-gray-900">{booking.driverName}</div>
+                          <div className="text-gray-500">{booking.cabNumber}</div>
+                          <div className="text-gray-500">{booking.cabModel}</div>
+                        </div>
+                      ) : (
+                        <span className="text-xs text-gray-400">Not assigned</span>
+                      )}
+                    </td>
+                    <td className="px-3 py-2 text-center">
+                      <div className="flex items-center justify-center space-x-1">
+                        {booking.status === 'confirmed' && (
+                          <button
+                            onClick={() => {
+                              setSelectedBooking(booking);
+                              setShowAssignModal(true);
+                            }}
+                            className="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded bg-primary-600 text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                          >
+                            Assign Vehicle
+                          </button>
+                        )}
+                        {booking.status === 'driver_declined' && (
+                          <button
+                            onClick={() => {
+                              setSelectedBooking(booking);
+                              setShowAssignModal(true);
+                            }}
+                            className="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded bg-orange-600 text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                          >
+                            Reassign Vehicle
+                          </button>
+                        )}
+                        {booking.status === 'driver_accepted' && (
+                          <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded text-green-800 bg-green-100">
+                            Ready
+                          </span>
+                        )}
+                        <button 
+                          className="text-gray-400 hover:text-gray-600 p-1"
+                          title="View details"
+                        >
+                          <EyeIcon className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           {filteredBookings.length === 0 && (
-            <div className="text-center py-12">
-              <ClockIcon className="mx-auto h-12 w-12 text-gray-400" />
+            <div className="text-center py-8">
+              <ClockIcon className="mx-auto h-8 w-8 text-gray-400" />
               <h3 className="mt-2 text-sm font-medium text-gray-900">No bookings found</h3>
               <p className="mt-1 text-sm text-gray-500">
                 {searchTerm || filterStatus !== 'All' 
@@ -529,13 +595,39 @@ const FleetManagement: React.FC = () => {
         </div>
       )}
 
-      {/* Driver Assignment Modal */}
+      {/* Quick Stats Summary */}
+      <div className="bg-white rounded-lg shadow p-4">
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-gray-600">
+            Showing {filteredBookings.length} of {bookings.length} bookings
+          </div>
+          <div className="flex items-center space-x-4 text-sm">
+            <span className="text-gray-600">
+              Pending Assignment: <span className="font-medium text-red-600">
+                {bookings.filter(b => b.status === 'confirmed').length}
+              </span>
+            </span>
+            <span className="text-gray-600">
+              Driver Declined: <span className="font-medium text-orange-600">
+                {bookings.filter(b => b.status === 'driver_declined').length}
+              </span>
+            </span>
+            <span className="text-gray-600">
+              Ready to Go: <span className="font-medium text-green-600">
+                {bookings.filter(b => b.status === 'driver_accepted').length}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Vehicle Assignment Modal */}
       {showAssignModal && selectedBooking && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative top-10 mx-auto p-5 border max-w-2xl w-full shadow-lg rounded-md bg-white">
             <div className="mt-3">
               <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Assign Driver to {selectedBooking.bookingId}
+                Assign Vehicle to {selectedBooking.bookingId}
               </h3>
               <div className="mb-4 p-3 bg-gray-50 rounded">
                 <p className="text-sm text-gray-600 mb-1">
@@ -551,57 +643,77 @@ const FleetManagement: React.FC = () => {
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Select Driver
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    Select Vehicle (Driver included)
                   </label>
-                  <select
-                    value={selectedDriver}
-                    onChange={(e) => setSelectedDriver(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                  >
-                    <option value="">Choose a driver...</option>
-                    {drivers.filter(driver => !vehicles.some(v => v.driver?._id === driver.id)).map((driver) => (
-                      <option key={driver.id} value={driver.id}>
-                        {driver.name} ({driver.email})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Select Vehicle
-                  </label>
-                  <select
-                    value={selectedVehicle}
-                    onChange={(e) => setSelectedVehicle(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                  >
-                    <option value="">Choose a vehicle...</option>
-                    {vehicles.filter(vehicle => !vehicle.driver).map((vehicle) => (
-                      <option key={vehicle._id} value={vehicle._id}>
-                        {vehicle.name} - {vehicle.licensePlate} ({vehicle.make} {vehicle.model})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {selectedVehicle && (
-                  <div className="p-3 bg-blue-50 rounded-md">
-                    <h4 className="text-sm font-medium text-blue-900 mb-2">Vehicle Details</h4>
-                    {(() => {
-                      const vehicle = vehicles.find(v => v._id === selectedVehicle);
-                      return vehicle ? (
-                        <div className="text-sm text-blue-800">
-                          <p><strong>Cab Number:</strong> {vehicle.cabNumber}</p>
-                          <p><strong>License Plate:</strong> {vehicle.licensePlate}</p>
-                          <p><strong>Model:</strong> {vehicle.make} {vehicle.model}</p>
-                          <p><strong>Seating:</strong> {vehicle.seatingCapacity} seats</p>
+                  <div className="space-y-2 max-h-96 overflow-y-auto">
+                    {vehicles.filter(vehicle => vehicle.driver && vehicle.status === 'active').map((vehicle) => (
+                      <div
+                        key={vehicle.id}
+                        className={`border rounded-lg p-3 cursor-pointer transition-colors ${
+                          selectedVehicle === vehicle.id
+                            ? 'border-blue-500 bg-blue-50'
+                            : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                        }`}
+                        onClick={() => setSelectedVehicle(vehicle.id)}
+                      >
+                        <div className="flex items-center">
+                          <input
+                            type="radio"
+                            name="vehicle"
+                            value={vehicle.id}
+                            checked={selectedVehicle === vehicle.id}
+                            onChange={() => setSelectedVehicle(vehicle.id)}
+                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                          />
+                          <div className="ml-3 flex-1">
+                            <div className="flex justify-between items-start">
+                              <div className="flex-1">
+                                <h4 className="text-sm font-medium text-gray-900">
+                                  {vehicle.name} - {vehicle.licensePlate}
+                                </h4>
+                                <p className="text-sm text-gray-600">
+                                  {vehicle.make} {vehicle.model} • Cab #{vehicle.cabNumber}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {vehicle.seatingCapacity} seats
+                                </p>
+                              </div>
+                              <div className="ml-4 text-right">
+                                <div className="flex items-center">
+                                  <UserIcon className="h-4 w-4 text-gray-400 mr-1" />
+                                  <div>
+                                    <p className="text-sm font-medium text-gray-900">
+                                      {vehicle.driver?.name}
+                                    </p>
+                                    <p className="text-xs text-gray-500">
+                                      {vehicle.driver?.email}
+                                    </p>
+                                    {vehicle.driver?.phone && (
+                                      <p className="text-xs text-gray-500">
+                                        {vehicle.driver.phone}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      ) : null;
-                    })()}
+                      </div>
+                    ))}
+                    
+                    {vehicles.filter(vehicle => vehicle.driver && vehicle.status === 'active').length === 0 && (
+                      <div className="text-center py-8 text-gray-500">
+                        <TruckIcon className="mx-auto h-12 w-12 text-gray-400" />
+                        <h3 className="mt-2 text-sm font-medium text-gray-900">No vehicles available</h3>
+                        <p className="mt-1 text-sm text-gray-500">
+                          All vehicles are either assigned or don't have drivers.
+                        </p>
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
               
               <div className="flex items-center justify-end space-x-3 mt-6">
@@ -609,7 +721,6 @@ const FleetManagement: React.FC = () => {
                   onClick={() => {
                     setShowAssignModal(false);
                     setSelectedBooking(null);
-                    setSelectedDriver('');
                     setSelectedVehicle('');
                   }}
                   className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
@@ -618,32 +729,33 @@ const FleetManagement: React.FC = () => {
                 </button>
                 <button
                   onClick={() => {
-                    const driver = drivers.find(d => d.id === selectedDriver);
-                    const vehicle = vehicles.find(v => v._id === selectedVehicle);
-                    
-                    if (!selectedDriver || !driver) {
-                      alert('Please select a driver');
-                      return;
-                    }
+                    const vehicle = vehicles.find(v => v.id === selectedVehicle);
                     
                     if (!selectedVehicle || !vehicle) {
-                      alert('Please select a vehicle');
+                      showWarning('Selection Required', 'Please select a vehicle before proceeding');
                       return;
                     }
                     
-                    assignDriver(selectedBooking.id, {
-                      driverId: selectedDriver,
-                      driverName: driver.name,
-                      driverPhone: driver.phone,
+                    if (!vehicle.driver) {
+                      showError('Invalid Vehicle', 'Selected vehicle does not have a driver assigned');
+                      return;
+                    }
+                    
+                    assignVehicle(selectedBooking.id, {
+                      vehicleId: vehicle.id,
+                      driverId: vehicle.driver.id,
+                      driverName: vehicle.driver.name,
+                      driverPhone: vehicle.driver.phone,
+                      driverEmail: vehicle.driver.email,
                       cabNumber: vehicle.cabNumber,
                       cabModel: `${vehicle.make} ${vehicle.model}`,
-                      vehicleId: vehicle._id,
                       licensePlate: vehicle.licensePlate
                     });
                   }}
-                  className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+                  disabled={!selectedVehicle}
+                  className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Assign Driver & Vehicle
+                  Assign Vehicle
                 </button>
               </div>
             </div>
