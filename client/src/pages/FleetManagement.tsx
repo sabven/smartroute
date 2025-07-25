@@ -83,6 +83,7 @@ const FleetManagement: React.FC = () => {
   const [selectedVehicle, setSelectedVehicle] = useState('');
   const [showAssignModal, setShowAssignModal] = useState(false);
 
+
   useEffect(() => {
     fetchBookings();
     fetchDrivers();
@@ -250,16 +251,21 @@ const FleetManagement: React.FC = () => {
             Assign drivers to bookings and manage ride requests
           </p>
         </div>
-        <div className="mt-4 sm:mt-0">
+        <div className="mt-3 sm:mt-0 flex space-x-3">
           <button 
             onClick={() => window.location.reload()}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
+            <ArrowPathIcon className="w-4 h-4 mr-2" />
+            Refresh
+          </button>
+          <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
             <PlusIcon className="w-4 h-4 mr-2" />
-            Refresh Bookings
+            New Booking
           </button>
         </div>
       </div>
+
 
       {/* Compact Filters and Quick Actions */}
       <div className="bg-white shadow rounded-lg p-4">
