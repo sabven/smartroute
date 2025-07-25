@@ -129,26 +129,16 @@ function App() {
     <ToastProvider>
       <Router>
       <div className="min-h-screen bg-gray-50">
-        {/* User Info Bar */}
-        <div className="bg-blue-100 border-b border-blue-200 p-2">
-          <div className="container mx-auto flex items-center justify-between">
-            <span className="text-sm font-medium text-blue-800">
-              Welcome, {user?.firstName || user?.name} ({user?.role})
-            </span>
-            <button
-              onClick={() => {
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                setIsAuthenticated(false);
-                setUser(null);
-              }}
-              className="px-3 py-1 text-xs bg-blue-600 text-white rounded-full hover:bg-blue-700"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-        <Navbar userRole={userRole} />
+        <Navbar 
+          userRole={userRole} 
+          user={user}
+          onLogout={() => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            setIsAuthenticated(false);
+            setUser(null);
+          }}
+        />
         <main className="container mx-auto px-4 py-6">
           <Routes>
             <Route path="/" element={getDashboardComponent()} />

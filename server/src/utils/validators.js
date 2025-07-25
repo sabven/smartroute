@@ -100,10 +100,10 @@ const routeValidation = [
     .isLength({ min: 2, max: 100 })
     .withMessage('Route name must be between 2 and 100 characters'),
   body('vehicle')
-    .isMongoId()
+    .isUUID()
     .withMessage('Valid vehicle ID is required'),
   body('driver')
-    .isMongoId()
+    .isUUID()
     .withMessage('Valid driver ID is required'),
   body('stops')
     .isArray({ min: 1 })
@@ -122,7 +122,7 @@ const routeValidation = [
 
 const trackingValidation = [
   body('vehicle')
-    .isMongoId()
+    .isUUID()
     .withMessage('Valid vehicle ID is required'),
   body('location.coordinates.latitude')
     .isFloat({ min: -90, max: 90 })

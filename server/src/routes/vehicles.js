@@ -6,6 +6,7 @@ const { actionLogger } = require('../../middleware/logging');
 function createVehiclesRouter(models) {
   const router = express.Router();
   const { Vehicle, User, DriverProfile } = models;
+  const { Op } = require('sequelize');
 
 // Validation middleware for vehicle data
 const validateVehicleData = [
@@ -37,8 +38,7 @@ router.get('/', actionLogger('list_vehicles'), async (req, res) => {
     } = req.query;
 
     const offset = (page - 1) * limit;
-    const { Op } = require('sequelize');
-    const whereClause = { isActive: true };
+    const whereClause = {};
 
     // Build search query
     if (search) {
@@ -105,28 +105,15 @@ router.get('/', actionLogger('list_vehicles'), async (req, res) => {
 // GET /api/vehicles/stats - Get vehicle statistics
 router.get('/stats', actionLogger('get_vehicle_stats'), async (req, res) => {
   try {
-    const totalVehicles = await Vehicle.countDocuments({ isActive: true });
-    const activeVehicles = await Vehicle.countDocuments({ status: 'active', isActive: true });
-    const availableVehicles = await Vehicle.countDocuments({ 
-      status: 'active', 
-      driver: { $exists: false },
-      isActive: true 
+    const totalVehicles = await Vehicle.count();
+    const activeVehicles = await Vehicle.count({ where: { status: 'active' } });
+    const availableVehicles = await Vehicle.count({ 
+      where: { 
+        status: 'active', 
+        driverId: { [Op.is]: null }
+      }
     });
-    const maintenanceVehicles = await Vehicle.countDocuments({ status: 'maintenance', isActive: true });
-
-    // Vehicle type distribution
-    const typeDistribution = await Vehicle.aggregate([
-      { $match: { isActive: true } },
-      { $group: { _id: '$type', count: { $sum: 1 } } },
-      { $sort: { count: -1 } }
-    ]);
-
-    // Fuel type distribution
-    const fuelDistribution = await Vehicle.aggregate([
-      { $match: { isActive: true } },
-      { $group: { _id: '$fuel.type', count: { $sum: 1 } } },
-      { $sort: { count: -1 } }
-    ]);
+    const maintenanceVehicles = await Vehicle.count({ where: { status: 'maintenance' } });
 
     res.status(200).json({
       success: true,
@@ -135,9 +122,7 @@ router.get('/stats', actionLogger('get_vehicle_stats'), async (req, res) => {
         activeVehicles,
         availableVehicles,
         maintenanceVehicles,
-        utilizationRate: totalVehicles > 0 ? ((totalVehicles - availableVehicles) / totalVehicles * 100).toFixed(1) : 0,
-        typeDistribution,
-        fuelDistribution
+        utilizationRate: totalVehicles > 0 ? ((totalVehicles - availableVehicles) / totalVehicles * 100).toFixed(1) : 0
       }
     });
   } catch (error) {
@@ -153,12 +138,14 @@ router.get('/stats', actionLogger('get_vehicle_stats'), async (req, res) => {
 // GET /api/vehicles/available - Get available vehicles for assignment
 router.get('/available', actionLogger('get_available_vehicles'), async (req, res) => {
   try {
-    const availableVehicles = await Vehicle.find({
-      status: 'active',
-      driver: { $exists: false },
-      isActive: true
-    }).select('name licensePlate cabNumber make model seatingCapacity features')
-      .sort({ name: 1 });
+    const availableVehicles = await Vehicle.findAll({
+      where: {
+        status: 'active',
+        driverId: { [Op.is]: null }
+      },
+      attributes: ['id', 'name', 'licensePlate', 'cabNumber', 'make', 'model', 'seatingCapacity', 'features'],
+      order: [['name', 'ASC']]
+    });
 
     res.status(200).json({
       success: true,
@@ -176,7 +163,7 @@ router.get('/available', actionLogger('get_available_vehicles'), async (req, res
 
 // GET /api/vehicles/:id - Get single vehicle by ID
 router.get('/:id', 
-  param('id').isMongoId().withMessage('Valid vehicle ID is required'),
+  param('id').isUUID().withMessage('Valid vehicle ID is required'),
   actionLogger('get_vehicle'),
   async (req, res) => {
     try {
@@ -189,10 +176,14 @@ router.get('/:id',
         });
       }
 
-      const vehicle = await Vehicle.findOne({ 
-        _id: req.params.id, 
-        isActive: true 
-      }).populate('driver', 'name email phone');
+      const vehicle = await Vehicle.findByPk(req.params.id, {
+        include: [{
+          model: User,
+          as: 'driver',
+          attributes: ['id', 'name', 'email', 'phone'],
+          required: false
+        }]
+      });
 
       if (!vehicle) {
         return res.status(404).json({
@@ -231,20 +222,29 @@ router.post('/',
         });
       }
 
-      // Check for duplicate license plate or cab number
-      const existingVehicle = await Vehicle.findOne({
-        $or: [
-          { licensePlate: req.body.licensePlate },
-          { cabNumber: req.body.cabNumber }
-        ],
-        isActive: true
+      // Check for duplicate license plate
+      const duplicateLicensePlate = await Vehicle.findOne({
+        where: { licensePlate: req.body.licensePlate }
       });
 
-      if (existingVehicle) {
+      if (duplicateLicensePlate) {
         return res.status(409).json({
           success: false,
           error: 'Vehicle already exists',
-          message: 'A vehicle with this license plate or cab number already exists'
+          message: 'A vehicle with this license plate already exists'
+        });
+      }
+
+      // Check for duplicate cab number
+      const duplicateCabNumber = await Vehicle.findOne({
+        where: { cabNumber: req.body.cabNumber }
+      });
+
+      if (duplicateCabNumber) {
+        return res.status(409).json({
+          success: false,
+          error: 'Vehicle already exists',
+          message: 'A vehicle with this cab number already exists'
         });
       }
 
@@ -253,9 +253,16 @@ router.post('/',
       if (req.body.assignedDriver && req.body.assignedDriver.trim() !== '') {
         // Find and validate the driver
         const driver = await DriverProfile.findOne({ 
-          userId: req.body.assignedDriver,
-          status: 'active'
-        }).populate('user', 'id name email');
+          where: {
+            userId: req.body.assignedDriver,
+            status: 'active'
+          },
+          include: [{
+            model: User,
+            as: 'user',
+            attributes: ['id', 'name', 'email']
+          }]
+        });
 
         if (!driver) {
           return res.status(400).json({
@@ -267,8 +274,9 @@ router.post('/',
 
         // Check if driver is already assigned to another vehicle
         const existingAssignment = await Vehicle.findOne({
-          driver: driver.user.id,
-          isActive: true
+          where: {
+            driverId: driver.user.id
+          }
         });
 
         if (existingAssignment) {
@@ -288,26 +296,29 @@ router.post('/',
         // Remove assignedDriver from the vehicle data as it's not a direct field
         assignedDriver: undefined,
         // Set the driver field if a driver was assigned
-        driver: assignedDriverId,
-        // Set default company - you might want to get this from req.user or request body
-        company: '60f1b0b0b0b0b0b0b0b0b0b0', // Replace with actual company ID logic
-        status: 'active'
+        driverId: assignedDriverId,
+        status: req.body.status || 'active'
       };
 
-      const vehicle = new Vehicle(vehicleData);
-      await vehicle.save();
+      const vehicle = await Vehicle.create(vehicleData);
 
       // Update driver profile with vehicle assignment if driver was assigned
       if (assignedDriverId) {
-        await DriverProfile.updateOne(
-          { userId: req.body.assignedDriver },
-          { assignedVehicleId: vehicle._id }
+        await DriverProfile.update(
+          { assignedVehicleId: vehicle.id },
+          { where: { userId: req.body.assignedDriver } }
         );
       }
 
-      // Fetch the created vehicle with driver populated
-      const createdVehicle = await Vehicle.findById(vehicle._id)
-        .populate('driver', 'name email phone');
+      // Fetch the created vehicle with driver included
+      const createdVehicle = await Vehicle.findByPk(vehicle.id, {
+        include: [{
+          model: User,
+          as: 'driver',
+          attributes: ['id', 'name', 'email', 'phone'],
+          required: false
+        }]
+      });
 
       res.status(201).json({
         success: true,
@@ -327,7 +338,7 @@ router.post('/',
 
 // PUT /api/vehicles/:id - Update vehicle
 router.put('/:id',
-  param('id').isMongoId().withMessage('Valid vehicle ID is required'),
+  param('id').isUUID().withMessage('Valid vehicle ID is required'),
   validateVehicleData,
   actionLogger('update_vehicle'),
   async (req, res) => {
@@ -342,10 +353,7 @@ router.put('/:id',
       }
 
       // Check if vehicle exists
-      const existingVehicle = await Vehicle.findOne({ 
-        _id: req.params.id, 
-        isActive: true 
-      });
+      const existingVehicle = await Vehicle.findByPk(req.params.id);
 
       if (!existingVehicle) {
         return res.status(404).json({
@@ -356,12 +364,13 @@ router.put('/:id',
 
       // Check for duplicate license plate or cab number (excluding current vehicle)
       const duplicateVehicle = await Vehicle.findOne({
-        $or: [
-          { licensePlate: req.body.licensePlate },
-          { cabNumber: req.body.cabNumber }
-        ],
-        _id: { $ne: req.params.id },
-        isActive: true
+        where: {
+          [Op.or]: [
+            { licensePlate: req.body.licensePlate },
+            { cabNumber: req.body.cabNumber }
+          ],
+          id: { [Op.ne]: req.params.id }
+        }
       });
 
       if (duplicateVehicle) {
@@ -373,16 +382,23 @@ router.put('/:id',
       }
 
       // Handle driver assignment if provided
-      let assignedDriverId = existingVehicle.driver; // Keep existing driver by default
+      let assignedDriverId = existingVehicle.driverId; // Keep existing driver by default
       let driverChanged = false;
 
       if (req.body.hasOwnProperty('assignedDriver')) {
         if (req.body.assignedDriver && req.body.assignedDriver.trim() !== '') {
           // Find and validate the new driver
           const driver = await DriverProfile.findOne({ 
-            userId: req.body.assignedDriver,
-            status: 'active'
-          }).populate('user', 'id name email');
+            where: {
+              userId: req.body.assignedDriver,
+              status: 'active'
+            },
+            include: [{
+              model: User,
+              as: 'user',
+              attributes: ['id', 'name', 'email']
+            }]
+          });
 
           if (!driver) {
             return res.status(400).json({
@@ -394,9 +410,10 @@ router.put('/:id',
 
           // Check if driver is already assigned to another vehicle (excluding current vehicle)
           const existingAssignment = await Vehicle.findOne({
-            driver: driver.user.id,
-            _id: { $ne: req.params.id },
-            isActive: true
+            where: {
+              driverId: driver.user.id,
+              id: { [Op.ne]: req.params.id }
+            }
           });
 
           if (existingAssignment) {
@@ -422,34 +439,41 @@ router.put('/:id',
         // Remove assignedDriver from the vehicle data as it's not a direct field
         assignedDriver: undefined,
         // Set the driver field
-        driver: assignedDriverId,
-        updatedAt: new Date()
+        driverId: assignedDriverId
       };
 
-      const updatedVehicle = await Vehicle.findByIdAndUpdate(
-        req.params.id,
-        updateData,
-        { new: true, runValidators: true }
-      ).populate('driver', 'name email phone');
+      await Vehicle.update(updateData, {
+        where: { id: req.params.id }
+      });
 
       // Update driver profiles if driver assignment changed
       if (driverChanged) {
         // Remove vehicle assignment from old driver if there was one
-        if (existingVehicle.driver) {
-          await DriverProfile.updateOne(
-            { userId: existingVehicle.driver },
-            { $unset: { assignedVehicleId: 1 } }
+        if (existingVehicle.driverId) {
+          await DriverProfile.update(
+            { assignedVehicleId: null },
+            { where: { userId: existingVehicle.driverId } }
           );
         }
 
         // Add vehicle assignment to new driver if there is one
         if (assignedDriverId) {
-          await DriverProfile.updateOne(
-            { userId: req.body.assignedDriver },
-            { assignedVehicleId: req.params.id }
+          await DriverProfile.update(
+            { assignedVehicleId: req.params.id },
+            { where: { userId: req.body.assignedDriver } }
           );
         }
       }
+
+      // Fetch updated vehicle
+      const updatedVehicle = await Vehicle.findByPk(req.params.id, {
+        include: [{
+          model: User,
+          as: 'driver',
+          attributes: ['id', 'name', 'email', 'phone'],
+          required: false
+        }]
+      });
 
       res.status(200).json({
         success: true,
@@ -469,7 +493,7 @@ router.put('/:id',
 
 // POST /api/vehicles/:id/assign-driver - Assign driver to vehicle
 router.post('/:id/assign-driver',
-  param('id').isMongoId().withMessage('Valid vehicle ID is required'),
+  param('id').isUUID().withMessage('Valid vehicle ID is required'),
   body('driverId').isUUID().withMessage('Valid driver ID is required'),
   actionLogger('assign_vehicle_driver'),
   async (req, res) => {
@@ -486,10 +510,7 @@ router.post('/:id/assign-driver',
       const { driverId } = req.body;
 
       // Find vehicle
-      const vehicle = await Vehicle.findOne({ 
-        _id: req.params.id, 
-        isActive: true 
-      });
+      const vehicle = await Vehicle.findByPk(req.params.id);
 
       if (!vehicle) {
         return res.status(404).json({
@@ -500,9 +521,16 @@ router.post('/:id/assign-driver',
 
       // Find driver
       const driver = await DriverProfile.findOne({ 
-        userId: driverId,
-        status: 'active'
-      }).populate('user', 'id name email');
+        where: {
+          userId: driverId,
+          status: 'active'
+        },
+        include: [{
+          model: User,
+          as: 'user',
+          attributes: ['id', 'name', 'email']
+        }]
+      });
 
       if (!driver) {
         return res.status(404).json({
@@ -513,9 +541,10 @@ router.post('/:id/assign-driver',
 
       // Check if driver is already assigned to another vehicle
       const existingAssignment = await Vehicle.findOne({
-        driver: driver.user.id,
-        _id: { $ne: req.params.id },
-        isActive: true
+        where: {
+          driverId: driver.user.id,
+          id: { [Op.ne]: req.params.id }
+        }
       });
 
       if (existingAssignment) {
@@ -527,15 +556,25 @@ router.post('/:id/assign-driver',
       }
 
       // Assign driver to vehicle
-      vehicle.driver = driver.user.id;
-      await vehicle.save();
+      await Vehicle.update(
+        { driverId: driver.user.id },
+        { where: { id: req.params.id } }
+      );
 
       // Update driver profile with vehicle assignment
-      driver.assignedVehicleId = req.params.id;
-      await driver.save();
+      await DriverProfile.update(
+        { assignedVehicleId: req.params.id },
+        { where: { userId: driverId } }
+      );
 
-      const updatedVehicle = await Vehicle.findById(req.params.id)
-        .populate('driver', 'name email phone');
+      const updatedVehicle = await Vehicle.findByPk(req.params.id, {
+        include: [{
+          model: User,
+          as: 'driver',
+          attributes: ['id', 'name', 'email', 'phone'],
+          required: false
+        }]
+      });
 
       res.status(200).json({
         success: true,
@@ -555,7 +594,7 @@ router.post('/:id/assign-driver',
 
 // DELETE /api/vehicles/:id/unassign-driver - Unassign driver from vehicle
 router.delete('/:id/unassign-driver',
-  param('id').isMongoId().withMessage('Valid vehicle ID is required'),
+  param('id').isUUID().withMessage('Valid vehicle ID is required'),
   actionLogger('unassign_vehicle_driver'),
   async (req, res) => {
     try {
@@ -569,10 +608,14 @@ router.delete('/:id/unassign-driver',
       }
 
       // Find vehicle
-      const vehicle = await Vehicle.findOne({ 
-        _id: req.params.id, 
-        isActive: true 
-      }).populate('driver', 'id name email');
+      const vehicle = await Vehicle.findByPk(req.params.id, {
+        include: [{
+          model: User,
+          as: 'driver',
+          attributes: ['id', 'name', 'email'],
+          required: false
+        }]
+      });
 
       if (!vehicle) {
         return res.status(404).json({
@@ -581,7 +624,7 @@ router.delete('/:id/unassign-driver',
         });
       }
 
-      if (!vehicle.driver) {
+      if (!vehicle.driverId) {
         return res.status(400).json({
           success: false,
           error: 'No driver assigned to this vehicle'
@@ -589,14 +632,16 @@ router.delete('/:id/unassign-driver',
       }
 
       // Update driver profile to remove vehicle assignment
-      await DriverProfile.updateOne(
-        { userId: vehicle.driver._id },
-        { $unset: { assignedVehicleId: 1 } }
+      await DriverProfile.update(
+        { assignedVehicleId: null },
+        { where: { userId: vehicle.driverId } }
       );
 
       // Remove driver from vehicle
-      vehicle.driver = undefined;
-      await vehicle.save();
+      await Vehicle.update(
+        { driverId: null },
+        { where: { id: req.params.id } }
+      );
 
       res.status(200).json({
         success: true,
@@ -613,9 +658,9 @@ router.delete('/:id/unassign-driver',
   }
 );
 
-// DELETE /api/vehicles/:id - Soft delete vehicle
+// DELETE /api/vehicles/:id - Delete vehicle
 router.delete('/:id',
-  param('id').isMongoId().withMessage('Valid vehicle ID is required'),
+  param('id').isUUID().withMessage('Valid vehicle ID is required'),
   actionLogger('delete_vehicle'),
   async (req, res) => {
     try {
@@ -628,10 +673,7 @@ router.delete('/:id',
         });
       }
 
-      const vehicle = await Vehicle.findOne({ 
-        _id: req.params.id, 
-        isActive: true 
-      });
+      const vehicle = await Vehicle.findByPk(req.params.id);
 
       if (!vehicle) {
         return res.status(404).json({
@@ -640,21 +682,18 @@ router.delete('/:id',
         });
       }
 
-      // Check if vehicle is currently assigned to active bookings
-      // You might want to add this check based on your booking system
-
-      // Soft delete by setting isActive to false
-      vehicle.isActive = false;
-      vehicle.status = 'inactive';
-      await vehicle.save();
-
       // If vehicle had an assigned driver, remove the assignment
-      if (vehicle.driver) {
-        await DriverProfile.updateOne(
-          { userId: vehicle.driver },
-          { $unset: { assignedVehicleId: 1 } }
+      if (vehicle.driverId) {
+        await DriverProfile.update(
+          { assignedVehicleId: null },
+          { where: { userId: vehicle.driverId } }
         );
       }
+
+      // Delete the vehicle
+      await Vehicle.destroy({
+        where: { id: req.params.id }
+      });
 
       res.status(200).json({
         success: true,

@@ -10,7 +10,6 @@ module.exports = (sequelize) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
       validate: {
         notEmpty: true,
         len: [2, 100]
@@ -191,15 +190,7 @@ module.exports = (sequelize) => {
     return this.save();
   };
 
-  // Define associations
-  Vehicle.associate = (models) => {
-    // A vehicle belongs to a driver (User)
-    Vehicle.belongsTo(models.User, {
-      foreignKey: 'driverId',
-      as: 'driver',
-      allowNull: true
-    });
-  };
+  // Associations are defined in the main server file
 
   return Vehicle;
 };

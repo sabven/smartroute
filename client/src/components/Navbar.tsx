@@ -15,9 +15,11 @@ import {
 
 interface NavbarProps {
   userRole?: string;
+  user?: any;
+  onLogout?: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ userRole }) => {
+const Navbar: React.FC<NavbarProps> = ({ userRole, user, onLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
@@ -72,6 +74,33 @@ const Navbar: React.FC<NavbarProps> = ({ userRole }) => {
                 </Link>
               );
             })}
+            
+            {/* User Info & Logout */}
+            {user && (
+              <div className="flex items-center space-x-4 ml-6 pl-6 border-l border-gray-200">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                    <span className="text-sm font-semibold text-primary-700">
+                      {(user.firstName || user.name || 'U').charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="text-sm">
+                    <p className="font-medium text-gray-900">
+                      {user.firstName || user.name}
+                    </p>
+                    <p className="text-xs text-gray-500 capitalize">
+                      {user.role?.replace('_', ' ')}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={onLogout}
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -112,6 +141,36 @@ const Navbar: React.FC<NavbarProps> = ({ userRole }) => {
                 </Link>
               );
             })}
+            
+            {/* Mobile User Info & Logout */}
+            {user && (
+              <div className="border-t border-gray-200 pt-3 mt-3">
+                <div className="flex items-center px-3 py-2">
+                  <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
+                    <span className="text-sm font-semibold text-primary-700">
+                      {(user.firstName || user.name || 'U').charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="ml-3 flex-1">
+                    <p className="text-base font-medium text-gray-900">
+                      {user.firstName || user.name}
+                    </p>
+                    <p className="text-sm text-gray-500 capitalize">
+                      {user.role?.replace('_', ' ')}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    onLogout?.();
+                    setIsOpen(false);
+                  }}
+                  className="w-full text-left flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
