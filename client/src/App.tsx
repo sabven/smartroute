@@ -9,6 +9,7 @@ import FleetManagement from './pages/FleetManagement';
 import IntelligentFleetDashboard from './pages/IntelligentFleetDashboard';
 import DriverManagement from './pages/DriverManagement';
 import VehicleManagement from './pages/VehicleManagement';
+import EmployeeProfile from './pages/EmployeeProfile';
 import Login from './pages/Login';
 import LogViewer from './components/LogViewer';
 import { ToastProvider } from './contexts/ToastContext';
@@ -167,6 +168,14 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles={['employee']} userRole={userRole}>
                   <MyBookings />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute allowedRoles={['employee']} userRole={userRole}>
+                  <EmployeeProfile />
                 </ProtectedRoute>
               } 
             />

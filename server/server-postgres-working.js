@@ -49,6 +49,10 @@ const DriverProfile = createDriverProfile(sequelize);
 const createVehicle = require('./src/models/Vehicle');
 const Vehicle = createVehicle(sequelize);
 
+// Import and create EmployeeProfile model
+const createEmployeeProfile = require('./src/models/EmployeeProfile');
+const EmployeeProfile = createEmployeeProfile(sequelize);
+
 // User Model
 const User = sequelize.define('User', {
   id: {
@@ -81,6 +85,9 @@ const User = sequelize.define('User', {
 // Set up associations
 User.hasOne(DriverProfile, { foreignKey: 'userId', as: 'driverProfile' });
 DriverProfile.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+User.hasOne(EmployeeProfile, { foreignKey: 'userId', as: 'employeeProfile' });
+EmployeeProfile.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 // Vehicle associations  
 User.hasMany(Vehicle, { foreignKey: 'driverId', as: 'vehicles' });
@@ -657,6 +664,268 @@ app.use('/api/driver-management', driverManagementRouter);
 // Vehicle Routes (create with models)
 const vehiclesRouter = createVehiclesRouter({ Vehicle, User, DriverProfile });
 app.use('/api/vehicles', vehiclesRouter);
+
+// Employee Profile Routes
+// Get employee profile
+app.get('/api/employee-profile/:userId', authenticateToken, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    // Check if requesting user is the employee or an admin
+    if (req.user.userId !== userId) {
+      const user = await User.findByPk(req.user.userId);
+      if (user.role !== 'company_admin') {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+    }
+
+    const profile = await EmployeeProfile.findOne({
+      where: { userId },
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: ['id', 'name', 'email', 'role']
+      }]
+    });
+
+    if (!profile) {
+      return res.status(404).json({ error: 'Employee profile not found' });
+    }
+
+    res.json(profile);
+  } catch (error) {
+    apiLogger.error('Error fetching employee profile', { 
+      requestId: req.id, 
+      error: error.message, 
+      userId: req.params.userId 
+    });
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get current user's employee profile
+app.get('/api/employee-profile', authenticateToken, async (req, res) => {
+  try {
+    const profile = await EmployeeProfile.findOne({
+      where: { userId: req.user.userId },
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: ['id', 'name', 'email', 'role']
+      }]
+    });
+
+    if (!profile) {
+      return res.status(404).json({ error: 'Employee profile not found' });
+    }
+
+    res.json(profile);
+  } catch (error) {
+    apiLogger.error('Error fetching current employee profile', { 
+      requestId: req.id, 
+      error: error.message, 
+      userId: req.user.userId 
+    });
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Create employee profile
+app.post('/api/employee-profile', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.userId);
+    
+    const {
+      employeeId,
+      firstName,
+      lastName,
+      phone,
+      alternatePhone,
+      department,
+      designation,
+      manager,
+      joinDate,
+      homeAddress,
+      homeCity,
+      homeState,
+      homePostalCode,
+      homeCountry,
+      homeLandmark,
+      officeAddress,
+      officeCity,
+      officeState,
+      officePostalCode,
+      officeCountry,
+      officeLandmark,
+      officeFloor,
+      emergencyContactName,
+      emergencyContactPhone,
+      emergencyContactRelation,
+      preferredPickupTime,
+      preferredDropTime,
+      specialRequests
+    } = req.body;
+
+    // Check if profile already exists
+    const existingProfile = await EmployeeProfile.findOne({
+      where: { userId: req.user.userId }
+    });
+
+    if (existingProfile) {
+      return res.status(400).json({ error: 'Employee profile already exists' });
+    }
+
+    const profile = await EmployeeProfile.create({
+      userId: req.user.userId,
+      employeeId,
+      firstName,
+      lastName,
+      email: user.email,
+      phone,
+      alternatePhone,
+      department,
+      designation,
+      manager,
+      joinDate,
+      homeAddress,
+      homeCity,
+      homeState,
+      homePostalCode,
+      homeCountry: homeCountry || 'India',
+      homeLandmark,
+      officeAddress,
+      officeCity,
+      officeState,
+      officePostalCode,
+      officeCountry: officeCountry || 'India',
+      officeLandmark,
+      officeFloor,
+      emergencyContactName,
+      emergencyContactPhone,
+      emergencyContactRelation,
+      preferredPickupTime,
+      preferredDropTime,
+      specialRequests: specialRequests || { ac: true, wheelchairAccessible: false, notes: '' },
+      profileCompleted: true,
+      createdBy: req.user.userId,
+      updatedBy: req.user.userId
+    });
+
+    apiLogger.info('Employee profile created', { 
+      requestId: req.id, 
+      profileId: profile.id, 
+      userId: req.user.userId 
+    });
+
+    res.status(201).json(profile);
+  } catch (error) {
+    apiLogger.error('Error creating employee profile', { 
+      requestId: req.id, 
+      error: error.message, 
+      userId: req.user.userId 
+    });
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update employee profile
+app.put('/api/employee-profile', authenticateToken, async (req, res) => {
+  try {
+    const profile = await EmployeeProfile.findOne({
+      where: { userId: req.user.userId }
+    });
+
+    if (!profile) {
+      return res.status(404).json({ error: 'Employee profile not found' });
+    }
+
+    const updateData = {
+      ...req.body,
+      updatedBy: req.user.userId,
+      profileCompleted: true
+    };
+
+    // Remove userId from update data to prevent changes
+    delete updateData.userId;
+    delete updateData.createdBy;
+
+    await profile.update(updateData);
+
+    apiLogger.info('Employee profile updated', { 
+      requestId: req.id, 
+      profileId: profile.id, 
+      userId: req.user.userId 
+    });
+
+    res.json(profile);
+  } catch (error) {
+    apiLogger.error('Error updating employee profile', { 
+      requestId: req.id, 
+      error: error.message, 
+      userId: req.user.userId 
+    });
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get employee addresses (for booking flow)
+app.get('/api/employee-addresses', authenticateToken, async (req, res) => {
+  try {
+    const profile = await EmployeeProfile.findOne({
+      where: { userId: req.user.userId },
+      attributes: [
+        'homeAddress', 'homeCity', 'homeState', 'homePostalCode', 'homeLandmark',
+        'officeAddress', 'officeCity', 'officeState', 'officePostalCode', 'officeLandmark', 'officeFloor'
+      ]
+    });
+
+    if (!profile) {
+      return res.status(404).json({ error: 'Employee profile not found' });
+    }
+
+    const addresses = {
+      home: {
+        address: profile.homeAddress,
+        city: profile.homeCity,
+        state: profile.homeState,
+        postalCode: profile.homePostalCode,
+        landmark: profile.homeLandmark,
+        fullAddress: [
+          profile.homeAddress,
+          profile.homeLandmark,
+          profile.homeCity,
+          profile.homeState,
+          profile.homePostalCode
+        ].filter(Boolean).join(', ')
+      },
+      office: {
+        address: profile.officeAddress,
+        city: profile.officeCity,
+        state: profile.officeState,
+        postalCode: profile.officePostalCode,
+        landmark: profile.officeLandmark,
+        floor: profile.officeFloor,
+        fullAddress: [
+          profile.officeAddress,
+          profile.officeFloor ? `Floor: ${profile.officeFloor}` : null,
+          profile.officeLandmark,
+          profile.officeCity,
+          profile.officeState,
+          profile.officePostalCode
+        ].filter(Boolean).join(', ')
+      }
+    };
+
+    res.json(addresses);
+  } catch (error) {
+    apiLogger.error('Error fetching employee addresses', { 
+      requestId: req.id, 
+      error: error.message, 
+      userId: req.user.userId 
+    });
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Static file serving for uploaded documents
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

@@ -9,7 +9,8 @@ import {
   UserIcon,
   CpuChipIcon,
   UsersIcon,
-  BuildingOffice2Icon
+  BuildingOffice2Icon,
+  UserCircleIcon
 } from '@heroicons/react/24/outline';
 
 interface NavbarProps {
@@ -25,6 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({ userRole }) => {
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, roles: ['company_admin'] },
     { name: 'Book Cab', href: '/book', icon: MapIcon, roles: ['employee'] },
     { name: 'My Bookings', href: '/bookings', icon: TruckIcon, roles: ['employee'] },
+    { name: 'Profile', href: '/profile', icon: UserCircleIcon, roles: ['employee'] },
     { name: 'AI Fleet', href: '/intelligent-fleet', icon: CpuChipIcon, roles: ['company_admin'] },
     { name: 'Drivers', href: '/drivers', icon: UsersIcon, roles: ['company_admin'] },
     { name: 'Vehicles', href: '/vehicles', icon: BuildingOffice2Icon, roles: ['company_admin'] },
@@ -70,13 +72,6 @@ const Navbar: React.FC<NavbarProps> = ({ userRole }) => {
                 </Link>
               );
             })}
-            <Link
-              to="/login"
-              className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 transition-colors"
-            >
-              <UserIcon className="w-5 h-5 mr-2" />
-              Login
-            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -117,14 +112,6 @@ const Navbar: React.FC<NavbarProps> = ({ userRole }) => {
                 </Link>
               );
             })}
-            <Link
-              to="/login"
-              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-primary-600 hover:text-primary-700 hover:bg-primary-50 transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              <UserIcon className="w-5 h-5 mr-3" />
-              Login
-            </Link>
           </div>
         </div>
       )}

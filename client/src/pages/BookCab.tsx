@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   MapPinIcon,
   ClockIcon,
@@ -25,8 +25,26 @@ interface BookingForm {
   };
 }
 
+interface SavedAddresses {
+  home: {
+    fullAddress: string;
+    address: string;
+    city: string;
+    state: string;
+    landmark: string;
+  };
+  office: {
+    fullAddress: string;
+    address: string;
+    city: string;
+    state: string;
+    landmark: string;
+    floor: string;
+  };
+}
+
 const BookCab: React.FC = () => {
-  const { showSuccess, showError } = useToast();
+  const { showSuccess, showError, showWarning } = useToast();
   const [step, setStep] = useState(1);
   const [bookingForm, setBookingForm] = useState<BookingForm>({
     tripType: 'home_to_office',
@@ -41,6 +59,77 @@ const BookCab: React.FC = () => {
     },
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddresses | null>(null);
+  const [loadingAddresses, setLoadingAddresses] = useState(true);
+  const [useCustomAddress, setUseCustomAddress] = useState(false);
+
+  // Fetch saved addresses on component mount
+  useEffect(() => {
+    fetchSavedAddresses();
+  }, []);
+
+  // Update addresses when trip type changes
+  useEffect(() => {
+    if (savedAddresses && !useCustomAddress) {
+      updateAddressesFromSaved();
+    }
+  }, [bookingForm.tripType, savedAddresses, useCustomAddress]);
+
+  const fetchSavedAddresses = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_BASE_URL}/employee-addresses`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const addresses = await response.json();
+        setSavedAddresses(addresses);
+        
+        // Auto-populate addresses if available
+        if (addresses.home.fullAddress && addresses.office.fullAddress) {
+          updateAddressesFromSaved(addresses);
+        } else {
+          setUseCustomAddress(true);
+          showWarning(
+            'Complete Your Profile',
+            'Please add your home and office addresses in your profile for faster booking.'
+          );
+        }
+      } else if (response.status === 404) {
+        setUseCustomAddress(true);
+        showWarning(
+          'Profile Not Found',
+          'Please complete your employee profile to save addresses for faster booking.'
+        );
+      }
+    } catch (error) {
+      console.error('Error fetching addresses:', error);
+      setUseCustomAddress(true);
+    } finally {
+      setLoadingAddresses(false);
+    }
+  };
+
+  const updateAddressesFromSaved = (addresses = savedAddresses) => {
+    if (!addresses) return;
+
+    if (bookingForm.tripType === 'home_to_office') {
+      setBookingForm(prev => ({
+        ...prev,
+        pickupAddress: addresses.home.fullAddress,
+        destinationAddress: addresses.office.fullAddress,
+      }));
+    } else {
+      setBookingForm(prev => ({
+        ...prev,
+        pickupAddress: addresses.office.fullAddress,
+        destinationAddress: addresses.home.fullAddress,
+      }));
+    }
+  };
 
   const handleInputChange = (field: string, value: any) => {
     if (field.includes('.')) {
@@ -289,33 +378,89 @@ const BookCab: React.FC = () => {
           <div className="space-y-6">
             <h3 className="text-lg font-medium text-gray-900">Pickup & Drop Locations</h3>
             
+            {/* Address Options */}
+            {savedAddresses && savedAddresses.home.fullAddress && savedAddresses.office.fullAddress && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <CheckCircleIcon className="w-5 h-5 text-blue-500 mr-2" />
+                    <span className="text-sm font-medium text-blue-800">
+                      Using saved addresses from your profile
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUseCustomAddress(!useCustomAddress);
+                      if (!useCustomAddress) {
+                        // Switching to custom addresses
+                        setBookingForm(prev => ({
+                          ...prev,
+                          pickupAddress: '',
+                          destinationAddress: '',
+                        }));
+                      } else {
+                        // Switching back to saved addresses
+                        updateAddressesFromSaved();
+                      }
+                    }}
+                    className="text-xs text-blue-600 hover:text-blue-800 underline"
+                  >
+                    {useCustomAddress ? 'Use saved addresses' : 'Enter custom addresses'}
+                  </button>
+                </div>
+              </div>
+            )}
+            
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   <MapPinIcon className="w-4 h-4 inline mr-1" />
-                  {bookingForm.tripType === 'home_to_office' ? 'Home Address' : 'Office Address'}
+                  {bookingForm.tripType === 'home_to_office' ? 'Home Address (Pickup)' : 'Office Address (Pickup)'}
                 </label>
-                <textarea
-                  value={bookingForm.pickupAddress}
-                  onChange={(e) => handleInputChange('pickupAddress', e.target.value)}
-                  placeholder="Enter pickup address with landmark"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
-                  rows={3}
-                />
+                {!useCustomAddress && savedAddresses ? (
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                    <p className="text-sm text-gray-700">
+                      {bookingForm.tripType === 'home_to_office' 
+                        ? savedAddresses.home.fullAddress 
+                        : savedAddresses.office.fullAddress
+                      }
+                    </p>
+                  </div>
+                ) : (
+                  <textarea
+                    value={bookingForm.pickupAddress}
+                    onChange={(e) => handleInputChange('pickupAddress', e.target.value)}
+                    placeholder="Enter pickup address with landmark"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+                    rows={3}
+                  />
+                )}
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   <MapPinIcon className="w-4 h-4 inline mr-1" />
-                  {bookingForm.tripType === 'home_to_office' ? 'Office Address' : 'Home Address'}
+                  {bookingForm.tripType === 'home_to_office' ? 'Office Address (Destination)' : 'Home Address (Destination)'}
                 </label>
-                <textarea
-                  value={bookingForm.destinationAddress}
-                  onChange={(e) => handleInputChange('destinationAddress', e.target.value)}
-                  placeholder="Enter destination address"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
-                  rows={3}
-                />
+                {!useCustomAddress && savedAddresses ? (
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                    <p className="text-sm text-gray-700">
+                      {bookingForm.tripType === 'home_to_office' 
+                        ? savedAddresses.office.fullAddress 
+                        : savedAddresses.home.fullAddress
+                      }
+                    </p>
+                  </div>
+                ) : (
+                  <textarea
+                    value={bookingForm.destinationAddress}
+                    onChange={(e) => handleInputChange('destinationAddress', e.target.value)}
+                    placeholder="Enter destination address"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+                    rows={3}
+                  />
+                )}
               </div>
             </div>
 
