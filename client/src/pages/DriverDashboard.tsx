@@ -12,6 +12,7 @@ import {
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 import { API_BASE_URL } from '../config';
+import { useToast } from '../contexts/ToastContext';
 
 interface Booking {
   id: string;
@@ -42,6 +43,7 @@ interface Booking {
 }
 
 const DriverDashboard: React.FC = () => {
+  const { showSuccess, showError, showWarning } = useToast();
   const [isOnline, setIsOnline] = useState(true);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
@@ -105,14 +107,17 @@ const DriverDashboard: React.FC = () => {
         setShowResponseModal(false);
         setSelectedBooking(null);
         setResponseMessage('');
-        alert(`Trip ${response}ed successfully!`);
+        showSuccess(
+          `Trip ${response}ed successfully!`,
+          `Your response has been recorded for booking ${selectedBooking?.bookingId}`
+        );
       } else {
         const errorData = await apiResponse.json();
-        alert('Failed to respond: ' + errorData.error);
+        showError('Failed to respond', errorData.error);
       }
     } catch (error) {
       console.error('Error responding to booking:', error);
-      alert('Network error. Please try again.');
+      showError('Network Error', 'Please check your connection and try again.');
     }
   };
 
@@ -120,6 +125,106 @@ const DriverDashboard: React.FC = () => {
     setSelectedBooking(booking);
     setResponseType(type);
     setShowResponseModal(true);
+  };
+
+  const handleStartRide = async (bookingId: string) => {
+    console.log('Starting ride for booking:', bookingId);
+    console.log('API_BASE_URL:', API_BASE_URL);
+    
+    try {
+      const token = localStorage.getItem('token');
+      console.log('Token exists:', !!token);
+      
+      const url = `${API_BASE_URL}/bookings/${bookingId}/start-ride`;
+      console.log('Request URL:', url);
+      
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Start ride success:', data);
+        
+        // Update the booking in the list
+        setBookings(prev => prev.map(booking => 
+          booking.id === bookingId ? { ...booking, status: 'in_progress' } : booking
+        ));
+        showSuccess(
+          'Ride Started!',
+          `You have successfully started the ride for booking ${bookingId.slice(-8)}`
+        );
+        
+        // Refresh bookings to get updated data
+        if (user) {
+          fetchDriverBookings(user.id);
+        }
+      } else {
+        const errorData = await response.json();
+        console.error('Start ride error response:', errorData);
+        showError('Failed to Start Ride', errorData.error);
+      }
+    } catch (error) {
+      console.error('Error starting ride:', error);
+      showError('Network Error', 'Please check your connection and try again.');
+    }
+  };
+
+  const handleCompleteRide = async (bookingId: string) => {
+    if (!window.confirm('Are you sure you want to end this ride?')) {
+      return;
+    }
+
+    console.log('Completing ride for booking:', bookingId);
+    
+    try {
+      const token = localStorage.getItem('token');
+      const url = `${API_BASE_URL}/bookings/${bookingId}/complete-ride`;
+      console.log('Complete ride URL:', url);
+      
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      console.log('Complete ride response status:', response.status);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Complete ride success:', data);
+        
+        // Update the booking in the list
+        setBookings(prev => prev.map(booking => 
+          booking.id === bookingId ? { ...booking, status: 'completed' } : booking
+        ));
+        showSuccess(
+          'Ride Completed!',
+          `You have successfully completed the ride for booking ${bookingId.slice(-8)}`
+        );
+        
+        // Refresh bookings to get updated data
+        if (user) {
+          fetchDriverBookings(user.id);
+        }
+      } else {
+        const errorData = await response.json();
+        console.error('Complete ride error response:', errorData);
+        showError('Failed to Complete Ride', errorData.error);
+      }
+    } catch (error) {
+      console.error('Error completing ride:', error);
+      showError('Network Error', 'Please check your connection and try again.');
+    }
   };
 
   // Filter bookings by status
@@ -302,6 +407,13 @@ const DriverDashboard: React.FC = () => {
                 <button className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors">
                   Navigation
                 </button>
+                <button 
+                  onClick={() => handleCompleteRide(booking.id)}
+                  className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors"
+                >
+                  <CheckCircleIcon className="w-4 h-4 inline mr-2" />
+                  End Ride
+                </button>
               </div>
             </div>
           ))}
@@ -372,6 +484,80 @@ const DriverDashboard: React.FC = () => {
                   >
                     <XCircleIcon className="w-4 h-4 inline mr-2" />
                     Decline
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Accepted Trips - Ready to Start */}
+      {acceptedBookings.length > 0 && (
+        <div className="bg-white rounded-lg shadow">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center space-x-2">
+              <CheckCircleIcon className="w-5 h-5 text-green-500" />
+              <h2 className="text-lg font-medium text-gray-900">Accepted Trips</h2>
+              <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                {acceptedBookings.length}
+              </span>
+            </div>
+          </div>
+          <div className="p-6 space-y-4">
+            {acceptedBookings.map((booking) => (
+              <div key={booking.id} className="border border-green-200 rounded-lg p-4 bg-green-50">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                      <UserIcon className="w-6 h-6 text-gray-600" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">{booking.User?.name || 'Unknown'}</p>
+                      <p className="text-sm text-gray-600">{booking.bookingId}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-600">{new Date(booking.date).toLocaleDateString()}</p>
+                    <p className="text-sm text-gray-600">{booking.time}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mt-1"></div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">
+                        Pickup at {booking.time}
+                      </p>
+                      <p className="text-sm text-gray-600">{booking.pickupAddress}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mt-1"></div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">Drop</p>
+                      <p className="text-sm text-gray-600">{booking.destinationAddress}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex space-x-3">
+                  {booking.User?.phone && (
+                    <a
+                      href={`tel:${booking.User.phone}`}
+                      className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg text-center font-medium hover:bg-blue-700 transition-colors"
+                    >
+                      <PhoneIcon className="w-4 h-4 inline mr-2" />
+                      Call
+                    </a>
+                  )}
+                  <button
+                    onClick={() => handleStartRide(booking.id)}
+                    className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors"
+                  >
+                    <ClockIcon className="w-4 h-4 inline mr-2" />
+                    Start Ride
                   </button>
                 </div>
               </div>
@@ -516,7 +702,7 @@ const DriverDashboard: React.FC = () => {
                 <button
                   onClick={() => {
                     if (responseType === 'decline' && !responseMessage.trim()) {
-                      alert('Please provide a reason for declining');
+                      showWarning('Required Field', 'Please provide a reason for declining the trip');
                       return;
                     }
                     handleDriverResponse(selectedBooking.id, responseType, responseMessage);

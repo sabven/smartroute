@@ -552,6 +552,133 @@ app.put('/api/bookings/:bookingId/driver-response', authenticateToken, async (re
   }
 });
 
+// Start ride endpoint
+app.put('/api/bookings/:bookingId/start-ride', authenticateToken, async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const driverId = req.user.userId;
+    
+    console.log('Starting ride:', { bookingId, driverId });
+    
+    const booking = await CabBooking.findByPk(bookingId);
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    
+    // Check if this driver is assigned to this booking
+    if (booking.driverId !== driverId) {
+      return res.status(403).json({ error: 'You are not assigned to this booking' });
+    }
+    
+    // Check if booking is in accepted status
+    if (booking.status !== 'driver_accepted') {
+      console.log('Start ride failed - booking status:', booking.status, 'expected: driver_accepted');
+      return res.status(400).json({ 
+        error: `Booking must be accepted before starting ride. Current status: ${booking.status}` 
+      });
+    }
+    
+    // Update booking status to in_progress
+    await booking.update({
+      status: 'in_progress',
+      startedAt: new Date()
+    });
+    
+    // Create notification for admin
+    const driver = await User.findByPk(driverId);
+    const adminUsers = await User.findAll({ where: { role: 'company_admin' } });
+    
+    for (const admin of adminUsers) {
+      await Notification.create({
+        type: 'ride_started',
+        title: 'Ride Started',
+        message: `${driver.name} has started trip ${booking.bookingId}`,
+        bookingId: booking.id,
+        driverId: driverId,
+        adminId: admin.id
+      });
+    }
+    
+    // Fetch updated booking with user details
+    const updatedBooking = await CabBooking.findByPk(bookingId, {
+      include: [{
+        model: User,
+        attributes: ['name', 'email', 'phone']
+      }]
+    });
+    
+    res.json({
+      message: 'Ride started successfully',
+      booking: updatedBooking
+    });
+  } catch (error) {
+    console.error('Start ride error:', error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Complete ride endpoint
+app.put('/api/bookings/:bookingId/complete-ride', authenticateToken, async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const driverId = req.user.userId;
+    
+    console.log('Completing ride:', { bookingId, driverId });
+    
+    const booking = await CabBooking.findByPk(bookingId);
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    
+    // Check if this driver is assigned to this booking
+    if (booking.driverId !== driverId) {
+      return res.status(403).json({ error: 'You are not assigned to this booking' });
+    }
+    
+    // Check if booking is in progress
+    if (booking.status !== 'in_progress') {
+      return res.status(400).json({ error: 'Booking must be in progress to complete ride' });
+    }
+    
+    // Update booking status to completed
+    await booking.update({
+      status: 'completed',
+      completedAt: new Date()
+    });
+    
+    // Create notification for admin
+    const driver = await User.findByPk(driverId);
+    const adminUsers = await User.findAll({ where: { role: 'company_admin' } });
+    
+    for (const admin of adminUsers) {
+      await Notification.create({
+        type: 'ride_completed',
+        title: 'Ride Completed',
+        message: `${driver.name} has completed trip ${booking.bookingId}`,
+        bookingId: booking.id,
+        driverId: driverId,
+        adminId: admin.id
+      });
+    }
+    
+    // Fetch updated booking with user details
+    const updatedBooking = await CabBooking.findByPk(bookingId, {
+      include: [{
+        model: User,
+        attributes: ['name', 'email', 'phone']
+      }]
+    });
+    
+    res.json({
+      message: 'Ride completed successfully',
+      booking: updatedBooking
+    });
+  } catch (error) {
+    console.error('Complete ride error:', error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
 // Get driver-assigned bookings for specific driver
 app.get('/api/bookings/driver/:driverId', authenticateToken, async (req, res) => {
   try {

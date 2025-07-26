@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TruckIcon,
   MapIcon,
@@ -8,9 +8,113 @@ import {
   CalendarDaysIcon,
   ChartBarIcon,
   BellAlertIcon,
+  CheckCircleIcon,
+  PlayIcon,
+  UserIcon,
 } from '@heroicons/react/24/outline';
+import { API_BASE_URL } from '../config';
+
+interface Booking {
+  id: string;
+  bookingId: string;
+  userId: string;
+  tripType: 'home_to_office' | 'office_to_home';
+  date: string;
+  time: string;
+  pickupAddress: string;
+  destinationAddress: string;
+  status: 'driver_assigned' | 'driver_accepted' | 'driver_declined' | 'in_progress' | 'completed';
+  driverName?: string;
+  driverPhone?: string;
+  cabNumber?: string;
+  cabModel?: string;
+  driverId?: string;
+  driverResponse?: string;
+  driverResponseAt?: string;
+  assignedAt?: string;
+  fare?: number;
+  createdAt: string;
+  updatedAt: string;
+  User: {
+    name: string;
+    email: string;
+    phone?: string;
+  };
+}
 
 const Dashboard: React.FC = () => {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetchBookings();
+    // Set up polling for real-time updates
+    const interval = setInterval(fetchBookings, 30000); // Poll every 30 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchBookings = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_BASE_URL}/bookings`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBookings(data);
+      } else {
+        setError('Failed to fetch bookings');
+      }
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+      setError('Network error. Please check if the server is running.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Filter bookings by status
+  const activeBookings = bookings.filter(b => 
+    ['driver_assigned', 'driver_accepted', 'in_progress'].includes(b.status)
+  );
+  const inProgressBookings = bookings.filter(b => b.status === 'in_progress');
+  const acceptedBookings = bookings.filter(b => b.status === 'driver_accepted');
+  const assignedBookings = bookings.filter(b => b.status === 'driver_assigned');
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'driver_assigned':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'driver_accepted':
+        return 'bg-green-100 text-green-800';
+      case 'in_progress':
+        return 'bg-blue-100 text-blue-800';
+      case 'completed':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'driver_assigned':
+        return 'Awaiting Response';
+      case 'driver_accepted':
+        return 'Ready to Start';
+      case 'in_progress':
+        return 'In Progress';
+      case 'completed':
+        return 'Completed';
+      default:
+        return status;
+    }
+  };
+
   const stats = [
     {
       name: 'Active Vehicles',
@@ -176,6 +280,119 @@ const Dashboard: React.FC = () => {
             </div>
           );
         })}
+      </div>
+
+      {/* Real-time Ride Status */}
+      <div className="bg-white shadow-sm rounded-xl border border-gray-100">
+        <div className="px-6 py-4 border-b border-gray-100">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+              🚗 Real-time Ride Status
+            </h3>
+            <button
+              onClick={fetchBookings}
+              className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+            >
+              Refresh
+            </button>
+          </div>
+        </div>
+        <div className="p-6">
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-2 text-sm text-gray-600">Loading rides...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-8">
+              <p className="text-red-600">{error}</p>
+            </div>
+          ) : activeBookings.length === 0 ? (
+            <div className="text-center py-8">
+              <TruckIcon className="mx-auto h-12 w-12 text-gray-400" />
+              <h3 className="mt-2 text-sm font-medium text-gray-900">No active rides</h3>
+              <p className="mt-1 text-sm text-gray-500">
+                All rides are either completed or awaiting assignment.
+              </p>
+            </div>
+          ) : (
+            <>
+              {/* Summary Stats */}
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-600">{inProgressBookings.length}</div>
+                  <div className="text-sm text-gray-600">In Progress</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600">{acceptedBookings.length}</div>
+                  <div className="text-sm text-gray-600">Ready to Start</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-yellow-600">{assignedBookings.length}</div>
+                  <div className="text-sm text-gray-600">Awaiting Response</div>
+                </div>
+              </div>
+
+              {/* Active Rides List */}
+              <div className="space-y-4">
+                {activeBookings.slice(0, 5).map((booking) => (
+                  <div key={booking.id} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-3">
+                        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                          <UserIcon className="w-5 h-5 text-gray-600" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2">
+                            <p className="font-medium text-gray-900">{booking.User?.name}</p>
+                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(booking.status)}`}>
+                              {getStatusText(booking.status)}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600">{booking.bookingId}</p>
+                          <p className="text-sm text-gray-500">
+                            {booking.tripType.replace('_', ' ')} • {booking.time}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        {booking.status === 'in_progress' && (
+                          <PlayIcon className="w-5 h-5 text-blue-600" />
+                        )}
+                        {booking.status === 'driver_accepted' && (
+                          <CheckCircleIcon className="w-5 h-5 text-green-600" />
+                        )}
+                        {booking.status === 'driver_assigned' && (
+                          <ClockIcon className="w-5 h-5 text-yellow-600" />
+                        )}
+                      </div>
+                    </div>
+                    <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600">
+                      <div>
+                        <span className="font-medium">Pickup:</span> {booking.pickupAddress.substring(0, 40)}...
+                      </div>
+                      <div>
+                        <span className="font-medium">Drop:</span> {booking.destinationAddress.substring(0, 40)}...
+                      </div>
+                    </div>
+                    {booking.driverName && (
+                      <div className="mt-2 text-sm text-gray-600">
+                        <span className="font-medium">Driver:</span> {booking.driverName}
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {activeBookings.length > 5 && (
+                  <div className="text-center py-2">
+                    <p className="text-sm text-gray-500">
+                      Showing 5 of {activeBookings.length} active rides
+                    </p>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Recent Activity and Quick Actions */}

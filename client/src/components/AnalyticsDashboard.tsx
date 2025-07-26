@@ -12,6 +12,7 @@ import {
   DocumentArrowDownIcon
 } from '@heroicons/react/24/outline';
 import logger from '../utils/logger';
+import { useToast } from '../contexts/ToastContext';
 
 interface AnalyticsData {
   totalRides: number;
@@ -37,6 +38,7 @@ interface AnalyticsData {
 }
 
 const AnalyticsDashboard: React.FC = () => {
+  const { showSuccess, showInfo } = useToast();
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | '90d' | '1y'>('30d');
   const [selectedMetric, setSelectedMetric] = useState<'rides' | 'revenue' | 'efficiency'>('rides');
@@ -104,7 +106,10 @@ const AnalyticsDashboard: React.FC = () => {
     });
     
     // In real app, would generate and download PDF/Excel report
-    alert(`Generating ${selectedPeriod} analytics report for ${selectedMetric}...`);
+    showSuccess(
+      'Report Generated',
+      `${selectedPeriod} analytics report for ${selectedMetric} is being prepared for download`
+    );
   };
 
   const insights = useMemo(() => {

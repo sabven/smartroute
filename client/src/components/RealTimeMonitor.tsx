@@ -10,6 +10,7 @@ import {
   ChatBubbleLeftRightIcon
 } from '@heroicons/react/24/outline';
 import logger from '../utils/logger';
+import { useToast } from '../contexts/ToastContext';
 
 interface LiveBooking {
   id: string;
@@ -35,6 +36,7 @@ interface Alert {
 }
 
 const RealTimeMonitor: React.FC = () => {
+  const { showSuccess, showInfo } = useToast();
   const [liveBookings, setLiveBookings] = useState<LiveBooking[]>([]);
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<string | null>(null);
@@ -179,7 +181,10 @@ const RealTimeMonitor: React.FC = () => {
       driverName: booking.driverName 
     });
     // In real app, would initiate call or open chat
-    alert(`Contacting ${booking.driverName} for booking ${booking.id}`);
+    showInfo(
+      'Contacting Driver',
+      `Initiating contact with ${booking.driverName} for booking ${booking.id.slice(-8)}`
+    );
   };
 
   return (

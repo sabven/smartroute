@@ -187,13 +187,43 @@ const Login: React.FC = () => {
             </button>
           </div>
 
-          {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-blue-50 rounded-md">
-            <h4 className="text-sm font-medium text-blue-800 mb-2">Demo Credentials</h4>
-            <div className="text-sm text-blue-700 space-y-1">
-              <p><strong>Employee:</strong> priya@techcorp.com / emp123</p>
-              <p><strong>Driver:</strong> rajesh@smartroute.com / driver123</p>
-              <p><strong>Company Admin:</strong> admin@techcorp.com / admin123</p>
+          {/* Available User Accounts */}
+          <div className="mt-6 p-4 bg-green-50 rounded-md max-h-64 overflow-y-auto">
+            <h4 className="text-sm font-medium text-green-800 mb-3">Available User Accounts</h4>
+            
+            {/* Primary Accounts */}
+            <div className="mb-4">
+              <h5 className="text-xs font-semibold text-green-900 mb-2">Primary Demo Accounts</h5>
+              <div className="text-xs text-green-700 space-y-1">
+                <p><strong>Admin:</strong> admin@techcorp.com / admin123</p>
+                <p><strong>Employee:</strong> priya@techcorp.com / emp123</p>
+                <p><strong>Driver:</strong> rajesh@smartroute.com / driver123</p>
+              </div>
+            </div>
+
+            {/* Employee Accounts */}
+            <div className="mb-4">
+              <h5 className="text-xs font-semibold text-green-900 mb-2">Employee Accounts (password123)</h5>
+              <div className="text-xs text-green-700 space-y-1">
+                <p>rajesh.kumar@company.com</p>
+                <p>priya.sharma@company.com</p>
+                <p>arun.reddy@company.com</p>
+                <p>meera.iyer@company.com</p>
+                <p>vikash.singh@company.com</p>
+                <p>anita.das@company.com</p>
+              </div>
+            </div>
+
+            {/* Driver Accounts */}
+            <div>
+              <h5 className="text-xs font-semibold text-green-900 mb-2">Driver Accounts (password123)</h5>
+              <div className="text-xs text-green-700 space-y-1">
+                <p>ravi.kumar@smartroute.com</p>
+                <p>suresh.reddy@smartroute.com</p>
+                <p>prakash.sharma@smartroute.com</p>
+                <p>anand.nair@smartroute.com</p>
+                <p>rajesh.iyer@smartroute.com</p>
+              </div>
             </div>
           </div>
 
