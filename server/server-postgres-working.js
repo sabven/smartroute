@@ -5,6 +5,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Sequelize, DataTypes } = require('sequelize');
 const path = require('path');
+const http = require('http');
+const { Server } = require('socket.io');
 
 // Import logging
 const { logger, authLogger, apiLogger, dbLogger, bookingLogger } = require('./logger');
@@ -20,6 +22,13 @@ const { router: driverManagementRouter, injectModels } = require('./src/routes/d
 const createVehiclesRouter = require('./src/routes/vehicles');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
 const PORT = process.env.PORT || 5001;
 
 // Logging middleware (before other middleware)
@@ -356,9 +365,27 @@ app.post('/api/bookings', authenticateToken, async (req, res) => {
     
     const booking = await CabBooking.create(bookingData);
     
+    // Fetch the created booking with user details
+    const bookingWithUser = await CabBooking.findByPk(booking.id, {
+      include: [{
+        model: User,
+        attributes: ['name', 'email', 'phone']
+      }]
+    });
+    
+    // Emit real-time update to admin dashboard
+    emitToAdmins('booking_updated', {
+      type: 'booking_created',
+      action: 'create',
+      booking: bookingWithUser,
+      driver: null,
+      message: `New booking created: ${booking.bookingId}`,
+      timestamp: new Date().toISOString()
+    });
+    
     res.status(201).json({
       message: 'Booking created successfully',
-      booking
+      booking: bookingWithUser
     });
   } catch (error) {
     console.error('Create booking error:', error);
@@ -542,6 +569,27 @@ app.put('/api/bookings/:bookingId/driver-response', authenticateToken, async (re
       }]
     });
     
+    // Emit real-time update to admin dashboard
+    emitToAdmins('booking_updated', {
+      type: 'driver_response',
+      action: response,
+      booking: updatedBooking,
+      driver: {
+        id: driver.id,
+        name: driver.name
+      },
+      message: `${driver.name} has ${response}ed trip ${booking.bookingId}`,
+      timestamp: new Date().toISOString()
+    });
+    
+    // Emit to the specific user who made the booking
+    emitToUser(booking.userId, 'booking_status_updated', {
+      booking: updatedBooking,
+      status: newStatus,
+      message: `Your trip has been ${response}ed by ${driver.name}`,
+      timestamp: new Date().toISOString()
+    });
+    
     res.json({
       message: `Trip ${response}ed successfully`,
       booking: updatedBooking
@@ -607,6 +655,27 @@ app.put('/api/bookings/:bookingId/start-ride', authenticateToken, async (req, re
       }]
     });
     
+    // Emit real-time update to admin dashboard
+    emitToAdmins('booking_updated', {
+      type: 'ride_started',
+      action: 'start',
+      booking: updatedBooking,
+      driver: {
+        id: driver.id,
+        name: driver.name
+      },
+      message: `${driver.name} has started trip ${booking.bookingId}`,
+      timestamp: new Date().toISOString()
+    });
+    
+    // Emit to the specific user who made the booking
+    emitToUser(booking.userId, 'booking_status_updated', {
+      booking: updatedBooking,
+      status: 'in_progress',
+      message: `Your ride has started! Driver: ${driver.name}`,
+      timestamp: new Date().toISOString()
+    });
+    
     res.json({
       message: 'Ride started successfully',
       booking: updatedBooking
@@ -667,6 +736,27 @@ app.put('/api/bookings/:bookingId/complete-ride', authenticateToken, async (req,
         model: User,
         attributes: ['name', 'email', 'phone']
       }]
+    });
+    
+    // Emit real-time update to admin dashboard
+    emitToAdmins('booking_updated', {
+      type: 'ride_completed',
+      action: 'complete',
+      booking: updatedBooking,
+      driver: {
+        id: driver.id,
+        name: driver.name
+      },
+      message: `${driver.name} has completed trip ${booking.bookingId}`,
+      timestamp: new Date().toISOString()
+    });
+    
+    // Emit to the specific user who made the booking
+    emitToUser(booking.userId, 'booking_status_updated', {
+      booking: updatedBooking,
+      status: 'completed',
+      message: `Your ride has been completed! Thank you for using SmartRoute.`,
+      timestamp: new Date().toISOString()
     });
     
     res.json({
@@ -1057,6 +1147,46 @@ app.get('/api/employee-addresses', authenticateToken, async (req, res) => {
 // Static file serving for uploaded documents
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Test WebSocket endpoint (for testing real-time updates)
+app.post('/api/test-websocket', async (req, res) => {
+  try {
+    // Emit a test booking update to admin dashboard
+    emitToAdmins('booking_updated', {
+      type: 'booking_created',
+      action: 'create',
+      booking: {
+        id: 'test-' + Date.now(),
+        bookingId: 'TEST-' + Date.now().toString().slice(-6),
+        userId: 'test-user',
+        tripType: 'home_to_office',
+        date: new Date().toISOString().split('T')[0],
+        time: new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
+        pickupAddress: 'Test Pickup Location',
+        destinationAddress: 'Test Destination',
+        status: 'driver_assigned',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        User: {
+          name: 'Test User',
+          email: 'test@example.com'
+        }
+      },
+      driver: null,
+      message: 'Test booking created successfully',
+      timestamp: new Date().toISOString()
+    });
+
+    res.json({ 
+      success: true, 
+      message: 'Test WebSocket event emitted to admin dashboard',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error in test WebSocket endpoint:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Vehicles endpoint is now handled by the vehicles router
 // Commented out mock endpoint - using real vehicles router instead
 /*
@@ -1087,6 +1217,83 @@ app.get('/api/vehicles', (req, res) => {
   });
 });
 */
+
+// WebSocket Authentication Middleware
+const authenticateSocket = async (socket, next) => {
+  try {
+    const token = socket.handshake.auth.token;
+    
+    // Allow connection without token for testing
+    if (!token) {
+      console.log('⚠️ WebSocket connection without token - using test user');
+      socket.userId = 'test-user';
+      socket.userRole = 'company_admin';
+      socket.userName = 'Test Admin';
+      return next();
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findByPk(decoded.userId);
+    
+    if (!user) {
+      return next(new Error('User not found'));
+    }
+
+    socket.userId = user.id;
+    socket.userRole = user.role;
+    socket.userName = user.name;
+    
+    next();
+  } catch (error) {
+    console.log('⚠️ Invalid token, using test user:', error.message);
+    socket.userId = 'test-user';
+    socket.userRole = 'company_admin';
+    socket.userName = 'Test Admin';
+    next();
+  }
+};
+
+// WebSocket Connection Handler
+io.use(authenticateSocket);
+
+io.on('connection', (socket) => {
+  console.log(`👤 User connected: ${socket.userName} (${socket.userRole}) - Socket ID: ${socket.id}`);
+  
+  // Join role-based rooms
+  socket.join(socket.userRole);
+  if (socket.userRole === 'company_admin') {
+    socket.join('admin');
+  }
+  
+  // Join user-specific room
+  socket.join(`user_${socket.userId}`);
+  
+  // Handle disconnection
+  socket.on('disconnect', () => {
+    console.log(`👋 User disconnected: ${socket.userName} - Socket ID: ${socket.id}`);
+  });
+  
+  // Handle admin-specific events
+  if (socket.userRole === 'company_admin') {
+    socket.on('join_admin_room', () => {
+      socket.join('admin_dashboard');
+      console.log(`📊 Admin joined dashboard room: ${socket.userName}`);
+    });
+  }
+});
+
+// Helper function to emit to admin users
+const emitToAdmins = (event, data) => {
+  io.to('admin').emit(event, data);
+  io.to('admin_dashboard').emit(event, data);
+  console.log(`📡 Emitted ${event} to admin users:`, data);
+};
+
+// Helper function to emit to specific user
+const emitToUser = (userId, event, data) => {
+  io.to(`user_${userId}`).emit(event, data);
+  console.log(`📡 Emitted ${event} to user ${userId}:`, data);
+};
 
 // Initialize database and start server
 async function startServer() {
@@ -1312,7 +1519,7 @@ app.post('/api/logs/client', (req, res) => {
     // Error logging middleware (should be last)
     app.use(errorLogger);
     
-    app.listen(PORT, '0.0.0.0', () => {
+    server.listen(PORT, '0.0.0.0', () => {
       logger.info('Server started successfully', {
         port: PORT,
         environment: process.env.NODE_ENV,

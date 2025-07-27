@@ -17,9 +17,13 @@ import {
   XCircleIcon,
   PlayIcon,
   UserGroupIcon,
+  WifiIcon,
+  BellAlertIcon,
+  ChartBarIcon,
 } from '@heroicons/react/24/outline';
 import { API_BASE_URL } from '../config';
 import { useToast } from '../contexts/ToastContext';
+import { useWebSocket } from '../hooks/useWebSocket';
 
 interface Booking {
   id: string;
@@ -77,12 +81,21 @@ interface Vehicle {
 
 const FleetManagement: React.FC = () => {
   const { showSuccess, showError, showWarning } = useToast();
+  const { isConnected, connectionError, connect, onBookingUpdate } = useWebSocket();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Debug connection status changes
+  useEffect(() => {
+    console.log('🔗 FleetManagement WebSocket connection status changed:', isConnected ? 'CONNECTED' : 'DISCONNECTED');
+    if (connectionError) {
+      console.log('❌ FleetManagement WebSocket connection error:', connectionError);
+    }
+  }, [isConnected, connectionError]);
   const [error, setError] = useState('');
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [selectedVehicle, setSelectedVehicle] = useState('');
@@ -90,10 +103,59 @@ const FleetManagement: React.FC = () => {
 
 
   useEffect(() => {
+    console.log('🔄 FleetManagement useEffect triggered');
     fetchBookings();
     fetchDrivers();
     fetchVehicles();
-  }, []);
+    
+    // Set up WebSocket connection for real-time updates
+    const token = localStorage.getItem('token');
+    console.log('🔑 Token from localStorage:', token ? `${token.substring(0, 20)}...` : 'No token');
+    
+    if (token) {
+      console.log('🔌 Attempting to connect WebSocket...');
+      connect(token);
+    } else {
+      console.log('❌ No token found, skipping WebSocket connection');
+    }
+
+    // Set up WebSocket event listeners for real-time booking updates
+    console.log('📡 Setting up WebSocket event listeners...');
+    onBookingUpdate((data) => {
+      console.log('📡 FleetManagement received real-time booking update:', data);
+      
+      // Update the bookings list with the new data
+      setBookings(prevBookings => {
+        if (data.type === 'booking_created') {
+          // Add new booking to the list
+          return [data.booking, ...prevBookings];
+        } else {
+          // Update existing booking
+          const updatedBookings = prevBookings.map(booking => 
+            booking.id === data.booking.id ? data.booking : booking
+          );
+          return updatedBookings;
+        }
+      });
+
+      // Show toast notification
+      const actionText = data.action === 'accept' ? 'accepted' : 
+                        data.action === 'decline' ? 'declined' : 
+                        data.action === 'start' ? 'started' : 
+                        data.action === 'complete' ? 'completed' :
+                        data.action === 'create' ? 'created' : 'updated';
+      
+      if (data.action === 'decline') {
+        showWarning(`Trip ${actionText}`, data.message);
+      } else {
+        showSuccess(`Trip ${actionText}`, data.message);
+      }
+    });
+
+    // Fallback polling (reduced frequency since we have WebSocket)
+    const interval = setInterval(fetchBookings, 120000); // Poll every 2 minutes as backup
+    return () => clearInterval(interval);
+  }, [connect, onBookingUpdate, showSuccess, showWarning]);
 
   const fetchBookings = async () => {
     try {
@@ -251,9 +313,25 @@ const FleetManagement: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Booking Management</h1>
+          <div className="flex items-center space-x-3">
+            <h1 className="text-2xl font-bold text-gray-900">Fleet Management</h1>
+            {/* WebSocket Connection Status */}
+            <div className="flex items-center space-x-2">
+              <WifiIcon 
+                className={`h-5 w-5 ${isConnected ? 'text-green-500' : 'text-red-500'}`} 
+              />
+              <span className={`text-xs font-medium ${isConnected ? 'text-green-600' : 'text-red-600'}`}>
+                {isConnected ? 'Live' : 'Offline'}
+              </span>
+            </div>
+          </div>
           <p className="mt-1 text-sm text-gray-500">
-            Assign drivers to bookings and manage ride requests
+            Real-time booking management and driver assignment
+            {connectionError && (
+              <span className="text-red-500 ml-2">
+                • Connection error: {connectionError}
+              </span>
+            )}
           </p>
         </div>
         <div className="mt-3 sm:mt-0 flex space-x-3">

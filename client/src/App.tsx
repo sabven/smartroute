@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Navbar from './components/Navbar';
 import EmployeeDashboard from './pages/EmployeeDashboard';
 import DriverDashboard from './pages/DriverDashboard';
+import Dashboard from './pages/Dashboard'; // Admin Dashboard with WebSocket
 import BookCab from './pages/BookCab';
 import MyBookings from './pages/MyBookings';
 import FleetManagement from './pages/FleetManagement';
@@ -104,7 +105,7 @@ function App() {
       return <DriverDashboard />;
     }
     if (userRole === 'company_admin') {
-      return <FleetManagement />;
+      return <FleetManagement />; // Use FleetManagement with WebSocket functionality
     }
     return <EmployeeDashboard />;
   };
