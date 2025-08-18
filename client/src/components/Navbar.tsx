@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Bars3Icon, 
@@ -6,11 +6,16 @@ import {
   HomeIcon,
   MapIcon,
   TruckIcon,
-  UserIcon,
   CpuChipIcon,
   UsersIcon,
   BuildingOffice2Icon,
-  UserCircleIcon
+  UserCircleIcon,
+  ExclamationTriangleIcon,
+  BuildingStorefrontIcon,
+  ArrowPathIcon,
+  RectangleGroupIcon,
+  TruckIcon as DeploymentIcon,
+  ChevronDownIcon
 } from '@heroicons/react/24/outline';
 
 interface NavbarProps {
@@ -21,29 +26,133 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ userRole, user, onLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const location = useLocation();
+  const navRef = useRef<HTMLDivElement>(null);
 
-  // Define navigation items with role permissions
-  const allNavigationItems = [
-    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, roles: ['company_admin'] },
-    { name: 'Book Cab', href: '/book', icon: MapIcon, roles: ['employee'] },
-    { name: 'My Bookings', href: '/bookings', icon: TruckIcon, roles: ['employee'] },
-    { name: 'Profile', href: '/profile', icon: UserCircleIcon, roles: ['employee'] },
-    { name: 'AI Fleet', href: '/intelligent-fleet', icon: CpuChipIcon, roles: ['company_admin'] },
-    { name: 'Drivers', href: '/drivers', icon: UsersIcon, roles: ['company_admin'] },
-    { name: 'Vehicles', href: '/vehicles', icon: BuildingOffice2Icon, roles: ['company_admin'] },
-  ];
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Close dropdown when route changes
+  useEffect(() => {
+    setOpenDropdown(null);
+  }, [location.pathname]);
+
+  // Define grouped navigation items
+  const navigationGroups = {
+    single: [
+      { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, roles: ['company_admin'] },
+      { name: 'Book Cab', href: '/book', icon: MapIcon, roles: ['employee'] },
+      { name: 'My Bookings', href: '/bookings', icon: TruckIcon, roles: ['employee'] },
+      { name: 'Profile', href: '/profile', icon: UserCircleIcon, roles: ['employee'] },
+      { name: 'AI Fleet', href: '/intelligent-fleet', icon: CpuChipIcon, roles: ['company_admin'] },
+    ],
+    fleet: {
+      name: 'Fleet Management',
+      icon: BuildingOffice2Icon,
+      roles: ['company_admin'],
+      items: [
+        { name: 'Drivers', href: '/drivers', icon: UsersIcon },
+        { name: 'Vehicles', href: '/vehicles', icon: BuildingOffice2Icon },
+        { name: 'Vendors', href: '/vendors', icon: BuildingStorefrontIcon },
+      ]
+    },
+    operations: {
+      name: 'Operations',
+      icon: RectangleGroupIcon,
+      roles: ['company_admin'],
+      items: [
+        { name: 'Routes', href: '/routes', icon: RectangleGroupIcon },
+        { name: 'Allocations', href: '/route-allocations', icon: ArrowPathIcon },
+        { name: 'Deployments', href: '/vendor-deployments', icon: DeploymentIcon },
+        { name: 'Issues', href: '/escalations', icon: ExclamationTriangleIcon },
+      ]
+    }
+  };
 
   // Filter navigation items based on user role
-  const navigation = allNavigationItems.filter(item => {
-    if (!userRole) return true; // Show all if no role specified (fallback)
-    return item.roles.includes(userRole);
-  });
+  const getFilteredItems = (items: any[], roles?: string[]) => {
+    if (!userRole) return items;
+    if (roles && !roles.includes(userRole)) return [];
+    return items.filter(item => !item.roles || item.roles.includes(userRole));
+  };
+
+  const singleItems = getFilteredItems(navigationGroups.single);
+  const fleetGroup = userRole && navigationGroups.fleet.roles.includes(userRole) ? navigationGroups.fleet : null;
+  const operationsGroup = userRole && navigationGroups.operations.roles.includes(userRole) ? navigationGroups.operations : null;
 
   const isActive = (path: string) => location.pathname === path;
+  
+  const isGroupActive = (group: any) => {
+    return group.items.some((item: any) => isActive(item.href));
+  };
+
+  const toggleDropdown = (dropdownName: string) => {
+    setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
+  };
+
+  // Dropdown Component
+  const DropdownMenu = ({ group, isDesktop = true }: { group: any, isDesktop?: boolean }) => {
+    const groupIsActive = isGroupActive(group);
+    const isDropdownOpen = openDropdown === group.name.toLowerCase().replace(' ', '-');
+    
+    return (
+      <div className={`relative ${isDesktop ? 'inline-block' : 'block'}`}>
+        <button
+          onClick={() => toggleDropdown(group.name.toLowerCase().replace(' ', '-'))}
+          className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+            groupIsActive
+              ? 'text-primary-600 bg-primary-50'
+              : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50'
+          } ${isDesktop ? '' : 'w-full text-left'}`}
+        >
+          <group.icon className="w-5 h-5 mr-2" />
+          {group.name}
+          <ChevronDownIcon className={`w-4 h-4 ml-1 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+        </button>
+        
+        {isDropdownOpen && (
+          <div className={`${isDesktop ? 'absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50' : 'mt-2 pl-4 space-y-1'}`}>
+            {group.items.map((item: any) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  onClick={() => {
+                    setOpenDropdown(null);
+                    if (!isDesktop) setIsOpen(false);
+                  }}
+                  className={`flex items-center px-3 py-2 text-sm transition-colors ${
+                    isActive(item.href)
+                      ? 'text-primary-600 bg-primary-50'
+                      : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50'
+                  } ${isDesktop ? 'border-b border-gray-100 last:border-b-0' : 'rounded-md'}`}
+                >
+                  <Icon className="w-4 h-4 mr-2" />
+                  {item.name}
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
-    <nav className="bg-white shadow-lg border-b border-gray-200">
+    <nav ref={navRef} className="bg-white shadow-lg border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -56,8 +165,9 @@ const Navbar: React.FC<NavbarProps> = ({ userRole, user, onLogout }) => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => {
+          <div className="hidden md:flex items-center space-x-6">
+            {/* Single Items */}
+            {singleItems.map((item) => {
               const Icon = item.icon;
               return (
                 <Link
@@ -74,6 +184,12 @@ const Navbar: React.FC<NavbarProps> = ({ userRole, user, onLogout }) => {
                 </Link>
               );
             })}
+            
+            {/* Fleet Management Dropdown */}
+            {fleetGroup && <DropdownMenu group={fleetGroup} />}
+            
+            {/* Operations Dropdown */}
+            {operationsGroup && <DropdownMenu group={operationsGroup} />}
             
             {/* User Info & Logout */}
             {user && (
@@ -123,7 +239,8 @@ const Navbar: React.FC<NavbarProps> = ({ userRole, user, onLogout }) => {
       {isOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
-            {navigation.map((item) => {
+            {/* Single Items */}
+            {singleItems.map((item) => {
               const Icon = item.icon;
               return (
                 <Link
@@ -141,6 +258,12 @@ const Navbar: React.FC<NavbarProps> = ({ userRole, user, onLogout }) => {
                 </Link>
               );
             })}
+            
+            {/* Fleet Management Dropdown */}
+            {fleetGroup && <DropdownMenu group={fleetGroup} isDesktop={false} />}
+            
+            {/* Operations Dropdown */}
+            {operationsGroup && <DropdownMenu group={operationsGroup} isDesktop={false} />}
             
             {/* Mobile User Info & Logout */}
             {user && (

@@ -11,6 +11,11 @@ import IntelligentFleetDashboard from './pages/IntelligentFleetDashboard';
 import DriverManagement from './pages/DriverManagement';
 import VehicleManagement from './pages/VehicleManagement';
 import EmployeeProfile from './pages/EmployeeProfile';
+import EscalationManagement from './pages/EscalationManagement';
+import VendorManagement from './pages/VendorManagement';
+import RouteManagement from './pages/RouteManagement';
+import RouteVendorAllocation from './pages/RouteVendorAllocation';
+import VendorVehicleDeployment from './pages/VendorVehicleDeployment';
 import Login from './pages/Login';
 import LogViewer from './components/LogViewer';
 import { ToastProvider } from './contexts/ToastContext';
@@ -192,6 +197,46 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles={['company_admin']} userRole={userRole}>
                   <VehicleManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/escalations" 
+              element={
+                <ProtectedRoute allowedRoles={['company_admin']} userRole={userRole}>
+                  <EscalationManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/vendors" 
+              element={
+                <ProtectedRoute allowedRoles={['company_admin']} userRole={userRole}>
+                  <VendorManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/routes" 
+              element={
+                <ProtectedRoute allowedRoles={['company_admin']} userRole={userRole}>
+                  <RouteManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/route-allocations" 
+              element={
+                <ProtectedRoute allowedRoles={['company_admin']} userRole={userRole}>
+                  <RouteVendorAllocation />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/vendor-deployments" 
+              element={
+                <ProtectedRoute allowedRoles={['company_admin']} userRole={userRole}>
+                  <VendorVehicleDeployment />
                 </ProtectedRoute>
               } 
             />

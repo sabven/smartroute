@@ -100,6 +100,7 @@ const FleetManagement: React.FC = () => {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [selectedVehicle, setSelectedVehicle] = useState('');
   const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
 
 
   useEffect(() => {
@@ -622,6 +623,10 @@ const FleetManagement: React.FC = () => {
                           </span>
                         )}
                         <button 
+                          onClick={() => {
+                            setSelectedBooking(booking);
+                            setShowDetailsModal(true);
+                          }}
                           className="text-gray-400 hover:text-gray-600 p-1"
                           title="View details"
                         >
@@ -809,6 +814,164 @@ const FleetManagement: React.FC = () => {
                   className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Assign Vehicle
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Booking Details Modal */}
+      {showDetailsModal && selectedBooking && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-10 mx-auto p-5 border max-w-3xl w-full shadow-lg rounded-md bg-white">
+            <div className="mt-3">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-medium text-gray-900">
+                  Booking Details: {selectedBooking.bookingId}
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowDetailsModal(false);
+                    setSelectedBooking(null);
+                  }}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <XCircleIcon className="h-6 w-6" />
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Customer Information */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
+                    <UserIcon className="h-4 w-4 mr-2" />
+                    Customer Information
+                  </h4>
+                  <div className="space-y-2">
+                    <p className="text-sm"><strong>Name:</strong> {selectedBooking.User?.name || 'Unknown'}</p>
+                    <p className="text-sm"><strong>Email:</strong> {selectedBooking.User?.email || 'N/A'}</p>
+                    <p className="text-sm"><strong>User ID:</strong> {selectedBooking.userId}</p>
+                  </div>
+                </div>
+
+                {/* Trip Information */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
+                    <MapPinIcon className="h-4 w-4 mr-2" />
+                    Trip Information
+                  </h4>
+                  <div className="space-y-2">
+                    <p className="text-sm"><strong>Type:</strong> {selectedBooking.tripType.replace('_', ' ')}</p>
+                    <p className="text-sm"><strong>Date:</strong> {new Date(selectedBooking.date).toLocaleDateString()}</p>
+                    <p className="text-sm"><strong>Time:</strong> {selectedBooking.time}</p>
+                    <p className="text-sm"><strong>Status:</strong> 
+                      <span className={`ml-1 inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                        selectedBooking.status === 'completed' ? 'bg-green-100 text-green-800' :
+                        selectedBooking.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
+                        selectedBooking.status === 'driver_accepted' ? 'bg-green-100 text-green-800' :
+                        selectedBooking.status === 'driver_assigned' ? 'bg-yellow-100 text-yellow-800' :
+                        selectedBooking.status === 'driver_declined' ? 'bg-red-100 text-red-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {selectedBooking.status.replace('_', ' ')}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Addresses */}
+                <div className="bg-gray-50 rounded-lg p-4 md:col-span-2">
+                  <h4 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
+                    <MapPinIcon className="h-4 w-4 mr-2" />
+                    Addresses
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm font-medium text-gray-700 mb-1">Pickup Address:</p>
+                      <p className="text-sm text-gray-600">{selectedBooking.pickupAddress}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-700 mb-1">Destination Address:</p>
+                      <p className="text-sm text-gray-600">{selectedBooking.destinationAddress}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Driver Information */}
+                {selectedBooking.driverName && (
+                  <div className="bg-gray-50 rounded-lg p-4 md:col-span-2">
+                    <h4 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
+                      <TruckIcon className="h-4 w-4 mr-2" />
+                      Assigned Driver & Vehicle
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-sm"><strong>Driver:</strong> {selectedBooking.driverName}</p>
+                        <p className="text-sm"><strong>Phone:</strong> {selectedBooking.driverPhone || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm"><strong>Vehicle:</strong> {selectedBooking.cabModel || 'N/A'}</p>
+                        <p className="text-sm"><strong>Cab Number:</strong> {selectedBooking.cabNumber || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm"><strong>Assigned:</strong> {selectedBooking.assignedAt ? new Date(selectedBooking.assignedAt).toLocaleString() : 'N/A'}</p>
+                        {selectedBooking.driverResponseAt && (
+                          <p className="text-sm"><strong>Response:</strong> {new Date(selectedBooking.driverResponseAt).toLocaleString()}</p>
+                        )}
+                      </div>
+                    </div>
+                    {selectedBooking.driverResponse && (
+                      <div className="mt-3">
+                        <p className="text-sm"><strong>Driver Response:</strong> {selectedBooking.driverResponse}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Additional Information */}
+                <div className="bg-gray-50 rounded-lg p-4 md:col-span-2">
+                  <h4 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
+                    <ClockIcon className="h-4 w-4 mr-2" />
+                    Additional Information
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <p className="text-sm"><strong>Booking ID:</strong> {selectedBooking.bookingId}</p>
+                      <p className="text-sm"><strong>Created:</strong> {new Date(selectedBooking.createdAt).toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm"><strong>Last Updated:</strong> {new Date(selectedBooking.updatedAt).toLocaleString()}</p>
+                      {selectedBooking.fare && (
+                        <p className="text-sm"><strong>Fare:</strong> ₹{selectedBooking.fare}</p>
+                      )}
+                    </div>
+                    <div className="flex items-center">
+                      {selectedBooking.status === 'confirmed' && (
+                        <button
+                          onClick={() => {
+                            setShowDetailsModal(false);
+                            setShowAssignModal(true);
+                          }}
+                          className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded bg-primary-600 text-white hover:bg-primary-700"
+                        >
+                          Assign Vehicle
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={() => {
+                    setShowDetailsModal(false);
+                    setSelectedBooking(null);
+                  }}
+                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                >
+                  Close
                 </button>
               </div>
             </div>
